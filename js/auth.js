@@ -6,8 +6,10 @@ function isAdminEmail(email) {
 }
 
 async function getUser() {
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
+  } catch(e) { return null; }
 }
 
 async function isAdmin() {
@@ -15,20 +17,10 @@ async function isAdmin() {
   return user && isAdminEmail(user.email);
 }
 
-async function requireAuth(redirectTo = '/login.html') {
-  const user = await getUser();
-  if (!user) {
-    window.location.href = redirectTo;
-    return null;
-  }
-  return user;
-}
-
 async function requireAdmin() {
   const user = await getUser();
   if (!user || !isAdminEmail(user.email)) {
-    window.location.href = '/';
-    return null;
+    window.location.href = '../index.html'; return null;
   }
   return user;
 }
@@ -39,7 +31,13 @@ async function signIn(email, password) {
 }
 
 async function signUp(email, password) {
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  // ⚠️ Disable "Confirm email" in Supabase Dashboard:
+  // Authentication → Settings → Confirm email → OFF
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo: undefined }
+  });
   return { data, error };
 }
 
@@ -48,19 +46,21 @@ async function signOut() {
   window.location.href = '/';
 }
 
-// Update nav UI based on auth state
 async function updateAuthNav() {
-  const user = await getUser();
-  const authBtn = document.getElementById('auth-btn');
-  const userMenu = document.getElementById('user-menu');
-  const userEmail = document.getElementById('user-email');
-
-  if (user) {
-    if (authBtn) authBtn.style.display = 'none';
-    if (userMenu) userMenu.style.display = 'flex';
-    if (userEmail) userEmail.textContent = user.email.split('@')[0];
-  } else {
-    if (authBtn) authBtn.style.display = 'flex';
-    if (userMenu) userMenu.style.display = 'none';
-  }
+  try {
+    const user = await getUser();
+    const authBtn   = document.getElementById('auth-btn');
+    const userMenu  = document.getElementById('user-menu');
+    const userEmail = document.getElementById('user-email');
+    const logoutBtn = document.getElementById('logout-btn');
+    if (user) {
+      if (authBtn)   authBtn.style.display   = 'none';
+      if (userMenu)  userMenu.style.display  = 'flex';
+      if (userEmail) userEmail.textContent   = user.email.split('@')[0];
+      if (logoutBtn) logoutBtn.textContent   = 'خروج';
+    } else {
+      if (authBtn)   authBtn.style.display   = 'flex';
+      if (userMenu)  userMenu.style.display  = 'none';
+    }
+  } catch(e) {}
 }

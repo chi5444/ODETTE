@@ -125,18 +125,35 @@ async function handleRegister() {
   const { data, error } = await signUp(email, pass);
 
   if (error) {
-    err.textContent = error.message === 'User already registered'
-      ? 'هذا البريد الإلكتروني مسجل مسبقاً'
-      : 'حدث خطأ: ' + error.message;
+    const msg = error.message || '';
+    if (msg.includes('already registered') || msg.includes('already exists')) {
+      err.textContent = 'هذا البريد الإلكتروني مسجل مسبقاً — جربي تسجيل الدخول';
+    } else if (msg.includes('Password should')) {
+      err.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+    } else {
+      err.textContent = 'خطأ: ' + msg;
+    }
     err.style.display = 'block';
     btn.disabled = false;
     btn.textContent = 'إنشاء الحساب';
     return;
   }
 
-  ok.textContent = 'تم إنشاء الحساب! جاري التحويل...';
-  ok.style.display = 'block';
-  setTimeout(() => window.location.href = 'index.html', 1200);
+  // If email confirmation is OFF → user is logged in immediately
+  // If email confirmation is ON  → data.user exists but no session
+  if (data && data.user) {
+    ok.textContent = 'تم إنشاء الحساب بنجاح! جاري التحويل...';
+    ok.style.display = 'block';
+    setTimeout(() => {
+      if (isAdminEmail(data.user.email)) window.location.href = 'admin/index.html';
+      else window.location.href = 'index.html';
+    }, 900);
+  } else {
+    ok.textContent = 'تحقق من بريدك الإلكتروني لتأكيد الحساب';
+    ok.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'إنشاء الحساب';
+  }
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });

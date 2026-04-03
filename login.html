@@ -105,24 +105,33 @@ async function handleLogin() {
   const { data, error } = await signIn(email, password);
 
   if (error) {
-    err.textContent = error.message === 'Invalid login credentials'
-      ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة'
-      : 'حدث خطأ، يرجى المحاولة مجدداً';
+    const msg = error.message || '';
+    if (msg.includes('Invalid login credentials') || msg.includes('invalid_credentials')) {
+      err.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+    } else if (msg.includes('Email not confirmed')) {
+      err.textContent = 'يرجى تعطيل Confirm email من Supabase Dashboard';
+    } else {
+      err.textContent = 'خطأ: ' + msg;
+    }
     err.style.display = 'block';
     btn.disabled = false;
     btn.textContent = 'دخول';
     return;
   }
-
+  if (!data || !data.user) {
+    err.textContent = 'حدث خطأ غير متوقع، يرجى المحاولة مجدداً';
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'دخول';
+    return;
+  }
   ok.textContent = 'تم الدخول بنجاح! جاري التحويل...';
   ok.style.display = 'block';
-
-  // Redirect: admin → admin panel, else → home
   if (isAdminEmail(data.user.email)) {
-    setTimeout(() => window.location.href = 'admin/index.html', 800);
+    setTimeout(() => window.location.href = 'admin/index.html', 700);
   } else {
     const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
-    setTimeout(() => window.location.href = redirect, 800);
+    setTimeout(() => window.location.href = redirect, 700);
   }
 }
 
