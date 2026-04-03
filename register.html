@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ODETTE — إنشاء حساب</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080808;--surface:#0F0F0F;--surface2:#151515;--border:#222;--border2:#2A2A2A;--gold:#C8A96E;--gold2:#E8C88A;--text:#EDE8DE;--muted:#666;--danger:#E74C3C;--success:#2ECC71}
+html{height:100%}
+body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;display:flex;flex-direction:column;cursor:none}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.4;pointer-events:none;z-index:0}
+#cur{position:fixed;width:6px;height:6px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#cur-r{position:fixed;width:28px;height:28px;border:1px solid rgba(200,169,110,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+@media(hover:none){#cur,#cur-r{display:none}body{cursor:auto}}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;border-bottom:1px solid var(--border);position:relative;z-index:1}
+.logo{font-family:'Orbitron',sans-serif;font-size:18px;letter-spacing:8px;font-weight:700;color:var(--gold);text-decoration:none}
+.nav-back{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;cursor:none}
+.nav-back:hover{color:var(--gold)}
+.nav-back::after{content:'←'}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 20px;position:relative;z-index:1}
+.auth-card{width:100%;max-width:440px;background:var(--surface);border:1px solid var(--border);padding:44px 40px}
+.auth-logo{font-family:'Orbitron',sans-serif;font-size:22px;letter-spacing:6px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:6px}
+.auth-sub{text-align:center;font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:36px;font-family:'Orbitron',sans-serif;text-transform:uppercase}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-family:'Orbitron',sans-serif}
+.field input{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:12px 16px;font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s;direction:ltr;text-align:left}
+.field input:focus{border-color:var(--gold)}
+.field input::placeholder{color:var(--muted);font-size:12px}
+.field-hint{font-size:10px;color:var(--muted);margin-top:4px;font-family:'Tajawal',sans-serif}
+.pass-strength{height:3px;margin-top:6px;background:var(--border2);transition:all .3s}
+.pass-strength.weak{background:#E74C3C;width:33%}
+.pass-strength.medium{background:#F39C12;width:66%}
+.pass-strength.strong{background:#27AE60;width:100%}
+.btn-submit{width:100%;padding:14px;background:var(--gold);color:#080808;font-size:9px;letter-spacing:4px;text-transform:uppercase;border:none;cursor:none;font-weight:700;font-family:'Orbitron',sans-serif;transition:all .3s;margin-top:8px}
+.btn-submit:hover{background:var(--gold2)}
+.btn-submit:disabled{opacity:.5}
+.auth-link{text-align:center;margin-top:22px;font-size:12px;color:var(--muted)}
+.auth-link a{color:var(--gold);text-decoration:none;cursor:none;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px}
+.auth-link a:hover{color:var(--gold2)}
+.error-msg{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);color:var(--danger);padding:10px 14px;font-size:11px;margin-bottom:14px;display:none;font-family:'Tajawal',sans-serif;text-align:center}
+.success-msg{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);color:var(--success);padding:10px 14px;font-size:11px;margin-bottom:14px;display:none;font-family:'Tajawal',sans-serif;text-align:center}
+.gold-line{width:40px;height:2px;background:linear-gradient(to left,transparent,var(--gold),transparent);margin:0 auto 28px}
+.terms{font-size:10px;color:var(--muted);text-align:center;margin-top:12px;font-family:'Tajawal',sans-serif;line-height:1.6}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-r"></div>
+
+<nav>
+  <a class="logo" href="index.html">ODETTE</a>
+  <a class="nav-back" href="login.html">تسجيل الدخول</a>
+</nav>
+
+<main>
+  <div class="auth-card">
+    <div class="auth-logo">ODETTE</div>
+    <div class="gold-line"></div>
+    <div class="auth-sub">إنشاء حساب جديد</div>
+
+    <div class="error-msg" id="errMsg"></div>
+    <div class="success-msg" id="okMsg"></div>
+
+    <div class="field">
+      <label>البريد الإلكتروني</label>
+      <input type="email" id="email" placeholder="email@example.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>كلمة المرور</label>
+      <input type="password" id="password" placeholder="8 أحرف على الأقل" oninput="checkStrength(this.value)" autocomplete="new-password">
+      <div class="pass-strength" id="passBar"></div>
+    </div>
+    <div class="field">
+      <label>تأكيد كلمة المرور</label>
+      <input type="password" id="password2" placeholder="أعيدي كتابة كلمة المرور" autocomplete="new-password">
+    </div>
+
+    <button class="btn-submit" id="regBtn" onclick="handleRegister()">إنشاء الحساب</button>
+
+    <div class="terms">بالتسجيل توافقين على شروط الاستخدام وسياسة الخصوصية</div>
+
+    <div class="auth-link">
+      لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a>
+    </div>
+  </div>
+</main>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+function checkStrength(pass) {
+  const bar = document.getElementById('passBar');
+  if (!pass) { bar.className = 'pass-strength'; return; }
+  if (pass.length < 6) bar.className = 'pass-strength weak';
+  else if (pass.length < 10) bar.className = 'pass-strength medium';
+  else bar.className = 'pass-strength strong';
+}
+
+async function handleRegister() {
+  const email = document.getElementById('email').value.trim();
+  const pass = document.getElementById('password').value;
+  const pass2 = document.getElementById('password2').value;
+  const btn = document.getElementById('regBtn');
+  const err = document.getElementById('errMsg');
+  const ok = document.getElementById('okMsg');
+
+  err.style.display = 'none';
+  ok.style.display = 'none';
+
+  if (!email || !pass || !pass2) {
+    err.textContent = 'يرجى ملء جميع الحقول'; err.style.display = 'block'; return;
+  }
+  if (pass.length < 8) {
+    err.textContent = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'; err.style.display = 'block'; return;
+  }
+  if (pass !== pass2) {
+    err.textContent = 'كلمتا المرور غير متطابقتين'; err.style.display = 'block'; return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'جاري إنشاء الحساب...';
+
+  const { data, error } = await signUp(email, pass);
+
+  if (error) {
+    err.textContent = error.message === 'User already registered'
+      ? 'هذا البريد الإلكتروني مسجل مسبقاً'
+      : 'حدث خطأ: ' + error.message;
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'إنشاء الحساب';
+    return;
+  }
+
+  ok.textContent = 'تم إنشاء الحساب! جاري التحويل...';
+  ok.style.display = 'block';
+  setTimeout(() => window.location.href = 'index.html', 1200);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
+
+const cur = document.getElementById('cur'), cr = document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; cr.style.left=rx+'px'; cr.style.top=ry+'px'; requestAnimationFrame(loop); })();
+</script>
+</body>
+</html>
