@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commander — Odette</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#d4879a;--rose-lt:#fdf0f3;--rose-md:#f2d0d9;--rose-dk:#b5607a;--white:#ffffff;--ink:#1f1419;--muted:#9a7d84;--border:#f0dde3;--green:#2ecc71;--red:#e74c3c;--sale:#e8445a}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#f9f1f3;color:var(--ink)}
+.topbar{background:var(--rose-dk);color:white;text-align:center;padding:7px;font-size:12px;font-weight:700}
+header{background:var(--white);border-bottom:2px solid var(--rose-md);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(212,135,154,.15)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;font-style:italic;color:var(--rose-dk);text-decoration:none}
+.logo span{color:var(--rose)}
+.wrap{max-width:1000px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start}
+.section{background:var(--white);border-radius:14px;border:1px solid var(--border);overflow:hidden}
+.sec-head{background:linear-gradient(135deg,var(--rose-dk),var(--rose));padding:16px 20px;color:white;font-size:16px;font-weight:900}
+.sec-body{padding:20px}
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.fi,.fta{width:100%;background:#fdf5f7;border:1.5px solid var(--border);color:var(--ink);font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;padding:11px 14px;border-radius:8px;outline:none;transition:border-color .2s}
+.fi:focus,.fta:focus{border-color:var(--rose)}
+.fi::placeholder,.fta::placeholder{color:#d4b0bb;font-weight:400}
+.fta{resize:vertical;min-height:70px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* PAYMENT METHODS */
+.pay-grid{display:flex;flex-direction:column;gap:10px}
+.pay-opt{display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:all .2s}
+.pay-opt:hover{border-color:var(--rose);background:var(--rose-lt)}
+.pay-opt.sel{border-color:var(--rose-dk);background:var(--rose-lt)}
+.pay-opt input{accent-color:var(--rose-dk);width:18px;height:18px;flex-shrink:0}
+.pay-ico{font-size:22px}
+.pay-lbl{font-size:14px;font-weight:800;color:var(--ink)}
+.pay-sub{font-size:11px;color:var(--muted);font-weight:600}
+/* ORDER SUMMARY */
+.order-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.order-img{width:60px;height:72px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--rose-lt);display:flex;align-items:center;justify-content:center;font-size:22px}
+.order-img img{width:100%;height:100%;object-fit:cover}
+.order-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.order-qty{font-size:12px;color:var(--muted);font-weight:600}
+.order-price{font-size:15px;font-weight:900;color:var(--sale);margin-left:auto;white-space:nowrap}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.total-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:6px}
+.total-final{display:flex;justify-content:space-between;font-size:20px;font-weight:900;color:var(--ink);margin-top:10px;padding-top:12px;border-top:2px solid var(--rose-md)}
+.btn-order{width:100%;margin-top:16px;background:linear-gradient(135deg,var(--rose-dk),var(--rose));color:white;border:none;padding:16px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-order:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 8px 24px rgba(181,96,122,.4)}
+.btn-order:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.empty-cart{text-align:center;padding:60px;color:var(--muted);font-weight:700}
+.success-box{text-align:center;padding:60px 30px}
+.suc-ico{font-size:70px;display:block;margin-bottom:16px}
+.success-box h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--ink);margin-bottom:10px}
+.success-box p{font-size:14px;color:var(--muted);line-height:1.7;font-weight:600;margin-bottom:24px}
+.btn-back{display:inline-block;background:var(--rose-dk);color:white;padding:12px 30px;border-radius:100px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;text-decoration:none;transition:all .2s}
+.btn-back:hover{background:var(--ink);transform:translateY(-2px)}
+footer{background:var(--ink);color:rgba(255,255,255,.5);text-align:center;padding:20px;font-size:12px;font-weight:600;margin-top:40px}
+footer strong{color:var(--rose)}
+@media(max-width:768px){.wrap{grid-template-columns:1fr}.fg2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">🔒 Commande sécurisée — Odette</div>
+<header>
+  <a class="logo" href="/">Od<span>e</span>tte</a>
+  <a href="/" style="font-size:13px;font-weight:700;color:var(--muted);text-decoration:none">← Retour à la boutique</a>
+</header>
+
+<div class="wrap" id="mainWrap">
+  <!-- FORM -->
+  <div>
+    <div class="section" style="margin-bottom:18px">
+      <div class="sec-head">📍 Vos coordonnées</div>
+      <div class="sec-body">
+        <div class="fg2">
+          <div class="fg"><label class="fl">Nom complet *</label><input class="fi" type="text" id="cName" required placeholder="Fatma Ben Ali"></div>
+          <div class="fg"><label class="fl">Téléphone *</label><input class="fi" type="tel" id="cPhone" required placeholder="+216 XX XXX XXX"></div>
+        </div>
+        <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="cEmail" placeholder="vous@exemple.com"></div>
+        <div class="fg"><label class="fl">Adresse de livraison *</label><input class="fi" type="text" id="cAddr" required placeholder="Rue, Quartier, Ville, Gouvernorat"></div>
+        <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="cNotes" placeholder="Instructions spéciales, couleur souhaitée…"></textarea></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head">💳 Méthode de paiement</div>
+      <div class="sec-body">
+        <div class="pay-grid" id="payGrid">
+          <label class="pay-opt sel">
+            <input type="radio" name="pay" value="cod" checked onchange="selPay(this)">
+            <span class="pay-ico">💵</span>
+            <div><div class="pay-lbl">Paiement à la livraison</div><div class="pay-sub">Payez en espèces à la réception</div></div>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="pay" value="d17" onchange="selPay(this)">
+            <span class="pay-ico">📱</span>
+            <div><div class="pay-lbl">D17 / Poste Tunisienne</div><div class="pay-sub">Paiement mobile instantané</div></div>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="pay" value="virement" onchange="selPay(this)">
+            <span class="pay-ico">🏦</span>
+            <div><div class="pay-lbl">Virement bancaire</div><div class="pay-sub">Contactez-nous pour les détails</div></div>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="pay" value="whatsapp" onchange="selPay(this)">
+            <span class="pay-ico">💬</span>
+            <div><div class="pay-lbl">Finaliser via WhatsApp</div><div class="pay-sub">Discutez directement avec nous</div></div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div>
+    <div class="section">
+      <div class="sec-head">🛒 Récapitulatif</div>
+      <div class="sec-body" id="summaryBox"></div>
+    </div>
+  </div>
+</div>
+
+<footer><strong>Odette ♛</strong> &nbsp;|&nbsp; © 2026 — Tous droits réservés</footer>
+
+<script type="module">
+import { supabase } from '/js/supabase.js';
+import { getUser } from '/js/auth.js';
+import { getCart, getTotal, clearCart } from '/js/cart.js';
+import { WA_NUMBER, FORMSUBMIT } from '/js/supabase.js';
+
+const CAT_ICON = { classique:'👜', luxe:'💎', casual:'🎒', mini:'👛', tote:'👝' };
+let selectedPay = 'cod';
+
+async function init() {
+  const cart = getCart();
+  if (!cart.length) {
+    document.getElementById('mainWrap').innerHTML = `<div class="empty-cart" style="grid-column:1/-1"><div style="font-size:60px;margin-bottom:16px">🛒</div><h2>Votre panier est vide</h2><p style="margin:12px 0 20px">Ajoutez des produits avant de commander.</p><a href="/" class="btn-back">← Retour à la boutique</a></div>`;
+    return;
+  }
+  renderSummary(cart);
+}
+
+function renderSummary(cart) {
+  const total = getTotal();
+  const shipping = total >= 200 ? 0 : 8;
+  const finalTotal = total + shipping;
+
+  document.getElementById('summaryBox').innerHTML = `
+    ${cart.map(it => `
+    <div class="order-item">
+      <div class="order-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '👜')}</div>
+      <div style="flex:1;min-width:0">
+        <div class="order-name">${it.title}</div>
+        <div class="order-qty">Qté: ${it.qty}</div>
+      </div>
+      <span class="order-price">${(it.price * it.qty).toFixed(2)} DT</span>
+    </div>`).join('')}
+    <div class="divider"></div>
+    <div class="total-row"><span>Sous-total</span><span>${total.toFixed(2)} DT</span></div>
+    <div class="total-row"><span>Livraison</span><span>${shipping === 0 ? '<span style="color:var(--green)">Gratuite</span>' : shipping.toFixed(2) + ' DT'}</span></div>
+    <div class="total-final"><span>Total</span><span>${finalTotal.toFixed(2)} DT</span></div>
+    <button class="btn-order" id="orderBtn" onclick="placeOrder()">🛍️ Confirmer la commande</button>
+  `;
+}
+
+window.selPay = function(radio) {
+  selectedPay = radio.value;
+  document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('sel'));
+  radio.closest('.pay-opt').classList.add('sel');
+};
+
+window.placeOrder = async function() {
+  const name  = document.getElementById('cName').value.trim();
+  const phone = document.getElementById('cPhone').value.trim();
+  const addr  = document.getElementById('cAddr').value.trim();
+  if (!name || !phone || !addr) { alert('Veuillez remplir tous les champs obligatoires.'); return; }
+
+  const cart = getCart();
+  const total = getTotal();
+  const shipping = total >= 200 ? 0 : 8;
+  const finalTotal = total + shipping;
+
+  const btn = document.getElementById('orderBtn');
+  btn.disabled = true; btn.textContent = 'Envoi en cours…';
+
+  // WhatsApp redirect
+  if (selectedPay === 'whatsapp') {
+    const items = cart.map(i => `• ${i.title} ×${i.qty} — ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
+    const msg = `🛍️ Nouvelle commande Odette\n\n👤 ${name}\n📞 ${phone}\n📍 ${addr}\n\n${items}\n\n💰 Total: ${finalTotal.toFixed(2)} DT\n💳 Paiement: WhatsApp`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+    showSuccess();
+    return;
+  }
+
+  // FormSubmit email
+  try {
+    const itemsText = cart.map(i => `${i.title} ×${i.qty} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
+    const fd = new FormData();
+    fd.append('_subject', `🛍️ Nouvelle commande Odette — ${name}`);
+    fd.append('_template', 'table');
+    fd.append('_captcha', 'false');
+    fd.append('Nom', name);
+    fd.append('Téléphone', phone);
+    fd.append('Email', document.getElementById('cEmail').value || '—');
+    fd.append('Adresse', addr);
+    fd.append('Commande', itemsText);
+    fd.append('Total', finalTotal.toFixed(2) + ' DT');
+    fd.append('Livraison', shipping === 0 ? 'Gratuite' : shipping.toFixed(2) + ' DT');
+    fd.append('Paiement', selectedPay);
+    fd.append('Notes', document.getElementById('cNotes').value || '—');
+    await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
+
+    // Save to Supabase (optional, if logged in)
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      await supabase.from('orders').insert({
+        user_id: user?.id || null,
+        items: cart,
+        total: finalTotal,
+        customer_name: name,
+        phone, email: document.getElementById('cEmail').value || null,
+        address: addr,
+        notes: document.getElementById('cNotes').value || null,
+        payment: selectedPay,
+        status: 'pending'
+      });
+    } catch (_) {}
+  } catch (_) {}
+
+  showSuccess();
+};
+
+function showSuccess() {
+  clearCart();
+  document.getElementById('mainWrap').innerHTML = `
+    <div class="section" style="grid-column:1/-1">
+      <div class="success-box">
+        <span class="suc-ico">🎀</span>
+        <h2>Commande confirmée !</h2>
+        <p>Merci pour votre commande. Notre équipe vous contactera dans les <strong>24 heures</strong> pour confirmer la livraison et les détails du paiement.</p>
+        <a href="/" class="btn-back">← Continuer mes achats</a>
+      </div>
+    </div>`;
+}
+
+init();
+</script>
+</body>
+</html>

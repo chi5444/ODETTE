@@ -1,151 +1,123 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ODETTE — تسجيل الدخول</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Connexion — Odette</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#080808;--surface:#0F0F0F;--surface2:#151515;--border:#222;--border2:#2A2A2A;--gold:#C8A96E;--gold2:#E8C88A;--text:#EDE8DE;--muted:#666;--danger:#E74C3C;--success:#2ECC71}
-html{height:100%}
-body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;display:flex;flex-direction:column;cursor:none}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.4;pointer-events:none;z-index:0}
-#cur{position:fixed;width:6px;height:6px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
-#cur-r{position:fixed;width:28px;height:28px;border:1px solid rgba(200,169,110,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
-@media(hover:none){#cur,#cur-r{display:none}body{cursor:auto}}
-
-nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;border-bottom:1px solid var(--border);position:relative;z-index:1}
-.logo{font-family:'Orbitron',sans-serif;font-size:18px;letter-spacing:8px;font-weight:700;color:var(--gold);text-decoration:none}
-.nav-back{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;cursor:none}
-.nav-back:hover{color:var(--gold)}
-.nav-back::after{content:'←'}
-
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 20px;position:relative;z-index:1}
-.auth-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);padding:44px 40px}
-.auth-logo{font-family:'Orbitron',sans-serif;font-size:22px;letter-spacing:6px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:6px}
-.auth-sub{text-align:center;font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:36px;font-family:'Orbitron',sans-serif;text-transform:uppercase}
-.field{margin-bottom:18px}
-.field label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-family:'Orbitron',sans-serif}
-.field input{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:12px 16px;font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s;direction:ltr;text-align:left}
-.field input:focus{border-color:var(--gold)}
-.field input::placeholder{color:var(--muted);font-size:12px}
-.btn-submit{width:100%;padding:14px;background:var(--gold);color:#080808;font-size:9px;letter-spacing:4px;text-transform:uppercase;border:none;cursor:none;font-weight:700;font-family:'Orbitron',sans-serif;transition:all .3s;margin-top:4px}
-.btn-submit:hover{background:var(--gold2)}
-.btn-submit:disabled{opacity:.5;cursor:not-allowed}
-.auth-link{text-align:center;margin-top:22px;font-size:12px;color:var(--muted)}
-.auth-link a{color:var(--gold);text-decoration:none;cursor:none;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px}
-.auth-link a:hover{color:var(--gold2)}
-.error-msg{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);color:var(--danger);padding:10px 14px;font-size:11px;margin-bottom:16px;display:none;font-family:'Tajawal',sans-serif;text-align:center}
-.success-msg{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);color:var(--success);padding:10px 14px;font-size:11px;margin-bottom:16px;display:none;font-family:'Tajawal',sans-serif;text-align:center}
-.divider{display:flex;align-items:center;gap:12px;margin:22px 0;color:var(--muted);font-size:10px;letter-spacing:2px;font-family:'Orbitron',sans-serif}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.gold-line{width:40px;height:2px;background:linear-gradient(to left,transparent,var(--gold),transparent);margin:0 auto 28px}
+:root{--rose:#d4879a;--rose-lt:#fdf0f3;--rose-md:#f2d0d9;--rose-dk:#b5607a;--white:#ffffff;--ink:#1f1419;--muted:#9a7d84;--border:#f0dde3;--red:#e74c3c}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#f9d5df,#fce8ee 40%,#f5e6ec);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:var(--white);border-radius:20px;box-shadow:0 20px 60px rgba(212,135,154,.25);width:100%;max-width:420px;overflow:hidden}
+.card-top{background:linear-gradient(135deg,var(--rose-dk),var(--rose));padding:32px 32px 28px;text-align:center}
+.logo{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;font-style:italic;color:white;letter-spacing:1px;display:block;text-decoration:none;margin-bottom:6px}
+.logo span{opacity:.8}
+.card-top p{font-size:13px;color:rgba(255,255,255,.8);font-weight:600}
+.card-body{padding:28px 32px 32px}
+.tabs{display:flex;background:var(--rose-lt);border-radius:10px;padding:4px;margin-bottom:24px;gap:4px}
+.tab{flex:1;padding:9px;border:none;background:none;border-radius:7px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s}
+.tab.on{background:var(--white);color:var(--rose-dk);box-shadow:0 2px 8px rgba(212,135,154,.2)}
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.fi{width:100%;background:#fdf5f7;border:1.5px solid var(--border);color:var(--ink);font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;padding:12px 14px;border-radius:8px;outline:none;transition:border-color .2s}
+.fi:focus{border-color:var(--rose)}
+.fi::placeholder{color:#d4b0bb;font-weight:400}
+.btn{width:100%;background:linear-gradient(135deg,var(--rose-dk),var(--rose));color:white;border:none;padding:14px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .25s;margin-top:8px}
+.btn:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 8px 24px rgba(181,96,122,.4)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.err{background:#fff0f0;border:1.5px solid var(--red);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);font-weight:700;margin-bottom:14px;display:none}
+.err.on{display:block}
+.suc{background:#f0fff4;border:1.5px solid #2ecc71;border-radius:8px;padding:10px 14px;font-size:13px;color:#27ae60;font-weight:700;margin-bottom:14px;display:none}
+.suc.on{display:block}
+.back-link{display:block;text-align:center;margin-top:18px;font-size:12px;color:var(--muted);font-weight:700;text-decoration:none}
+.back-link:hover{color:var(--rose-dk)}
 </style>
 </head>
 <body>
-<div id="cur"></div><div id="cur-r"></div>
-
-<nav>
-  <a class="logo" href="index.html">ODETTE</a>
-  <a class="nav-back" href="index.html">العودة للمتجر</a>
-</nav>
-
-<main>
-  <div class="auth-card">
-    <div class="auth-logo">ODETTE</div>
-    <div class="gold-line"></div>
-    <div class="auth-sub">تسجيل الدخول</div>
-
-    <div class="error-msg" id="errMsg"></div>
-    <div class="success-msg" id="okMsg"></div>
-
-    <div class="field">
-      <label>البريد الإلكتروني</label>
-      <input type="email" id="email" placeholder="email@example.com" autocomplete="email">
-    </div>
-    <div class="field">
-      <label>كلمة المرور</label>
-      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
-    </div>
-
-    <button class="btn-submit" id="loginBtn" onclick="handleLogin()">دخول</button>
-
-    <div class="divider">أو</div>
-
-    <div class="auth-link">
-      ليس لديك حساب؟ <a href="register.html">إنشاء حساب</a>
-    </div>
+<div class="card">
+  <div class="card-top">
+    <a class="logo" href="/">Od<span>e</span>tte</a>
+    <p>Bienvenue dans votre espace</p>
   </div>
-</main>
+  <div class="card-body">
+    <div class="tabs">
+      <button class="tab on" id="tabLogin" onclick="switchTab('login')">Se connecter</button>
+      <button class="tab" id="tabReg" onclick="switchTab('register')">Créer un compte</button>
+    </div>
 
-<script src="js/supabase.js"></script>
-<script src="js/auth.js"></script>
-<script>
-async function handleLogin() {
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const btn = document.getElementById('loginBtn');
-  const err = document.getElementById('errMsg');
-  const ok = document.getElementById('okMsg');
+    <div id="errBox" class="err"></div>
+    <div id="sucBox" class="suc"></div>
 
-  err.style.display = 'none';
-  ok.style.display = 'none';
+    <!-- LOGIN FORM -->
+    <form id="loginForm" onsubmit="doLogin(event)">
+      <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="lEmail" required placeholder="vous@exemple.com"></div>
+      <div class="fg"><label class="fl">Mot de passe</label><input class="fi" type="password" id="lPass" required placeholder="••••••••"></div>
+      <button class="btn" id="lBtn" type="submit">Se connecter →</button>
+    </form>
 
-  if (!email || !password) {
-    err.textContent = 'يرجى إدخال البريد الإلكتروني وكلمة المرور';
-    err.style.display = 'block';
-    return;
-  }
+    <!-- REGISTER FORM -->
+    <form id="regForm" onsubmit="doRegister(event)" style="display:none">
+      <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="rEmail" required placeholder="vous@exemple.com"></div>
+      <div class="fg"><label class="fl">Mot de passe</label><input class="fi" type="password" id="rPass" required placeholder="Minimum 6 caractères" minlength="6"></div>
+      <div class="fg"><label class="fl">Confirmer le mot de passe</label><input class="fi" type="password" id="rPass2" required placeholder="Répétez votre mot de passe"></div>
+      <button class="btn" id="rBtn" type="submit">Créer mon compte →</button>
+    </form>
 
-  btn.disabled = true;
-  btn.textContent = 'جاري الدخول...';
+    <a class="back-link" href="/">← Retour à la boutique</a>
+  </div>
+</div>
 
-  const { data, error } = await signIn(email, password);
+<script type="module">
+import { supabase } from '/js/supabase.js';
+import { getUser } from '/js/auth.js';
 
-  if (error) {
-    const msg = error.message || '';
-    if (msg.includes('Invalid login credentials') || msg.includes('invalid_credentials')) {
-      err.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
-    } else if (msg.includes('Email not confirmed')) {
-      err.textContent = 'يرجى تعطيل Confirm email من Supabase Dashboard';
-    } else {
-      err.textContent = 'خطأ: ' + msg;
-    }
-    err.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'دخول';
-    return;
-  }
-  if (!data || !data.user) {
-    err.textContent = 'حدث خطأ غير متوقع، يرجى المحاولة مجدداً';
-    err.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'دخول';
-    return;
-  }
-  ok.textContent = 'تم الدخول بنجاح! جاري التحويل...';
-  ok.style.display = 'block';
-  if (isAdminEmail(data.user.email)) {
-    setTimeout(() => window.location.href = 'admin/index.html', 700);
-  } else {
-    const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
-    setTimeout(() => window.location.href = redirect, 700);
-  }
-}
+// Redirect if already logged in
+getUser().then(user => { if (user) window.location.href = '/'; });
 
-// Enter key support
-document.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+function showErr(msg) { const e = document.getElementById('errBox'); e.textContent = msg; e.classList.add('on'); document.getElementById('sucBox').classList.remove('on'); }
+function showSuc(msg) { const s = document.getElementById('sucBox'); s.textContent = msg; s.classList.add('on'); document.getElementById('errBox').classList.remove('on'); }
+function clearMsg() { document.getElementById('errBox').classList.remove('on'); document.getElementById('sucBox').classList.remove('on'); }
 
-// Cursor
-const cur = document.getElementById('cur'), cr = document.getElementById('cur-r');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
-(function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; cr.style.left=rx+'px'; cr.style.top=ry+'px'; requestAnimationFrame(loop); })();
+window.switchTab = function(tab) {
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('regForm').style.display   = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tabLogin').classList.toggle('on', tab === 'login');
+  document.getElementById('tabReg').classList.toggle('on', tab === 'register');
+  clearMsg();
+};
 
-// Check already logged in
-getUser().then(user => { if (user) window.location.href = isAdminEmail(user.email) ? 'admin/index.html' : 'index.html'; });
+window.doLogin = async function(e) {
+  e.preventDefault();
+  clearMsg();
+  const btn = document.getElementById('lBtn');
+  btn.disabled = true; btn.textContent = 'Connexion…';
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: document.getElementById('lEmail').value,
+    password: document.getElementById('lPass').value,
+  });
+  if (error) { showErr('Email ou mot de passe incorrect.'); btn.disabled = false; btn.textContent = 'Se connecter →'; return; }
+  window.location.href = data.user.email === 'admin@odette.com' ? '/admin/' : '/';
+};
+
+window.doRegister = async function(e) {
+  e.preventDefault();
+  clearMsg();
+  const p1 = document.getElementById('rPass').value;
+  const p2 = document.getElementById('rPass2').value;
+  if (p1 !== p2) { showErr('Les mots de passe ne correspondent pas.'); return; }
+  const btn = document.getElementById('rBtn');
+  btn.disabled = true; btn.textContent = 'Création…';
+  const { error } = await supabase.auth.signUp({
+    email: document.getElementById('rEmail').value,
+    password: p1,
+    options: { emailRedirectTo: window.location.origin }
+  });
+  if (error) { showErr(error.message); btn.disabled = false; btn.textContent = 'Créer mon compte →'; return; }
+  showSuc('Compte créé ! Vous pouvez maintenant vous connecter.');
+  btn.disabled = false; btn.textContent = 'Créer mon compte →';
+  switchTab('login');
+};
 </script>
 </body>
 </html>

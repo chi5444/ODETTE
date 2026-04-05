@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produit — Odette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose:#d4879a; --rose-lt:#fdf0f3; --rose-md:#f2d0d9; --rose-dk:#b5607a;
+  --white:#ffffff; --ink:#1f1419; --muted:#9a7d84; --border:#f0dde3;
+  --green:#2ecc71; --red:#e74c3c; --sale:#e8445a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:#f9f1f3;color:var(--ink)}
+
+/* TOPBAR */
+.topbar{background:var(--rose-dk);color:white;text-align:center;padding:7px 16px;font-size:12px;font-weight:700;letter-spacing:.5px;overflow:hidden;white-space:nowrap}
+.topbar-inner{display:inline-block;animation:slide 22s linear infinite}
+@keyframes slide{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+
+/* HEADER */
+header{background:var(--white);border-bottom:2px solid var(--rose-md);position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(212,135,154,.15)}
+.header-main{display:flex;align-items:center;gap:14px;padding:10px 16px;max-width:1280px;margin:0 auto}
+.logo{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;font-style:italic;color:var(--rose-dk);letter-spacing:1px;text-decoration:none}
+.logo span{color:var(--rose)}
+.h-icons{display:flex;align-items:center;gap:4px;margin-left:auto}
+.h-ico{position:relative;display:flex;flex-direction:column;align-items:center;background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:20px;color:var(--muted);transition:all .2s;gap:2px;text-decoration:none}
+.h-ico span.lbl{font-size:10px;font-weight:700;color:var(--muted)}
+.h-ico:hover{background:var(--rose-lt);color:var(--rose-dk)}
+.badge{position:absolute;top:2px;right:2px;background:var(--sale);color:white;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:100px;display:none;align-items:center;justify-content:center;padding:0 4px}
+.badge.on{display:flex}
+
+/* BREADCRUMB */
+.breadcrumb{max-width:1280px;margin:12px auto;padding:0 16px;font-size:12px;color:var(--muted);font-weight:600}
+.breadcrumb a{color:var(--rose-dk);text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+
+/* PRODUCT PAGE */
+.prod-wrap{max-width:1280px;margin:0 auto;padding:0 16px 40px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+
+/* IMAGE SECTION */
+.prod-gallery{position:sticky;top:100px}
+.prod-main-img{border-radius:16px;overflow:hidden;background:var(--rose-lt);aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;font-size:100px;position:relative;border:1px solid var(--border)}
+.prod-main-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.prod-main-img:hover img{transform:scale(1.04)}
+.prod-main-img .img-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:100px}
+.prod-badge-abs{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:6px}
+.b-tag{display:inline-block;font-size:10px;font-weight:800;padding:3px 9px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;width:fit-content}
+.b-sale{background:var(--sale);color:white}
+.b-new{background:var(--rose-dk);color:white}
+.b-hot{background:#ff6b35;color:white}
+.b-vip{background:#9b59b6;color:white}
+
+/* INFO SECTION */
+.prod-info{}
+.prod-cat-lbl{font-size:11px;font-weight:800;color:var(--rose-dk);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.prod-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:var(--ink);line-height:1.2;margin-bottom:12px}
+.prod-stars{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.stars{font-size:16px;color:#f39c12}
+.stars-count{font-size:13px;color:var(--muted);font-weight:600}
+.prod-prices{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.price-now{font-size:34px;font-weight:900;color:var(--sale)}
+.price-old{font-size:18px;color:#ccc;text-decoration:line-through;font-weight:600}
+.price-pct{background:#fff0f3;color:var(--sale);font-size:13px;font-weight:900;padding:4px 10px;border-radius:6px}
+.prod-sold{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:18px}
+.prod-desc{font-size:14px;color:var(--muted);line-height:1.8;font-weight:600;margin-bottom:24px;padding:14px;background:var(--rose-lt);border-radius:10px;border-left:3px solid var(--rose)}
+
+/* ACTIONS */
+.prod-actions{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.btn-atc{width:100%;background:linear-gradient(135deg,var(--rose-dk),var(--rose));color:white;border:none;padding:16px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-atc:hover{filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 8px 24px rgba(181,96,122,.4)}
+.btn-atc.done{background:var(--green)!important}
+.btn-wa{width:100%;background:#25D366;color:white;border:none;padding:14px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+.btn-wa:hover{background:#1fb055;transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,.35)}
+.btn-quick{width:100%;background:var(--white);color:var(--rose-dk);border:2px solid var(--rose);padding:13px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .25s}
+.btn-quick:hover{background:var(--rose-lt)}
+
+/* PERKS */
+.prod-perks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.perk{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--muted);background:var(--white);padding:10px 12px;border-radius:8px;border:1px solid var(--border)}
+.perk-ico{font-size:18px}
+
+/* QUICK ORDER MODAL */
+.qo-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:600;padding:16px}
+.qo-bg.on{display:flex}
+.qo-box{background:var(--white);border-radius:16px;width:100%;max-width:500px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;animation:popIn .3s ease both}
+.qo-head{background:linear-gradient(135deg,var(--rose-dk),var(--rose));padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.qo-head-txt h2{font-size:18px;font-weight:900;color:white}
+.qo-head-txt p{font-size:12px;color:rgba(255,255,255,.75);margin-top:2px}
+.qo-close{background:rgba(255,255,255,.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.qo-body{padding:20px 24px 24px;overflow-y:auto}
+.summ{background:var(--rose-lt);border:1.5px solid var(--rose-md);border-radius:10px;padding:14px;margin-bottom:18px}
+.summ-lbl{font-size:11px;font-weight:800;color:var(--rose-dk);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.summ-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-weight:600;padding:3px 0}
+.summ-total{display:flex;justify-content:space-between;font-size:16px;font-weight:900;color:var(--ink);border-top:1.5px solid var(--rose-md);margin-top:8px;padding-top:10px}
+.fg{margin-bottom:13px}
+.fl{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.fi,.fta{width:100%;background:#fdf5f7;border:1.5px solid var(--border);color:var(--ink);font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;padding:11px 14px;border-radius:8px;outline:none;transition:border-color .2s}
+.fi:focus,.fta:focus{border-color:var(--rose)}
+.fi::placeholder,.fta::placeholder{color:#d4b0bb;font-weight:400}
+.fta{resize:vertical;min-height:70px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sub-btn{width:100%;margin-top:6px;background:linear-gradient(135deg,var(--rose-dk),var(--rose));color:white;border:none;padding:14px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px}
+.sub-btn:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-2px)}
+.sub-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.qo-success{display:none;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;gap:12px;text-align:center}
+.qo-success.on{display:flex}
+.suc-ico{font-size:58px;animation:bounceIn .5s both}
+.qo-success h3{font-size:22px;font-weight:900;color:var(--ink)}
+.qo-success p{font-size:14px;color:var(--muted);line-height:1.7;font-weight:600}
+
+/* CART DRAWER */
+.cart-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:400;opacity:0;pointer-events:none;transition:opacity .3s}
+.cart-bg.on{opacity:1;pointer-events:all}
+.cart-drawer{position:fixed;top:0;right:-420px;width:400px;max-width:100vw;height:100vh;background:var(--white);z-index:401;display:flex;flex-direction:column;transition:right .35s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.12)}
+.cart-drawer.on{right:0}
+.cd-head{padding:18px 20px;background:var(--rose-dk);display:flex;align-items:center;justify-content:space-between}
+.cd-head h2{font-size:17px;font-weight:900;color:white}
+.cd-close{background:rgba(255,255,255,.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.cd-items{flex:1;overflow-y:auto;padding:14px 16px}
+.cd-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:10px;color:var(--muted);font-size:14px;font-weight:600}
+.cd-empty-ico{font-size:44px;opacity:.3}
+.cd-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.cd-item-img{width:70px;height:82px;border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--rose-lt)}
+.cd-item-img img{width:100%;height:100%;object-fit:cover}
+.cd-item-info{flex:1;min-width:0}
+.cd-item-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.cd-item-price{font-size:15px;font-weight:900;color:var(--sale);margin-bottom:8px}
+.cd-ctrl{display:flex;align-items:center;gap:8px}
+.q-b{width:26px;height:26px;border-radius:5px;background:var(--rose-lt);border:1.5px solid var(--rose-md);color:var(--ink);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.q-b:hover{background:var(--rose);border-color:var(--rose);color:white}
+.q-n{font-size:14px;font-weight:800;min-width:22px;text-align:center}
+.cd-rm{background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;margin-left:auto;opacity:.6;transition:opacity .2s}
+.cd-foot{padding:16px;border-top:2px solid var(--rose-md);background:var(--rose-lt)}
+.cd-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cd-subtotal span{font-size:14px;color:var(--muted);font-weight:700}
+.cd-subtotal strong{font-size:22px;font-weight:900;color:var(--ink)}
+.btn-checkout{width:100%;background:linear-gradient(135deg,var(--rose-dk),var(--rose));color:white;border:none;padding:14px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+
+/* LOADING */
+.skeleton{background:linear-gradient(90deg,#f0dde3 25%,#fce8ee 50%,#f0dde3 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:10px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--ink);color:white;padding:12px 24px;border-radius:100px;font-size:13px;font-weight:700;z-index:9998;opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;gap:8px;box-shadow:0 8px 28px rgba(0,0,0,.2)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.t-dot{width:7px;height:7px;border-radius:50%;background:var(--rose)}
+
+footer{background:var(--ink);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:12px;font-weight:600;letter-spacing:.5px;margin-top:40px}
+footer strong{color:var(--rose)}
+
+@keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+@media(max-width:768px){
+  .prod-wrap{grid-template-columns:1fr}
+  .prod-gallery{position:static}
+  .prod-title{font-size:26px}
+  .price-now{font-size:26px}
+  .fg2{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .h-ico .lbl{display:none}
+  .prod-perks{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar"><div class="topbar-inner">🚚 Livraison gratuite dès 200 DT &nbsp;|&nbsp; 🎀 Emballage cadeau offert &nbsp;|&nbsp; ✨ Nouvelle collection Printemps 2026 &nbsp;|&nbsp; 💕 -20% code: ODETTE20 &nbsp;|&nbsp; 🚚 Livraison gratuite dès 200 DT</div></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-main">
+    <a class="logo" href="/">Od<span>e</span>tte</a>
+    <div class="h-icons" style="margin-left:auto">
+      <button class="h-ico" onclick="openCart()">🛒<span class="badge on" id="cartBadge">0</span><span class="lbl">Panier</span></button>
+      <a class="h-ico" href="/" >🏠<span class="lbl">Accueil</span></a>
+      <a class="h-ico" id="navLogin" href="/login.html">👤<span class="lbl">Connexion</span></a>
+      <a class="h-ico" id="navLogout" href="#" onclick="doLogout()" style="display:none">🚪<span class="lbl" id="navUser">Compte</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="/">Accueil</a> &rsaquo; <a href="/">Boutique</a> &rsaquo; <span id="bcTitle">Chargement…</span>
+</div>
+
+<!-- PRODUCT WRAP -->
+<div class="prod-wrap" id="prodWrap">
+  <!-- Loading state -->
+  <div class="skeleton" style="aspect-ratio:4/5;border-radius:16px"></div>
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <div class="skeleton" style="height:20px;width:80px;border-radius:6px"></div>
+    <div class="skeleton" style="height:48px;border-radius:8px"></div>
+    <div class="skeleton" style="height:20px;width:60%;border-radius:6px"></div>
+    <div class="skeleton" style="height:80px;border-radius:10px"></div>
+    <div class="skeleton" style="height:52px;border-radius:10px"></div>
+    <div class="skeleton" style="height:52px;border-radius:10px"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer><strong>Odette ♛</strong> &nbsp;|&nbsp; © 2026 — Tous droits réservés &nbsp;|&nbsp; 💬 WhatsApp: +216 96 672 771</footer>
+
+<!-- CART DRAWER -->
+<div class="cart-bg" id="cartBg" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cd-head"><h2>🛒 Mon Panier</h2><button class="cd-close" onclick="closeCart()">✕</button></div>
+  <div class="cd-items" id="cdItems"></div>
+  <div class="cd-foot">
+    <div class="cd-subtotal"><span>Total</span><strong id="cdTotal">0.00 DT</strong></div>
+    <a href="/checkout.html" class="btn-checkout" id="checkoutBtn" style="pointer-events:none;opacity:.4">Commander →</a>
+  </div>
+</div>
+
+<!-- QUICK ORDER MODAL -->
+<div class="qo-bg" id="qoBg" onclick="if(event.target===this)closeQO()">
+  <div class="qo-box">
+    <div class="qo-head">
+      <div class="qo-head-txt"><h2>🛍️ Commande Rapide</h2><p>Remplissez vos coordonnées</p></div>
+      <button class="qo-close" onclick="closeQO()">✕</button>
+    </div>
+    <div class="qo-success" id="qoSucc">
+      <div class="suc-ico">🎀</div>
+      <h3>Commande envoyée !</h3>
+      <p>Merci ! Nous vous contacterons dans les 24h pour confirmer votre commande.</p>
+      <button class="sub-btn" style="margin-top:16px;max-width:220px" onclick="closeQO()">Continuer →</button>
+    </div>
+    <div class="qo-body" id="qoFormW">
+      <div class="summ" id="qoSumm"></div>
+      <form id="qoForm" onsubmit="submitQuick(event)">
+        <div class="fg2">
+          <div class="fg"><label class="fl">Nom complet *</label><input class="fi" type="text" name="name" required placeholder="Fatma Ben Ali" id="qiName"></div>
+          <div class="fg"><label class="fl">Téléphone *</label><input class="fi" type="tel" name="phone" required placeholder="+216 XX XXX" id="qiPhone"></div>
+        </div>
+        <div class="fg"><label class="fl">Email</label><input class="fi" type="email" name="email" placeholder="vous@exemple.com" id="qiEmail"></div>
+        <div class="fg"><label class="fl">Adresse *</label><input class="fi" type="text" name="address" required placeholder="Rue, Ville, Gouvernorat" id="qiAddr"></div>
+        <div class="fg"><label class="fl">Notes</label><textarea class="fta" name="notes" placeholder="Couleur souhaitée…" id="qiNotes"></textarea></div>
+        <button type="submit" class="sub-btn" id="qSubBtn">🛍️ <span id="qSubBtnT">Envoyer la commande</span></button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="t-dot"></div><span id="toastMsg"></span></div>
+
+<script type="module">
+import { supabase } from '/js/supabase.js';
+import { getUser, logout, updateNav } from '/js/auth.js';
+import { addToCart, removeFromCart, updateQty, getCart, getTotal, getCount } from '/js/cart.js';
+import { WA_NUMBER, FORMSUBMIT } from '/js/supabase.js';
+
+const CAT_ICON = { classique:'👜', luxe:'💎', casual:'🎒', mini:'👛', tote:'👝' };
+const BADGE_COLORS = { sale:'b-sale', new:'b-new', hot:'b-hot', vip:'b-vip' };
+let currentProduct = null;
+
+async function init() {
+  await updateNav();
+  syncCartUI();
+  window.addEventListener('cartUpdated', syncCartUI);
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) { window.location.href = '/'; return; }
+
+  const { data: p, error } = await supabase.from('products').select('*').eq('id', id).single();
+  if (error || !p) { window.location.href = '/'; return; }
+
+  currentProduct = p;
+  renderProduct(p);
+}
+
+function renderProduct(p) {
+  const pct = p.old_price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
+  const stars = '★'.repeat(Math.floor(p.stars || 4)) + ((p.stars || 4) % 1 >= .5 ? '☆' : '');
+  const badgeCls = BADGE_COLORS[p.badge] || '';
+  const badgeTxt = p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? 'Nouveau' : p.badge === 'hot' ? '🔥 Tendance' : p.badge === 'vip' ? 'VIP' : '';
+
+  document.title = `${p.title} — Odette`;
+  document.getElementById('bcTitle').textContent = p.title;
+
+  document.getElementById('prodWrap').innerHTML = `
+    <!-- GALLERY -->
+    <div class="prod-gallery">
+      <div class="prod-main-img">
+        ${p.img_url ? `<img src="${p.img_url}" alt="${p.title}" onerror="this.style.display='none';document.querySelector('.img-ph').style.display='flex'">` : ''}
+        <div class="img-ph" style="${p.img_url ? 'display:none' : ''}">${CAT_ICON[p.category] || '👜'}</div>
+        ${p.badge ? `<div class="prod-badge-abs"><span class="b-tag ${badgeCls}">${badgeTxt}</span></div>` : ''}
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="prod-info">
+      <div class="prod-cat-lbl">${(p.category || '').toUpperCase()}</div>
+      <h1 class="prod-title">${p.title}</h1>
+      <div class="prod-stars">
+        <span class="stars">${stars}</span>
+        <span class="stars-count">${p.stars || 4.5} / 5 &nbsp;·&nbsp; ${p.sold || 0} ventes</span>
+      </div>
+      <div class="prod-prices">
+        <span class="price-now">${Number(p.price).toFixed(2)} DT</span>
+        ${p.old_price ? `<span class="price-old">${p.old_price} DT</span><span class="price-pct">−${pct}%</span>` : ''}
+      </div>
+      <div class="prod-sold">✅ ${p.sold || 0}+ clientes satisfaites</div>
+
+      ${p.description ? `<div class="prod-desc">${p.description}</div>` : ''}
+
+      <div class="prod-actions">
+        <button class="btn-atc" id="btnAtc" onclick="doATC()">🛒 Ajouter au panier</button>
+        <button class="btn-quick" onclick="openQO()">⚡ Commande rapide (formulaire)</button>
+        <a class="btn-wa" href="https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Bonjour, je souhaite commander:\n📦 ${p.title}\n💰 ${p.price} DT\n\nMerci !`)}" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Commander via WhatsApp
+        </a>
+      </div>
+
+      <div class="prod-perks">
+        <div class="perk"><span class="perk-ico">🚚</span>Livraison rapide</div>
+        <div class="perk"><span class="perk-ico">🎀</span>Emballage cadeau</div>
+        <div class="perk"><span class="perk-ico">↩️</span>Retour 30 jours</div>
+        <div class="perk"><span class="perk-ico">🔒</span>Paiement sécurisé</div>
+      </div>
+    </div>
+  `;
+}
+
+function doATC() {
+  if (!currentProduct) return;
+  addToCart(currentProduct);
+  toast(`🛒 "${currentProduct.title}" ajouté !`);
+  const btn = document.getElementById('btnAtc');
+  if (btn) { btn.classList.add('done'); btn.textContent = '✓ Ajouté au panier'; setTimeout(() => { btn.classList.remove('done'); btn.textContent = '🛒 Ajouter au panier'; }, 2500); }
+}
+
+function openQO() {
+  const p = currentProduct;
+  document.getElementById('qoSumm').innerHTML = `
+    <div class="summ-lbl">Récapitulatif</div>
+    <div class="summ-row"><span>${p.title}</span><span>${Number(p.price).toFixed(2)} DT</span></div>
+    <div class="summ-total"><span>Total</span><span>${Number(p.price).toFixed(2)} DT</span></div>`;
+  document.getElementById('qoSucc').classList.remove('on');
+  document.getElementById('qoFormW').style.display = 'block';
+  document.getElementById('qoBg').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeQO() { document.getElementById('qoBg').classList.remove('on'); document.body.style.overflow = ''; }
+
+async function submitQuick(e) {
+  e.preventDefault();
+  const p = currentProduct;
+  const btn = document.getElementById('qSubBtn');
+  btn.disabled = true;
+  document.getElementById('qSubBtnT').textContent = 'Envoi…';
+  try {
+    const fd = new FormData();
+    fd.append('_subject', `🛍️ Commande Rapide Odette — ${document.getElementById('qiName').value}`);
+    fd.append('_template', 'table');
+    fd.append('_captcha', 'false');
+    fd.append('Nom', document.getElementById('qiName').value);
+    fd.append('Téléphone', document.getElementById('qiPhone').value);
+    fd.append('Email', document.getElementById('qiEmail').value || '—');
+    fd.append('Adresse', document.getElementById('qiAddr').value);
+    fd.append('Produit', `${p.title} — ${Number(p.price).toFixed(2)} DT`);
+    fd.append('Notes', document.getElementById('qiNotes').value || '—');
+    await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
+  } catch (_) {}
+  document.getElementById('qoFormW').style.display = 'none';
+  document.getElementById('qoSucc').classList.add('on');
+  document.getElementById('qoForm').reset();
+  btn.disabled = false;
+  document.getElementById('qSubBtnT').textContent = 'Envoyer la commande';
+}
+
+function syncCartUI() {
+  const cart = getCart();
+  const cnt = getCount();
+  const b = document.getElementById('cartBadge');
+  b.textContent = cnt; b.classList.toggle('on', cnt > 0);
+  document.getElementById('cdTotal').textContent = getTotal().toFixed(2) + ' DT';
+  const cbtn = document.getElementById('checkoutBtn');
+  cbtn.style.pointerEvents = cart.length ? 'auto' : 'none';
+  cbtn.style.opacity = cart.length ? '1' : '.4';
+  const el = document.getElementById('cdItems');
+  if (!cart.length) { el.innerHTML = `<div class="cd-empty"><div class="cd-empty-ico">🛒</div><p>Votre panier est vide</p></div>`; return; }
+  el.innerHTML = cart.map(it => `
+  <div class="cd-item">
+    <div class="cd-item-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '👜')}</div>
+    <div class="cd-item-info">
+      <div class="cd-item-name">${it.title}</div>
+      <div class="cd-item-price">${(it.price * it.qty).toFixed(2)} DT</div>
+      <div class="cd-ctrl">
+        <button class="q-b" onclick="doChQty(${it.id},-1)">−</button>
+        <span class="q-n">${it.qty}</span>
+        <button class="q-b" onclick="doChQty(${it.id},1)">+</button>
+        <button class="cd-rm" onclick="doRmItem(${it.id})">🗑️</button>
+      </div>
+    </div>
+  </div>`).join('');
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('on'); clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('on'), 3200);
+}
+
+async function doLogout() { await logout(); }
+function openCart() { document.getElementById('cartDrawer').classList.add('on'); document.getElementById('cartBg').classList.add('on'); document.body.style.overflow = 'hidden'; }
+function closeCart() { document.getElementById('cartDrawer').classList.remove('on'); document.getElementById('cartBg').classList.remove('on'); document.body.style.overflow = ''; }
+function doRmItem(id) { removeFromCart(id); }
+function doChQty(id, d) { const cart = getCart(); const item = cart.find(i => i.id === id); if (item) updateQty(id, item.qty + d); }
+
+window.doATC = doATC;
+window.openQO = openQO;
+window.closeQO = closeQO;
+window.submitQuick = submitQuick;
+window.doLogout = doLogout;
+window.openCart = openCart;
+window.closeCart = closeCart;
+window.doRmItem = doRmItem;
+window.doChQty = doChQty;
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeCart(); closeQO(); } });
+
+init();
+</script>
+</body>
+</html>
