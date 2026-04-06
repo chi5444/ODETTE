@@ -69,13 +69,10 @@ header { background: var(--white); border-bottom: 2px solid var(--rose-md); posi
 .mb1 { background: linear-gradient(135deg, #d4879a, #b5607a); }
 .mb2 { background: linear-gradient(135deg, #c9a5b2, #a07888); }
 
-/* ══ FLASH SALE ══ */
+/* ══ BEST SELLERS ══ */
 .flash { max-width: 1280px; margin: 16px auto; padding: 0 12px; }
 .flash-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.flash-title { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 900; color: var(--ink); flex-wrap: wrap; }
-.countdown { display: flex; gap: 6px; align-items: center; }
-.cd-block { background: var(--rose-dk); color: white; font-size: 14px; font-weight: 900; padding: 4px 10px; border-radius: 6px; min-width: 32px; text-align: center; }
-.cd-sep { font-weight: 900; color: var(--rose-dk); font-size: 16px; }
+.flash-title { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 900; color: var(--ink); }
 .see-all { background: none; border: 2px solid var(--rose); color: var(--rose-dk); font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; padding: 6px 16px; border-radius: 100px; cursor: pointer; transition: all .2s; }
 .see-all:hover { background: var(--rose); color: white; }
 .flash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
@@ -184,13 +181,38 @@ footer strong { color: var(--rose); }
   .sidebar { position: static; }
 }
 @media(max-width:640px) {
-  .header-main { padding: 8px 12px; gap: 8px; }
-  .logo { font-size: 26px; }
+  /* HEADER */
+  .header-main { padding: 8px 12px; gap: 6px; flex-wrap: wrap; }
+  .logo { font-size: 24px; }
+  .search-bar { order: 3; flex: 0 0 100%; max-width: 100%; margin: 4px 0 0; }
+  .h-icons { margin-left: auto; }
+  .h-ico { padding: 6px 8px; font-size: 22px; }
   .h-ico .lbl { display: none; }
-  .flash-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-  .main-grid { grid-template-columns: repeat(2, 1fr); }
-  .banner-main { padding: 24px 20px; }
-  .banner-txt h2 { font-size: 24px; }
+
+  /* BANNER */
+  .hero-banner { padding: 0 10px; }
+  .banner-main { padding: 20px 16px; min-height: 140px; }
+  .banner-txt h2 { font-size: 22px; }
+  .banner-side { flex-direction: row; }
+
+  /* FLASH */
+  .flash { padding: 0 10px; }
+  .flash-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+  /* SIDEBAR hidden on mobile */
+  .sidebar { display: none; }
+  .shop-area { grid-template-columns: 1fr; padding: 0 10px; }
+
+  /* MAIN GRID */
+  .main-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .main-grid-head { margin-bottom: 10px; }
+
+  /* CARDS */
+  .pc-img { padding-top: 115%; }
+  .pc-body { padding: 10px 8px; }
+  .pc-name { font-size: 13px; }
+  .pc-price-now { font-size: 15px; }
+  .pc-atc { font-size: 12px; padding: 9px; }
 }
 </style>
 </head>
@@ -246,26 +268,13 @@ footer strong { color: var(--rose); }
   </div>
 </div>
 
-<!-- FLASH SALE -->
-<div class="flash">
+<!-- BEST SELLERS -->
+<div class="flash" id="featuredSection" style="display:none">
   <div class="flash-head">
-    <div class="flash-title">
-      🔥 Ventes Flash
-      <span style="font-size:13px;color:var(--muted);font-weight:600">Se termine dans</span>
-      <div class="countdown">
-        <div class="cd-block" id="cdH">02</div><span class="cd-sep">:</span>
-        <div class="cd-block" id="cdM">47</div><span class="cd-sep">:</span>
-        <div class="cd-block" id="cdS">33</div>
-      </div>
-    </div>
+    <div class="flash-title">⭐ Meilleures Ventes</div>
     <button class="see-all" onclick="catFilter('all', document.querySelectorAll('.cat-btn')[0])">Voir tout →</button>
   </div>
-  <div class="flash-grid" id="flashGrid">
-    <div class="skeleton skel-card"></div>
-    <div class="skeleton skel-card"></div>
-    <div class="skeleton skel-card"></div>
-    <div class="skeleton skel-card"></div>
-  </div>
+  <div class="flash-grid" id="flashGrid"></div>
 </div>
 
 <!-- MAIN SHOP -->
@@ -351,7 +360,6 @@ async function init() {
   syncCartUI();
   window.addEventListener('cartUpdated', syncCartUI);
   await loadProducts();
-  startCountdown();
 }
 
 async function loadProducts() {
@@ -362,12 +370,13 @@ async function loadProducts() {
   renderMain();
 }
 
-/* ── FLASH ── */
+/* ── BEST SELLERS ── */
 function renderFlash() {
-  const items = allProducts.filter(p => p.old_price).slice(0, 4);
-  document.getElementById('flashGrid').innerHTML = items.length
-    ? items.map(p => cardHTML(p)).join('')
-    : '<p style="color:var(--muted);font-size:13px;padding:20px">Aucune promotion en cours</p>';
+  const items = allProducts.filter(p => p.featured);
+  const section = document.getElementById('featuredSection');
+  if (!items.length) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  document.getElementById('flashGrid').innerHTML = items.map(p => cardHTML(p)).join('');
 }
 
 /* ── MAIN GRID ── */
@@ -501,17 +510,6 @@ function toast(msg) {
   document.getElementById('toastMsg').textContent = msg;
   t.classList.add('on'); clearTimeout(t._t);
   t._t = setTimeout(() => t.classList.remove('on'), 3200);
-}
-
-/* ── COUNTDOWN ── */
-function startCountdown() {
-  let h = 2, m = 47, s = 33;
-  setInterval(() => {
-    s--; if (s < 0) { s = 59; m--; } if (m < 0) { m = 59; h--; } if (h < 0) { h = 2; m = 59; s = 59; }
-    document.getElementById('cdH').textContent = String(h).padStart(2, '0');
-    document.getElementById('cdM').textContent = String(m).padStart(2, '0');
-    document.getElementById('cdS').textContent = String(s).padStart(2, '0');
-  }, 1000);
 }
 
 /* ── NAVIGATION ── */

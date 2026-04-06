@@ -120,7 +120,7 @@ tr:hover td{background:var(--rose-lt)}
     <a class="nav-item" href="/" target="_blank"><span class="nav-ico">🏪</span> Voir la boutique</a>
   </nav>
   <div class="sb-foot">
-    <div class="sb-user">Connecté en tant que<strong id="adminEmail">admin@odette.com</strong></div>
+    <div class="sb-user">Connecté en tant que<strong id="adminEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="244540494d4a644b40415050410a474b49">[email&#160;protected]</a></strong></div>
     <button class="btn-logout" onclick="doLogout()">🚪 Déconnexion</button>
   </div>
 </div>
@@ -230,7 +230,7 @@ tr:hover td{background:var(--rose-lt)}
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script type="module">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { supabase } from '../js/supabase.js';
 import { requireAdmin, logout } from '../js/auth.js';
 
@@ -256,7 +256,7 @@ function renderProductsTable() {
   const el = document.getElementById('productsTable');
   if (!products.length) { el.innerHTML = '<div class="empty-msg">Aucun produit</div>'; return; }
   el.innerHTML = `<table>
-    <thead><tr><th></th><th>Titre</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Actions</th></tr></thead>
+    <thead><tr><th></th><th>Titre</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Vedette</th><th>Actions</th></tr></thead>
     <tbody>
     ${products.map(p => `
     <tr>
@@ -265,6 +265,7 @@ function renderProductsTable() {
       <td>${p.category}</td>
       <td><strong style="color:var(--sale)">${Number(p.price).toFixed(2)} DT</strong>${p.old_price ? `<br><span style="font-size:11px;color:#ccc;text-decoration:line-through">${p.old_price} DT</span>` : ''}</td>
       <td>${p.in_stock ? '<span style="color:var(--green);font-weight:800">✅ Oui</span>' : '<span style="color:var(--red);font-weight:800">❌ Non</span>'}</td>
+      <td><button class="btn-sm" style="${p.featured ? 'background:#fff9e6;color:#c9a96e;border:1.5px solid #c9a96e' : 'background:#f5f5f5;color:#bbb'}" onclick="toggleFeatured(${p.id},${!!p.featured})">${p.featured ? '⭐ Vedette' : '☆ Vedette'}</button></td>
       <td><div class="tbl-actions">
         <button class="btn-sm btn-edit" onclick="editProd(${p.id})">✏️ Modifier</button>
         <button class="btn-sm btn-del" onclick="deleteProd(${p.id})">🗑️ Supprimer</button>
@@ -303,6 +304,13 @@ window.deleteProd = async function(id) {
   const { error } = await supabase.from('products').delete().eq('id', id);
   if (error) { toast('❌ Erreur: ' + error.message); return; }
   toast('🗑️ Produit supprimé');
+  await loadProducts();
+};
+
+window.toggleFeatured = async function(id, current) {
+  const { error } = await supabase.from('products').update({ featured: !current }).eq('id', id);
+  if (error) { toast('❌ ' + error.message); return; }
+  toast(current ? '☆ Retiré des vedettes' : '⭐ Ajouté aux Meilleures Ventes !');
   await loadProducts();
 };
 
@@ -443,12 +451,7 @@ function toast(msg) {
 
 window.doLogout = async function() { await logout(); };
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.getElementById('prodModal').classList.remove('on');
-    document.getElementById('orderModal').classList.remove('on');
-  }
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('prodModal').classList.remove('on'); document.getElementById('orderModal').classList.remove('on'); } });
 
 init();
 </script>
