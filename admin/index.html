@@ -204,7 +204,20 @@ tr:hover td{background:var(--rose-lt)}
           </select>
         </div>
       </div>
-      <div class="fg"><label class="fl">URL Image</label><input class="fi" id="pImg" placeholder="https://images.unsplash.com/…"></div>
+      <div class="fg">
+        <label class="fl">Image du produit</label>
+        <div id="imgPreviewWrap" style="display:none;margin-bottom:8px;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);max-height:160px;display:flex;align-items:center;justify-content:center;background:var(--rose-lt)">
+          <img id="imgPreview" src="" alt="" style="max-height:160px;max-width:100%;object-fit:contain;display:block">
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label style="flex-shrink:0;background:var(--rose-lt);border:1.5px solid var(--rose);color:var(--rose-dk);font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;padding:9px 14px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap" id="uploadLabel">
+            📁 Choisir une image
+            <input type="file" id="pImgFile" accept="image/*" style="display:none" onchange="previewImg(this)">
+          </label>
+          <input class="fi" id="pImg" placeholder="Ou coller une URL…" style="flex:1" oninput="previewUrl(this.value)">
+        </div>
+        <div id="uploadProgress" style="display:none;margin-top:8px;font-size:12px;font-weight:700;color:var(--rose-dk)">⏳ Upload en cours…</div>
+      </div>
       <div class="fg"><label class="fl">Description</label><textarea class="fta" id="pDesc" placeholder="Description du produit…" rows="3"></textarea></div>
       <div class="fg2">
         <div class="fg"><label class="fl">Vendus</label><input class="fi" type="number" id="pSold" placeholder="0" value="0"></div>
@@ -289,6 +302,9 @@ window.openProdModal = function(prod = null) {
   document.getElementById('pSold').value   = prod?.sold || 0;
   document.getElementById('pStars').value  = prod?.stars || 4.5;
   document.getElementById('pStock').checked = prod ? prod.in_stock : true;
+  document.getElementById('pImgFile').value = '';
+  if (prod?.img_url) showPreview(prod.img_url);
+  else { document.getElementById('imgPreviewWrap').style.display = 'none'; }
   document.getElementById('prodModal').classList.add('on');
 };
 
@@ -314,14 +330,50 @@ window.toggleFeatured = async function(id, current) {
   await loadProducts();
 };
 
+window.previewImg = function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  showPreview(url);
+  document.getElementById('pImg').value = '';
+};
+
+window.previewUrl = function(url) {
+  if (url) showPreview(url);
+  else { document.getElementById('imgPreviewWrap').style.display = 'none'; }
+  document.getElementById('pImgFile').value = '';
+};
+
+function showPreview(url) {
+  const wrap = document.getElementById('imgPreviewWrap');
+  const img  = document.getElementById('imgPreview');
+  img.src = url;
+  wrap.style.display = 'flex';
+}
+
+async function uploadImageIfNeeded() {
+  const file = document.getElementById('pImgFile').files[0];
+  if (!file) return document.getElementById('pImg').value.trim() || null;
+
+  document.getElementById('uploadProgress').style.display = 'block';
+  const ext  = file.name.split('.').pop();
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const { error } = await supabase.storage.from('products').upload(path, file, { upsert: true });
+  document.getElementById('uploadProgress').style.display = 'none';
+  if (error) { toast('❌ Upload échoué: ' + error.message); return null; }
+  const { data } = supabase.storage.from('products').getPublicUrl(path);
+  return data.publicUrl;
+}
+
 window.saveProd = async function() {
+  const img_url = await uploadImageIfNeeded();
   const payload = {
     title:       document.getElementById('pTitle').value.trim(),
     price:       parseFloat(document.getElementById('pPrice').value),
     old_price:   parseFloat(document.getElementById('pOldPrice').value) || null,
     category:    document.getElementById('pCat').value,
     badge:       document.getElementById('pBadge').value || null,
-    img_url:     document.getElementById('pImg').value.trim() || null,
+    img_url,
     description: document.getElementById('pDesc').value.trim() || null,
     sold:        parseInt(document.getElementById('pSold').value) || 0,
     stars:       parseFloat(document.getElementById('pStars').value) || 4.5,
