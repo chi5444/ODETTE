@@ -317,9 +317,19 @@ window.editProd = function(id) {
 
 window.deleteProd = async function(id) {
   if (!confirm('Supprimer ce produit définitivement ?')) return;
+
+  // حذف الصورة من Storage إذا كانت من Supabase
+  const prod = products.find(x => x.id === id);
+  if (prod?.img_url && prod.img_url.includes('supabase')) {
+    try {
+      const path = prod.img_url.split('/products/').pop();
+      await supabase.storage.from('products').remove([path]);
+    } catch (_) {}
+  }
+
   const { error } = await supabase.from('products').delete().eq('id', id);
   if (error) { toast('❌ Erreur: ' + error.message); return; }
-  toast('🗑️ Produit supprimé');
+  toast('🗑️ Produit et image supprimés');
   await loadProducts();
 };
 
