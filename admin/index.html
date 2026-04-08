@@ -186,12 +186,13 @@ tr:hover td{background:var(--rose-lt)}
       </div>
       <div class="fg2">
         <div class="fg"><label class="fl">Catégorie</label>
-          <select class="fsel" id="pCat">
-            <option value="classique">👜 Classique</option>
-            <option value="luxe">💎 Luxe</option>
-            <option value="casual">🎒 Casual</option>
+          <select class="fsel" id="pCat" onchange="updateTypeFromCat()">
+            <option value="classique">👜 Sacs Classiques</option>
+            <option value="luxe">💎 Sacs Luxe</option>
             <option value="mini">👛 Mini Bag</option>
             <option value="tote">👝 Tote Bag</option>
+            <option value="tshirt">👕 T-Shirt</option>
+            <option value="pants">👖 Pantalon</option>
           </select>
         </div>
         <div class="fg"><label class="fl">Badge</label>
@@ -202,6 +203,28 @@ tr:hover td{background:var(--rose-lt)}
             <option value="hot">🔥 Hot</option>
             <option value="vip">VIP</option>
           </select>
+        </div>
+      </div>
+
+      <!-- COULEURS -->
+      <div class="fg">
+        <label class="fl">Couleurs disponibles</label>
+        <div id="colorPicker" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="color" id="colorInput" value="#d4879a" style="width:38px;height:38px;border:none;border-radius:6px;cursor:pointer;padding:2px;background:var(--rose-lt);border:1.5px solid var(--border)">
+          <input class="fi" id="colorHex" placeholder="#d4879a ou nom ex: rouge" style="flex:1;font-size:13px">
+          <button type="button" onclick="addColor()" style="background:var(--rose-dk);color:white;border:none;padding:9px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap">+ Ajouter</button>
+        </div>
+      </div>
+
+      <!-- TAILLES (visible seulement pour vêtements) -->
+      <div class="fg" id="sizesSection">
+        <label class="fl">Tailles disponibles</label>
+        <div id="sizeChips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${['XS','S','M','L','XL','XXL','28','30','32','34','36','38','40'].map(s =>
+            `<button type="button" class="size-preset" data-size="${s}" onclick="toggleSize('${s}',this)" style="padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--rose-lt);font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;color:var(--muted);transition:all .2s">${s}</button>`
+          ).join('')}
         </div>
       </div>
       <div class="fg">
@@ -302,9 +325,22 @@ window.openProdModal = function(prod = null) {
   document.getElementById('pSold').value   = prod?.sold || 0;
   document.getElementById('pStars').value  = prod?.stars || 4.5;
   document.getElementById('pStock').checked = prod ? prod.in_stock : true;
+  // Colors
+  selectedColors = prod?.colors || [];
+  renderColorPicker();
+  document.getElementById('colorHex').value = '';
+  // Sizes
+  selectedSizes = prod?.sizes || [];
+  document.querySelectorAll('.size-preset').forEach(btn => {
+    const on = selectedSizes.includes(btn.dataset.size);
+    btn.style.background   = on ? 'var(--rose-dk)' : 'var(--rose-lt)';
+    btn.style.color        = on ? 'white' : 'var(--muted)';
+    btn.style.borderColor  = on ? 'var(--rose-dk)' : 'var(--border)';
+  });
+  updateTypeFromCat();
   document.getElementById('pImgFile').value = '';
   if (prod?.img_url) showPreview(prod.img_url);
-  else { document.getElementById('imgPreviewWrap').style.display = 'none'; }
+  else document.getElementById('imgPreviewWrap').style.display = 'none';
   document.getElementById('prodModal').classList.add('on');
 };
 
@@ -340,7 +376,47 @@ window.toggleFeatured = async function(id, current) {
   await loadProducts();
 };
 
-window.previewImg = function(input) {
+/* ── COLORS & SIZES ── */
+let selectedColors = [];
+let selectedSizes  = [];
+
+window.addColor = function() {
+  const hex = document.getElementById('colorHex').value.trim() || document.getElementById('colorInput').value;
+  if (!hex || selectedColors.includes(hex)) return;
+  selectedColors.push(hex);
+  renderColorPicker();
+  document.getElementById('colorHex').value = '';
+};
+
+function renderColorPicker() {
+  document.getElementById('colorPicker').innerHTML = selectedColors.map(c => `
+    <div style="display:flex;align-items:center;gap:4px;background:var(--rose-lt);border:1.5px solid var(--border);border-radius:6px;padding:3px 8px">
+      <span style="width:14px;height:14px;border-radius:50%;background:${c};border:1px solid rgba(0,0,0,.15);flex-shrink:0"></span>
+      <span style="font-size:12px;font-weight:700;color:var(--ink)">${c}</span>
+      <button type="button" onclick="removeColor('${c}')" style="background:none;border:none;cursor:pointer;color:var(--red);font-size:14px;line-height:1;margin-left:2px">×</button>
+    </div>`).join('');
+}
+
+window.removeColor = function(c) {
+  selectedColors = selectedColors.filter(x => x !== c);
+  renderColorPicker();
+};
+
+window.toggleSize = function(s, btn) {
+  if (selectedSizes.includes(s)) {
+    selectedSizes = selectedSizes.filter(x => x !== s);
+    btn.style.background = 'var(--rose-lt)'; btn.style.color = 'var(--muted)'; btn.style.borderColor = 'var(--border)';
+  } else {
+    selectedSizes.push(s);
+    btn.style.background = 'var(--rose-dk)'; btn.style.color = 'white'; btn.style.borderColor = 'var(--rose-dk)';
+  }
+};
+
+window.updateTypeFromCat = function() {
+  const cat = document.getElementById('pCat').value;
+  const isClothing = ['tshirt','pants'].includes(cat);
+  document.getElementById('sizesSection').style.display = isClothing ? 'block' : 'none';
+};
   const file = input.files[0];
   if (!file) return;
   const url = URL.createObjectURL(file);
@@ -377,17 +453,21 @@ async function uploadImageIfNeeded() {
 
 window.saveProd = async function() {
   const img_url = await uploadImageIfNeeded();
+  const cat = document.getElementById('pCat').value;
   const payload = {
     title:       document.getElementById('pTitle').value.trim(),
     price:       parseFloat(document.getElementById('pPrice').value),
     old_price:   parseFloat(document.getElementById('pOldPrice').value) || null,
-    category:    document.getElementById('pCat').value,
+    category:    cat,
+    type:        ['tshirt','pants'].includes(cat) ? 'clothing' : 'bag',
     badge:       document.getElementById('pBadge').value || null,
     img_url,
     description: document.getElementById('pDesc').value.trim() || null,
     sold:        parseInt(document.getElementById('pSold').value) || 0,
     stars:       parseFloat(document.getElementById('pStars').value) || 4.5,
     in_stock:    document.getElementById('pStock').checked,
+    colors:      selectedColors,
+    sizes:       selectedSizes,
   };
   if (!payload.title || !payload.price) { toast('⚠️ Titre et prix obligatoires'); return; }
   if (editingId) payload.id = editingId;

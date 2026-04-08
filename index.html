@@ -48,12 +48,17 @@ header { background: var(--white); border-bottom: 2px solid var(--rose-md); posi
 .badge { position: absolute; top: 2px; right: 2px; background: var(--sale); color: white; font-size: 9px; font-weight: 800; min-width: 16px; height: 16px; border-radius: 100px; display: none; align-items: center; justify-content: center; padding: 0 4px; }
 .badge.on { display: flex; }
 
-/* ══ CAT NAV ══ */
-.cat-nav { background: var(--white); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
-.cat-nav::-webkit-scrollbar { display: none; }
-.cat-inner { display: flex; align-items: center; padding: 0 16px; max-width: 1280px; margin: 0 auto; width: max-content; }
-.cat-btn { background: none; border: none; padding: 10px 18px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; }
-.cat-btn:hover, .cat-btn.on { color: var(--rose-dk); border-bottom-color: var(--rose-dk); }
+/* ══ MAIN NAV ══ */
+.main-nav { background: var(--white); border-bottom: 2px solid var(--rose-md); }
+.main-nav-inner { display: flex; align-items: center; padding: 0 16px; max-width: 1280px; margin: 0 auto; }
+.main-nav-btn { background: none; border: none; padding: 13px 22px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; display: flex; align-items: center; gap: 7px; }
+.main-nav-btn:hover, .main-nav-btn.on { color: var(--rose-dk); border-bottom-color: var(--rose-dk); }
+/* SUB NAV */
+.sub-nav { background: var(--rose-lt); border-bottom: 1px solid var(--rose-md); overflow-x: auto; scrollbar-width: none; transition: all .25s; }
+.sub-nav::-webkit-scrollbar { display: none; }
+.sub-nav-inner { display: flex; align-items: center; padding: 0 16px; max-width: 1280px; margin: 0 auto; width: max-content; min-width: 100%; gap: 4px; }
+.sub-btn { background: none; border: none; padding: 9px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; border-radius: 100px; transition: all .2s; white-space: nowrap; margin: 5px 0; }
+.sub-btn:hover, .sub-btn.on { background: var(--rose-dk); color: white; }
 
 /* ══ HERO ══ */
 .hero-banner { max-width: 1280px; margin: 12px auto; padding: 0 12px; display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
@@ -123,6 +128,11 @@ header { background: var(--white); border-bottom: 2px solid var(--rose-md); posi
 .pc-atc { width: 100%; background: var(--rose); color: white; border: none; padding: 8px; border-radius: 6px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; transition: all .2s; margin-top: 6px; }
 .pc-atc:hover { background: var(--rose-dk); }
 .pc-atc.done { background: var(--green) !important; }
+/* Colors & Sizes preview on card */
+.pc-colors { display: flex; gap: 4px; margin: 5px 0 3px; flex-wrap: wrap; }
+.pc-color-dot { width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,.12); flex-shrink: 0; }
+.pc-sizes { display: flex; gap: 3px; margin-bottom: 4px; flex-wrap: wrap; }
+.pc-size-chip { font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 3px; background: var(--rose-lt); color: var(--muted); border: 1px solid var(--border); }
 
 /* ══ CART DRAWER ══ */
 .cart-bg { position: fixed; inset: 0; background: rgba(0,0,0,.4); backdrop-filter: blur(4px); z-index: 400; opacity: 0; pointer-events: none; transition: opacity .3s; }
@@ -241,15 +251,17 @@ footer strong { color: var(--rose); }
       <a class="h-ico" id="navAdmin" href="/admin/" style="display:none">⚙️<span class="lbl">Admin</span></a>
     </div>
   </div>
-  <div class="cat-nav">
-    <div class="cat-inner">
-      <button class="cat-btn on" onclick="catFilter('all',this)">✨ Tous</button>
-      <button class="cat-btn" onclick="catFilter('classique',this)">👜 Classique</button>
-      <button class="cat-btn" onclick="catFilter('luxe',this)">💎 Luxe</button>
-      <button class="cat-btn" onclick="catFilter('casual',this)">🎒 Casual</button>
-      <button class="cat-btn" onclick="catFilter('mini',this)">👛 Mini Bags</button>
-      <button class="cat-btn" onclick="catFilter('tote',this)">👝 Tote Bags</button>
+  <!-- MAIN NAV -->
+  <nav class="main-nav">
+    <div class="main-nav-inner">
+      <button class="main-nav-btn on" onclick="setSection('all',this)">✨ Tout voir</button>
+      <button class="main-nav-btn" onclick="setSection('bags',this)">👜 Sacs</button>
+      <button class="main-nav-btn" onclick="setSection('clothing',this)">👗 Vêtements</button>
     </div>
+  </nav>
+  <!-- SUB NAV -->
+  <div class="sub-nav" id="subNav" style="display:none">
+    <div class="sub-nav-inner" id="subNavInner"></div>
   </div>
 </header>
 
@@ -263,8 +275,8 @@ footer strong { color: var(--rose); }
     </div>
   </div>
   <div class="banner-side">
-    <div class="mini-banner mb1" onclick="catFilter('luxe', document.querySelectorAll('.cat-btn')[2])">💎 Collection Luxe<br><small style="font-size:11px;opacity:.8">Dès 150 DT</small></div>
-    <div class="mini-banner mb2" onclick="catFilter('mini', document.querySelectorAll('.cat-btn')[4])">👛 Mini Bags<br><small style="font-size:11px;opacity:.8">Dès 59 DT</small></div>
+    <div class="mini-banner mb1" onclick="setSection('bags', document.querySelectorAll('.main-nav-btn')[1])">👜 Collection Sacs<br><small style="font-size:11px;opacity:.8">Classique & Luxe</small></div>
+    <div class="mini-banner mb2" onclick="setSection('clothing', document.querySelectorAll('.main-nav-btn')[2])">👗 Vêtements<br><small style="font-size:11px;opacity:.8">T-Shirts & Pantalons</small></div>
   </div>
 </div>
 
@@ -352,7 +364,7 @@ import { addToCart, removeFromCart, updateQty, getCart, getTotal, getCount } fro
 let allProducts = [], activeFilter = 'all', searchQ = '', wishCount = 0;
 
 const BADGE_COLORS = { sale:'b-sale', new:'b-new', hot:'b-hot', vip:'b-vip' };
-const CAT_ICON = { classique:'👜', luxe:'💎', casual:'🎒', mini:'👛', tote:'👝' };
+const CAT_ICON = { classique:'👜', luxe:'💎', casual:'🎒', mini:'👛', tote:'👝', tshirt:'👕', pants:'👖' };
 
 /* ── INIT ── */
 async function init() {
@@ -387,7 +399,11 @@ function renderMain() {
   const sort = document.getElementById('sortSel').value;
 
   let list = allProducts.filter(p => {
-    const mCat    = activeFilter === 'all' || p.category === activeFilter;
+    let mCat;
+    if (activeFilter === 'all')          mCat = true;
+    else if (activeFilter === 'all_bags')     mCat = !['tshirt','pants'].includes(p.category);
+    else if (activeFilter === 'all_clothing') mCat = ['tshirt','pants'].includes(p.category);
+    else                                      mCat = p.category === activeFilter;
     const mSearch = !searchQ || p.title.toLowerCase().includes(searchQ);
     const mPrice  = p.price >= min && p.price <= max;
     const mSale   = !onSale || p.old_price;
@@ -438,6 +454,8 @@ function cardHTML(p) {
         <span class="pc-price-now">${Number(p.price).toFixed(2)} DT</span>
         ${p.old_price ? `<span class="pc-price-old">${p.old_price} DT</span><span class="pc-discount">−${pct}%</span>` : ''}
       </div>
+      ${p.colors?.length ? `<div class="pc-colors">${p.colors.map(c => `<span class="pc-color-dot" style="background:${c}" title="${c}"></span>`).join('')}</div>` : ''}
+      ${p.sizes?.length  ? `<div class="pc-sizes">${p.sizes.map(s => `<span class="pc-size-chip">${s}</span>`).join('')}</div>` : ''}
       <div class="pc-sold">${p.sold || 0}+ vendus</div>
       <button class="pc-atc" id="atc${p.id}" onclick="doAddToCart(${p.id})">🛒 Ajouter</button>
     </div>
@@ -482,14 +500,52 @@ function syncCartUI() {
   </div>`).join('');
 }
 
-/* ── FILTERS ── */
-function catFilter(cat, btn) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('on'));
+/* ── NAV ── */
+const SUB_CATS = {
+  bags:     [
+    { key:'all_bags',  ico:'👜', label:'Tous les sacs' },
+    { key:'classique', ico:'👜', label:'Classiques' },
+    { key:'luxe',      ico:'💎', label:'Luxe' },
+    { key:'mini',      ico:'👛', label:'Mini Bags' },
+    { key:'tote',      ico:'👝', label:'Tote Bags' },
+  ],
+  clothing: [
+    { key:'all_clothing', ico:'👗', label:'Tous les vêtements' },
+    { key:'tshirt',       ico:'👕', label:'T-Shirts' },
+    { key:'pants',        ico:'👖', label:'Pantalons' },
+  ],
+};
+
+let activeSection = 'all'; // 'all' | 'bags' | 'clothing'
+
+window.setSection = function(section, btn) {
+  activeSection = section;
+  activeFilter  = section === 'all' ? 'all' : (section === 'bags' ? 'all_bags' : 'all_clothing');
+  document.querySelectorAll('.main-nav-btn').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
-  activeFilter = cat;
+
+  const subNav = document.getElementById('subNav');
+  if (section === 'all') {
+    subNav.style.display = 'none';
+  } else {
+    subNav.style.display = 'block';
+    const subs = SUB_CATS[section];
+    document.getElementById('subNavInner').innerHTML = subs.map((s, i) =>
+      `<button class="sub-btn${i === 0 ? ' on' : ''}" onclick="setSubCat('${s.key}',this)">${s.ico} ${s.label}</button>`
+    ).join('');
+  }
   renderMain();
   document.getElementById('mainShop').scrollIntoView({ behavior: 'smooth' });
-}
+};
+
+window.setSubCat = function(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderMain();
+};
+
+window.catFilter = window.setSubCat; // backward compat for mini-banners
 function liveSearch(v) { searchQ = v.trim().toLowerCase(); renderMain(); }
 
 /* ── WISHLIST ── */

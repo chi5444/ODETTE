@@ -150,7 +150,7 @@ function renderSummary(cart) {
       <div class="order-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '👜')}</div>
       <div style="flex:1;min-width:0">
         <div class="order-name">${it.title}</div>
-        <div class="order-qty">Qté: ${it.qty}</div>
+        <div class="order-qty">Qté: ${it.qty}${it.selectedColor ? ` · <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${it.selectedColor};vertical-align:middle;border:1px solid rgba(0,0,0,.12)"></span>` : ''}${it.selectedSize ? ` · ${it.selectedSize}` : ''}</div>
       </div>
       <span class="order-price">${(it.price * it.qty).toFixed(2)} DT</span>
     </div>`).join('')}
@@ -193,7 +193,7 @@ window.placeOrder = async function() {
 
   // FormSubmit email
   try {
-    const itemsText = cart.map(i => `${i.title} ×${i.qty} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
+    const itemsText = cart.map(i => `${i.title} ×${i.qty}${i.selectedSize ? ` | Taille: ${i.selectedSize}` : ''}${i.selectedColor ? ` | Couleur: ${i.selectedColor}` : ''} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
     const fd = new FormData();
     fd.append('_subject', `🛍️ Nouvelle commande Odette — ${name}`);
     fd.append('_template', 'table');

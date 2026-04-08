@@ -275,6 +275,9 @@ async function init() {
 
   currentProduct = p;
   renderProduct(p);
+  // تحديد أول لون ومقاس افتراضياً
+  if (p.colors?.length) selectedColor = p.colors[0];
+  if (p.sizes?.length)  selectedSize  = p.sizes[0];
 }
 
 function renderProduct(p) {
@@ -312,6 +315,26 @@ function renderProduct(p) {
 
       ${p.description ? `<div class="prod-desc">${p.description}</div>` : ''}
 
+      ${p.colors?.length ? `
+      <div style="margin-bottom:18px">
+        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Couleur</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="colorSelector">
+          ${p.colors.map((c,i) => `
+          <button onclick="selectColor(this,'${c}')" title="${c}" style="width:30px;height:30px;border-radius:50%;background:${c};border:3px solid ${i===0?'var(--rose-dk)':'transparent'};cursor:pointer;transition:border-color .2s;outline:2px solid rgba(0,0,0,.08)"></button>`).join('')}
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedColorTxt">Couleur sélectionnée: ${p.colors[0]}</div>
+      </div>` : ''}
+
+      ${p.sizes?.length ? `
+      <div style="margin-bottom:18px">
+        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Taille</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="sizeSelector">
+          ${p.sizes.map((s,i) => `
+          <button onclick="selectSize(this,'${s}')" style="min-width:44px;padding:8px 12px;border-radius:8px;border:2px solid ${i===0?'var(--rose-dk)':'var(--border)'};background:${i===0?'var(--rose-lt)':'white'};font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:${i===0?'var(--rose-dk)':'var(--muted)'};cursor:pointer;transition:all .2s">${s}</button>`).join('')}
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedSizeTxt">Taille sélectionnée: ${p.sizes[0]}</div>
+      </div>` : ''}
+
       <div class="prod-actions">
         <button class="btn-atc" id="btnAtc" onclick="doATC()">🛒 Ajouter au panier</button>
         <button class="btn-quick" onclick="openQO()">⚡ Commande rapide (formulaire)</button>
@@ -331,19 +354,58 @@ function renderProduct(p) {
   `;
 }
 
+/* ── COLOR / SIZE SELECTION ── */
+let selectedColor = null;
+let selectedSize  = null;
+
+window.selectColor = function(btn, color) {
+  selectedColor = color;
+  document.querySelectorAll('#colorSelector button').forEach(b => b.style.borderColor = 'transparent');
+  btn.style.borderColor = 'var(--rose-dk)';
+  const txt = document.getElementById('selectedColorTxt');
+  if (txt) txt.textContent = `Couleur sélectionnée: ${color}`;
+};
+
+window.selectSize = function(btn, size) {
+  selectedSize = size;
+  document.querySelectorAll('#sizeSelector button').forEach(b => {
+    b.style.borderColor = 'var(--border)';
+    b.style.background  = 'white';
+    b.style.color       = 'var(--muted)';
+  });
+  btn.style.borderColor = 'var(--rose-dk)';
+  btn.style.background  = 'var(--rose-lt)';
+  btn.style.color       = 'var(--rose-dk)';
+  const txt = document.getElementById('selectedSizeTxt');
+  if (txt) txt.textContent = `Taille sélectionnée: ${size}`;
+};
+
+function getVariantNote() {
+  const parts = [];
+  if (selectedColor) parts.push(`Couleur: ${selectedColor}`);
+  if (selectedSize)  parts.push(`Taille: ${selectedSize}`);
+  return parts.join(' | ');
+}
+
 function doATC() {
   if (!currentProduct) return;
-  addToCart(currentProduct);
-  toast(`🛒 "${currentProduct.title}" ajouté !`);
+  const p = currentProduct;
+  // Vérification taille obligatoire pour vêtements
+  if (p.sizes?.length && !selectedSize) { toast('⚠️ Veuillez choisir une taille'); return; }
+  const item = { ...p, selectedColor, selectedSize, variantNote: getVariantNote() };
+  addToCart(item);
+  toast(`🛒 "${p.title}" ajouté !`);
   const btn = document.getElementById('btnAtc');
   if (btn) { btn.classList.add('done'); btn.textContent = '✓ Ajouté au panier'; setTimeout(() => { btn.classList.remove('done'); btn.textContent = '🛒 Ajouter au panier'; }, 2500); }
 }
 
 function openQO() {
   const p = currentProduct;
+  const variant = getVariantNote();
   document.getElementById('qoSumm').innerHTML = `
     <div class="summ-lbl">Récapitulatif</div>
     <div class="summ-row"><span>${p.title}</span><span>${Number(p.price).toFixed(2)} DT</span></div>
+    ${variant ? `<div class="summ-row"><span style="color:var(--rose-dk)">${variant}</span></div>` : ''}
     <div class="summ-total"><span>Total</span><span>${Number(p.price).toFixed(2)} DT</span></div>`;
   document.getElementById('qoSucc').classList.remove('on');
   document.getElementById('qoFormW').style.display = 'block';
@@ -355,6 +417,7 @@ function closeQO() { document.getElementById('qoBg').classList.remove('on'); doc
 async function submitQuick(e) {
   e.preventDefault();
   const p = currentProduct;
+  if (p.sizes?.length && !selectedSize) { toast('⚠️ Veuillez choisir une taille'); return; }
   const btn = document.getElementById('qSubBtn');
   btn.disabled = true;
   document.getElementById('qSubBtnT').textContent = 'Envoi…';
@@ -363,11 +426,13 @@ async function submitQuick(e) {
     fd.append('_subject', `🛍️ Commande Rapide Odette — ${document.getElementById('qiName').value}`);
     fd.append('_template', 'table');
     fd.append('_captcha', 'false');
-    fd.append('Nom', document.getElementById('qiName').value);
+    fd.append('Nom',       document.getElementById('qiName').value);
     fd.append('Téléphone', document.getElementById('qiPhone').value);
-    fd.append('Email', document.getElementById('qiEmail').value || '—');
-    fd.append('Adresse', document.getElementById('qiAddr').value);
-    fd.append('Produit', `${p.title} — ${Number(p.price).toFixed(2)} DT`);
+    fd.append('Email',     document.getElementById('qiEmail').value || '—');
+    fd.append('Adresse',   document.getElementById('qiAddr').value);
+    fd.append('Produit',   `${p.title} — ${Number(p.price).toFixed(2)} DT`);
+    if (selectedColor) fd.append('Couleur', selectedColor);
+    if (selectedSize)  fd.append('Taille',  selectedSize);
     fd.append('Notes', document.getElementById('qiNotes').value || '—');
     await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
   } catch (_) {}
