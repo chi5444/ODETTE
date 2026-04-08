@@ -384,7 +384,14 @@ async function loadProducts() {
 
 /* ── BEST SELLERS ── */
 function renderFlash() {
-  const items = allProducts.filter(p => p.featured);
+  const BAG_CATS = ['classique','luxe','mini','tote','casual'];
+  const CLO_CATS = ['tshirt','pants'];
+  const items = allProducts.filter(p => {
+    if (!p.featured) return false;
+    if (activeSection === 'bags')     return BAG_CATS.includes(p.category);
+    if (activeSection === 'clothing') return CLO_CATS.includes(p.category);
+    return true; // 'all' → كل المميزين
+  });
   const section = document.getElementById('featuredSection');
   if (!items.length) { section.style.display = 'none'; return; }
   section.style.display = 'block';
@@ -534,6 +541,7 @@ window.setSection = function(section, btn) {
       `<button class="sub-btn${i === 0 ? ' on' : ''}" onclick="setSubCat('${s.key}',this)">${s.ico} ${s.label}</button>`
     ).join('');
   }
+  renderFlash();
   renderMain();
   document.getElementById('mainShop').scrollIntoView({ behavior: 'smooth' });
 };
