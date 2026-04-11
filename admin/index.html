@@ -308,17 +308,21 @@ tr:hover td{background:var(--rose-lt)}
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { supabase } from '../js/supabase.js';
-import { requireAdmin, logout } from '../js/auth.js';
+import { supabase } from '/js/supabase.js';
+import { requireAdmin, logout } from '/js/auth.js';
 
 let products = [], orders = [], editingId = null;
 
 async function init() {
-  const user = await requireAdmin();
-  if (!user) return;
-  document.getElementById('adminEmail').textContent = user.email;
-  await Promise.all([loadProducts(), loadOrders()]);
-  updateStats();
+  try {
+    const user = await requireAdmin();
+    if (!user) return;
+    document.getElementById('adminEmail').textContent = user.email;
+    await Promise.all([loadProducts(), loadOrders()]);
+    updateStats();
+  } catch(err) {
+    console.error('Admin init error:', err);
+  }
 }
 
 /* ── PRODUCTS ── */
