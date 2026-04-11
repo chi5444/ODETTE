@@ -194,7 +194,10 @@ tr:hover td{background:var(--rose-lt)}
  <div class="fg"><label class="fl">Titre</label><input class="fi" id="heroTitle" placeholder="Nouvelle Collection"></div>
  <div class="fg"><label class="fl">Sous-titre</label><input class="fi" id="heroSubtitle" placeholder="Printemps 2026"></div>
  </div>
- <button class="btn-save" onclick="saveHero()"> Enregistrer le Hero</button>
+ <div style="display:flex;gap:10px;margin-top:8px">
+ <button class="btn-save" style="flex:1" onclick="saveHero()">Enregistrer le Hero</button>
+ <button id="btnDeleteHero" onclick="deleteHero()" style="background:#fff0f0;border:1.5px solid var(--red);color:var(--red);padding:13px 20px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;white-space:nowrap;display:none" onmouseover="this.style.background='#ffe0e0'" onmouseout="this.style.background='#fff0f0'">Supprimer l'image</button>
+ </div>
  </div>
  </div>
  </div>
@@ -607,12 +610,42 @@ async function loadHeroAdmin() {
  const { data } = await supabase.from('settings').select('*').eq('key', 'hero').single();
  if (data?.value) {
  const h = JSON.parse(data.value);
- if (h.img_url) document.getElementById('heroPreviewAdmin').innerHTML = `<img src="${h.img_url}" style="width:100%;max-height:220px;object-fit:cover">`;
+ if (h.img_url) {
+ document.getElementById('heroPreviewAdmin').innerHTML = `<img src="${h.img_url}" style="width:100%;max-height:220px;object-fit:cover">`;
+ const db = document.getElementById('btnDeleteHero');
+ if (db) { db.style.display = 'block'; db.dataset.imgPath = h.img_url; }
+ }
  if (h.title) document.getElementById('heroTitle').value = h.title;
  if (h.subtitle) document.getElementById('heroSubtitle').value = h.subtitle;
  }
  } catch (_) {}
 }
+
+window.deleteHero = async function() {
+ if (!confirm("Supprimer l'image hero du site et de Supabase ?")) return;
+ const btn = document.getElementById('btnDeleteHero');
+ btn.textContent = 'Suppression...'; btn.style.pointerEvents = 'none';
+
+ const imgUrl = btn.dataset.imgPath || '';
+ if (imgUrl.includes('supabase')) {
+ try {
+ const path = imgUrl.split('/products/').pop().split('?')[0];
+ await supabase.storage.from('products').remove([path]);
+ } catch (_) {}
+ }
+
+ const { error } = await supabase.from('settings').upsert(
+ { key: 'hero', value: JSON.stringify({ img_url: '', title: document.getElementById('heroTitle').value, subtitle: document.getElementById('heroSubtitle').value }) },
+ { onConflict: 'key' }
+ );
+ if (error) { toast('Erreur: ' + error.message); btn.textContent = "Supprimer l'image"; btn.style.pointerEvents = 'auto'; return; }
+
+ document.getElementById('heroPreviewAdmin').innerHTML = 'Aucune image pour le moment';
+ document.getElementById('heroUrl').value = '';
+ document.getElementById('heroFile').value = '';
+ btn.style.display = 'none';
+ toast('Image supprimee !');
+};
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('prodModal').classList.remove('on'); document.getElementById('orderModal').classList.remove('on'); } });
 
