@@ -308,21 +308,17 @@ tr:hover td{background:var(--rose-lt)}
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { supabase } from '/js/supabase.js';
-import { requireAdmin, logout } from '/js/auth.js';
+import { supabase } from '../js/supabase.js';
+import { requireAdmin, logout } from '../js/auth.js';
 
 let products = [], orders = [], editingId = null;
 
 async function init() {
-  try {
-    const user = await requireAdmin();
-    if (!user) return;
-    document.getElementById('adminEmail').textContent = user.email;
-    await Promise.all([loadProducts(), loadOrders()]);
-    updateStats();
-  } catch(err) {
-    console.error('Admin init error:', err);
-  }
+  const user = await requireAdmin();
+  if (!user) return;
+  document.getElementById('adminEmail').textContent = user.email;
+  await Promise.all([loadProducts(), loadOrders()]);
+  updateStats();
 }
 
 /* ── PRODUCTS ── */
@@ -462,6 +458,8 @@ window.updateTypeFromCat = function() {
   const isClothing = ['tshirt','pants'].includes(cat);
   document.getElementById('sizesSection').style.display = isClothing ? 'block' : 'none';
 };
+
+window.previewImg = function(input) {
   const file = input.files[0];
   if (!file) return;
   const url = URL.createObjectURL(file);
