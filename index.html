@@ -26,39 +26,54 @@ html { scroll-behavior: smooth; }
 body { font-family: 'Nunito', sans-serif; background: #f9f1f3; color: var(--ink); }
 
 /* ══ TOP BAR ══ */
-.topbar { background: var(--rose-dk); color: white; text-align: center; padding: 7px 16px; font-size: 12px; font-weight: 700; letter-spacing: .5px; overflow: hidden; white-space: nowrap; }
+.topbar { background: var(--rose-dk); color: white; text-align: center; padding: 9px 16px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; overflow: hidden; white-space: nowrap; }
 .topbar-inner { display: inline-block; animation: slide 22s linear infinite; }
 @keyframes slide { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
 
 /* ══ HEADER ══ */
-header { background: var(--white); border-bottom: 2px solid var(--rose-md); position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(212,135,154,.15); }
-.header-main { display: flex; align-items: center; gap: 14px; padding: 10px 16px; max-width: 1280px; margin: 0 auto; }
-.logo { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; font-style: italic; color: var(--rose-dk); letter-spacing: 1px; flex-shrink: 0; text-decoration: none; }
-.logo span { color: var(--rose); }
-.search-bar { flex: 1; display: flex; border: 2px solid var(--rose); border-radius: 6px; overflow: hidden; max-width: 560px; }
-.search-bar input { flex: 1; border: none; outline: none; padding: 9px 14px; font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--ink); background: var(--white); }
-.search-bar input::placeholder { color: #cbb0b8; }
-.search-bar button { background: var(--rose); border: none; cursor: pointer; padding: 0 18px; color: white; font-size: 16px; transition: background .2s; }
-.search-bar button:hover { background: var(--rose-dk); }
-.h-icons { display: flex; align-items: center; gap: 4px; margin-left: auto; }
-.h-ico { position: relative; display: flex; flex-direction: column; align-items: center; background: none; border: none; cursor: pointer; padding: 6px 10px; border-radius: 8px; font-size: 20px; color: var(--muted); transition: all .2s; gap: 2px; text-decoration: none; }
-.h-ico span.lbl { font-size: 10px; font-weight: 700; color: var(--muted); }
-.h-ico:hover { background: var(--rose-lt); color: var(--rose-dk); }
-.h-ico:hover span.lbl { color: var(--rose-dk); }
-.badge { position: absolute; top: 2px; right: 2px; background: var(--sale); color: white; font-size: 9px; font-weight: 800; min-width: 16px; height: 16px; border-radius: 100px; display: none; align-items: center; justify-content: center; padding: 0 4px; }
+header { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 200; box-shadow: 0 1px 8px rgba(212,135,154,.1); }
+.header-main { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 14px 20px; max-width: 1280px; margin: 0 auto; }
+.header-left { display: flex; align-items: center; gap: 8px; }
+.header-center { text-align: center; }
+.header-right { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+.logo { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; font-style: italic; color: var(--ink); letter-spacing: 2px; text-decoration: none; }
+/* hamburger */
+.hamburger { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 6px; }
+.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--ink); transition: all .25s; }
+/* search icon */
+.h-ico { position: relative; background: none; border: none; cursor: pointer; padding: 7px; color: var(--ink); font-size: 18px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: opacity .2s; }
+.h-ico:hover { opacity: .6; }
+.badge { position: absolute; top: 0; right: 0; background: var(--sale); color: white; font-size: 8px; font-weight: 800; min-width: 15px; height: 15px; border-radius: 100px; display: none; align-items: center; justify-content: center; padding: 0 3px; }
 .badge.on { display: flex; }
+/* search bar dropdown */
+.search-wrap { max-width: 1280px; margin: 0 auto; padding: 0 20px 12px; display: none; }
+.search-wrap.on { display: block; }
+.search-bar { display: flex; border: 1.5px solid var(--border); border-radius: 4px; overflow: hidden; }
+.search-bar input { flex: 1; border: none; outline: none; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--ink); background: var(--white); }
+.search-bar input::placeholder { color: #cbb0b8; }
+.search-bar button { background: none; border: none; cursor: pointer; padding: 0 14px; color: var(--muted); font-size: 16px; }
 
 /* ══ MAIN NAV ══ */
-.main-nav { background: var(--white); border-bottom: 2px solid var(--rose-md); }
-.main-nav-inner { display: flex; align-items: center; padding: 0 16px; max-width: 1280px; margin: 0 auto; }
-.main-nav-btn { background: none; border: none; padding: 13px 22px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; display: flex; align-items: center; gap: 7px; }
-.main-nav-btn:hover, .main-nav-btn.on { color: var(--rose-dk); border-bottom-color: var(--rose-dk); }
+.main-nav { background: var(--white); border-bottom: 1px solid var(--border); }
+.main-nav-inner { display: flex; align-items: center; justify-content: center; padding: 0 16px; max-width: 1280px; margin: 0 auto; gap: 8px; }
+.main-nav-btn { background: none; border: none; padding: 12px 20px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; white-space: nowrap; letter-spacing: 1px; text-transform: uppercase; }
+.main-nav-btn:hover, .main-nav-btn.on { color: var(--ink); border-bottom-color: var(--ink); }
 /* SUB NAV */
-.sub-nav { background: var(--rose-lt); border-bottom: 1px solid var(--rose-md); overflow-x: auto; scrollbar-width: none; transition: all .25s; }
+.sub-nav { background: var(--white); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
 .sub-nav::-webkit-scrollbar { display: none; }
-.sub-nav-inner { display: flex; align-items: center; padding: 0 16px; max-width: 1280px; margin: 0 auto; width: max-content; min-width: 100%; gap: 4px; }
-.sub-btn { background: none; border: none; padding: 9px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; border-radius: 100px; transition: all .2s; white-space: nowrap; margin: 5px 0; }
-.sub-btn:hover, .sub-btn.on { background: var(--rose-dk); color: white; }
+.sub-nav-inner { display: flex; align-items: center; justify-content: center; padding: 0 16px; max-width: 1280px; margin: 0 auto; gap: 4px; flex-wrap: wrap; }
+.sub-btn { background: none; border: none; padding: 9px 16px; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 800; color: var(--muted); cursor: pointer; transition: all .2s; white-space: nowrap; margin: 4px 0; letter-spacing: 1px; text-transform: uppercase; border-bottom: 2px solid transparent; }
+.sub-btn:hover, .sub-btn.on { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ══ HERO IMAGE ══ */
+.hero-img-wrap { position: relative; width: 100%; overflow: hidden; background: var(--rose-lt); max-height: 520px; display: flex; align-items: center; justify-content: center; }
+.hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; max-height: 520px; }
+.hero-img-placeholder { width: 100%; height: 280px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; background: linear-gradient(135deg, #f9d5df, #fce8ee); }
+.hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 32px; background: linear-gradient(to top, rgba(0,0,0,.45), transparent); color: white; }
+.hero-overlay h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 5vw, 52px); font-weight: 600; line-height: 1.1; margin-bottom: 8px; }
+.hero-overlay p { font-size: 13px; font-weight: 600; opacity: .85; margin-bottom: 16px; letter-spacing: .5px; }
+.hero-cta { display: inline-block; background: white; color: var(--ink); padding: 11px 28px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; transition: all .2s; cursor: pointer; border: none; }
+.hero-cta:hover { background: var(--rose-dk); color: white; }
 
 /* ══ HERO ══ */
 .hero-banner { max-width: 1280px; margin: 12px auto; padding: 0 12px; display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
@@ -231,32 +246,56 @@ footer strong { color: var(--rose); }
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-inner">
-    🚚 Livraison gratuite dès 200 DT &nbsp;|&nbsp; 🎀 Emballage cadeau offert &nbsp;|&nbsp; ✨ Nouvelle collection Printemps 2026 &nbsp;|&nbsp; 💕 -20% sur votre 1ère commande avec code: ODETTE20 &nbsp;|&nbsp; 🚚 Livraison gratuite dès 200 DT &nbsp;|&nbsp; 🎀 Emballage cadeau offert &nbsp;|&nbsp; ✨ Nouvelle collection Printemps 2026
+    Livraison gratuite dès 200 DT &nbsp;|&nbsp; Nouvelle collection Printemps 2026 &nbsp;|&nbsp; -20% code: ODETTE20 &nbsp;|&nbsp; Livraison gratuite dès 200 DT &nbsp;|&nbsp; Nouvelle collection Printemps 2026
   </div>
 </div>
 
 <!-- HEADER -->
 <header>
   <div class="header-main">
-    <a class="logo" href="/">Od<span>e</span>tte</a>
-    <div class="search-bar">
-      <input type="text" id="sInp" placeholder="Rechercher un sac, une couleur…" oninput="liveSearch(this.value)">
-      <button onclick="liveSearch(document.getElementById('sInp').value)">🔍</button>
+    <div class="header-left">
+      <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <div class="h-icons">
-      <button class="h-ico" onclick="openCart()">🛒<span class="badge on" id="cartBadge">0</span><span class="lbl">Panier</span></button>
-      <button class="h-ico" id="wishBtn" onclick="showWishToast()">🤍<span class="badge" id="wishBadge">0</span><span class="lbl">Favoris</span></button>
-      <a class="h-ico" id="navLogin" href="/login.html">👤<span class="lbl">Connexion</span></a>
-      <a class="h-ico" id="navLogout" href="#" onclick="doLogout()" style="display:none">🚪<span class="lbl" id="navUser">Compte</span></a>
-      <a class="h-ico" id="navAdmin" href="/admin/" style="display:none">⚙️<span class="lbl">Admin</span></a>
+    <div class="header-center">
+      <a class="logo" href="/">Odette</a>
+    </div>
+    <div class="header-right">
+      <button class="h-ico" onclick="toggleSearch()" title="Rechercher">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="h-ico" onclick="openCart()" title="Panier">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge on" id="cartBadge">0</span>
+      </button>
+      <a class="h-ico" id="navLogin" href="/login.html" title="Connexion">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <a class="h-ico" id="navLogout" href="#" onclick="doLogout()" style="display:none" title="Déconnexion">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span id="navUser" style="font-size:9px;font-weight:800;letter-spacing:.5px"></span>
+      </a>
+      <a class="h-ico" id="navAdmin" href="/admin/" style="display:none" title="Admin">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      </a>
+    </div>
+  </div>
+  <!-- SEARCH BAR -->
+  <div class="search-wrap" id="searchWrap">
+    <div class="search-bar">
+      <input type="text" id="sInp" placeholder="Rechercher…" oninput="liveSearch(this.value)">
+      <button onclick="liveSearch(document.getElementById('sInp').value)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
     </div>
   </div>
   <!-- MAIN NAV -->
   <nav class="main-nav">
     <div class="main-nav-inner">
-      <button class="main-nav-btn on" onclick="setSection('all',this)">✨ Tout voir</button>
-      <button class="main-nav-btn" onclick="setSection('bags',this)">👜 Sacs</button>
-      <button class="main-nav-btn" onclick="setSection('clothing',this)">👗 Vêtements</button>
+      <button class="main-nav-btn on" onclick="setSection('all',this)">Tout voir</button>
+      <button class="main-nav-btn" onclick="setSection('bags',this)">Sacs</button>
+      <button class="main-nav-btn" onclick="setSection('clothing',this)">Vêtements</button>
     </div>
   </nav>
   <!-- SUB NAV -->
@@ -265,26 +304,22 @@ footer strong { color: var(--rose); }
   </div>
 </header>
 
-<!-- HERO BANNER -->
-<div class="hero-banner">
-  <div class="banner-main">
-    <div class="banner-txt">
-      <h2>Nouvelle Collection<br>Printemps 2026 🌸</h2>
-      <p>Des sacs élégants pour chaque occasion</p>
-      <button class="btn-banner" onclick="document.getElementById('mainShop').scrollIntoView({behavior:'smooth'})">Découvrir maintenant →</button>
-    </div>
+<!-- HERO IMAGE -->
+<div class="hero-img-wrap" id="heroSection">
+  <div class="hero-img-placeholder" id="heroPlaceholder">
+    <span style="font-size:32px;opacity:.3">♛</span>
+    <span>Nouvelle Collection</span>
   </div>
-  <div class="banner-side">
-    <div class="mini-banner mb1" onclick="setSection('bags', document.querySelectorAll('.main-nav-btn')[1])">👜 Collection Sacs<br><small style="font-size:11px;opacity:.8">Classique & Luxe</small></div>
-    <div class="mini-banner mb2" onclick="setSection('clothing', document.querySelectorAll('.main-nav-btn')[2])">👗 Vêtements<br><small style="font-size:11px;opacity:.8">T-Shirts & Pantalons</small></div>
+  <div class="hero-overlay" id="heroOverlay" style="display:none">
+    <h2 id="heroTitle">Nouvelle Collection</h2>
+    <p id="heroSubtitle">Printemps 2026</p>
+    <button class="hero-cta" onclick="document.getElementById('mainShop').scrollIntoView({behavior:'smooth'})">Découvrir</button>
   </div>
 </div>
-
-<!-- BEST SELLERS -->
 <div class="flash" id="featuredSection" style="display:none">
   <div class="flash-head">
-    <div class="flash-title">⭐ Meilleures Ventes</div>
-    <button class="see-all" onclick="catFilter('all', document.querySelectorAll('.cat-btn')[0])">Voir tout →</button>
+    <div class="flash-title">Meilleures Ventes</div>
+    <button class="see-all" onclick="setSection('all',document.querySelectorAll('.main-nav-btn')[0])">Voir tout →</button>
   </div>
   <div class="flash-grid" id="flashGrid"></div>
 </div>
@@ -372,6 +407,7 @@ async function init() {
   syncCartUI();
   window.addEventListener('cartUpdated', syncCartUI);
   await loadProducts();
+  loadHero();
 }
 
 async function loadProducts() {
@@ -384,14 +420,7 @@ async function loadProducts() {
 
 /* ── BEST SELLERS ── */
 function renderFlash() {
-  const BAG_CATS = ['classique','luxe','mini','tote','casual'];
-  const CLO_CATS = ['tshirt','pants'];
-  const items = allProducts.filter(p => {
-    if (!p.featured) return false;
-    if (activeSection === 'bags')     return BAG_CATS.includes(p.category);
-    if (activeSection === 'clothing') return CLO_CATS.includes(p.category);
-    return true; // 'all' → كل المميزين
-  });
+  const items = allProducts.filter(p => p.featured);
   const section = document.getElementById('featuredSection');
   if (!items.length) { section.style.display = 'none'; return; }
   section.style.display = 'block';
@@ -541,7 +570,6 @@ window.setSection = function(section, btn) {
       `<button class="sub-btn${i === 0 ? ' on' : ''}" onclick="setSubCat('${s.key}',this)">${s.ico} ${s.label}</button>`
     ).join('');
   }
-  renderFlash();
   renderMain();
   document.getElementById('mainShop').scrollIntoView({ behavior: 'smooth' });
 };
@@ -554,6 +582,40 @@ window.setSubCat = function(cat, btn) {
 };
 
 window.catFilter = window.setSubCat; // backward compat for mini-banners
+
+/* ── SEARCH & MENU TOGGLE ── */
+window.toggleSearch = function() {
+  const w = document.getElementById('searchWrap');
+  w.classList.toggle('on');
+  if (w.classList.contains('on')) document.getElementById('sInp').focus();
+};
+window.toggleMenu = function() {
+  // simple: scroll to nav
+  document.querySelector('.main-nav').scrollIntoView({ behavior: 'smooth' });
+};
+
+/* ── HERO IMAGE (from Supabase settings or admin) ── */
+async function loadHero() {
+  try {
+    const { data } = await supabase.from('settings').select('*').eq('key', 'hero').single();
+    if (data?.value) {
+      const h = JSON.parse(data.value);
+      const wrap = document.getElementById('heroSection');
+      if (h.img_url) {
+        const img = document.createElement('img');
+        img.src = h.img_url;
+        img.alt = h.title || 'Hero';
+        document.getElementById('heroPlaceholder').style.display = 'none';
+        wrap.insertBefore(img, wrap.firstChild);
+      }
+      if (h.title) {
+        document.getElementById('heroTitle').textContent = h.title;
+        document.getElementById('heroSubtitle').textContent = h.subtitle || '';
+        document.getElementById('heroOverlay').style.display = 'block';
+      }
+    }
+  } catch (_) {}
+}
 function liveSearch(v) { searchQ = v.trim().toLowerCase(); renderMain(); }
 
 /* ── WISHLIST ── */
