@@ -59,67 +59,67 @@ footer strong{color:var(--rose)}
 </style>
 </head>
 <body>
-<div class="topbar">🔒 Commande sécurisée — Odette</div>
+<div class="topbar"> Commande sécurisée — Odette</div>
 <header>
-  <a class="logo" href="/">Od<span>e</span>tte</a>
-  <a href="/" style="font-size:13px;font-weight:700;color:var(--muted);text-decoration:none">← Retour à la boutique</a>
+ <a class="logo" href="/">Od<span>e</span>tte</a>
+ <a href="/" style="font-size:13px;font-weight:700;color:var(--muted);text-decoration:none">← Retour à la boutique</a>
 </header>
 
 <div class="wrap" id="mainWrap">
-  <!-- FORM -->
-  <div>
-    <div class="section" style="margin-bottom:18px">
-      <div class="sec-head">📍 Vos coordonnées</div>
-      <div class="sec-body">
-        <div class="fg2">
-          <div class="fg"><label class="fl">Nom complet *</label><input class="fi" type="text" id="cName" required placeholder="Fatma Ben Ali"></div>
-          <div class="fg"><label class="fl">Téléphone *</label><input class="fi" type="tel" id="cPhone" required placeholder="+216 XX XXX XXX"></div>
-        </div>
-        <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="cEmail" placeholder="vous@exemple.com"></div>
-        <div class="fg"><label class="fl">Adresse de livraison *</label><input class="fi" type="text" id="cAddr" required placeholder="Rue, Quartier, Ville, Gouvernorat"></div>
-        <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="cNotes" placeholder="Instructions spéciales, couleur souhaitée…"></textarea></div>
-      </div>
-    </div>
+ <!-- FORM -->
+ <div>
+ <div class="section" style="margin-bottom:18px">
+ <div class="sec-head"> Vos coordonnées</div>
+ <div class="sec-body">
+ <div class="fg2">
+ <div class="fg"><label class="fl">Nom complet *</label><input class="fi" type="text" id="cName" required placeholder="Fatma Ben Ali"></div>
+ <div class="fg"><label class="fl">Téléphone *</label><input class="fi" type="tel" id="cPhone" required placeholder="+216 XX XXX XXX"></div>
+ </div>
+ <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="cEmail" placeholder="vous@exemple.com"></div>
+ <div class="fg"><label class="fl">Adresse de livraison *</label><input class="fi" type="text" id="cAddr" required placeholder="Rue, Quartier, Ville, Gouvernorat"></div>
+ <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="cNotes" placeholder="Instructions spéciales, couleur souhaitée…"></textarea></div>
+ </div>
+ </div>
 
-    <div class="section">
-      <div class="sec-head">💳 Méthode de paiement</div>
-      <div class="sec-body">
-        <div class="pay-grid" id="payGrid">
-          <label class="pay-opt sel">
-            <input type="radio" name="pay" value="cod" checked onchange="selPay(this)">
-            <span class="pay-ico">💵</span>
-            <div><div class="pay-lbl">Paiement à la livraison</div><div class="pay-sub">Payez en espèces à la réception</div></div>
-          </label>
-          <label class="pay-opt">
-            <input type="radio" name="pay" value="d17" onchange="selPay(this)">
-            <span class="pay-ico">📱</span>
-            <div><div class="pay-lbl">D17 / Poste Tunisienne</div><div class="pay-sub">Paiement mobile instantané</div></div>
-          </label>
-          <label class="pay-opt">
-            <input type="radio" name="pay" value="virement" onchange="selPay(this)">
-            <span class="pay-ico">🏦</span>
-            <div><div class="pay-lbl">Virement bancaire</div><div class="pay-sub">Contactez-nous pour les détails</div></div>
-          </label>
-          <label class="pay-opt">
-            <input type="radio" name="pay" value="whatsapp" onchange="selPay(this)">
-            <span class="pay-ico">💬</span>
-            <div><div class="pay-lbl">Finaliser via WhatsApp</div><div class="pay-sub">Discutez directement avec nous</div></div>
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
+ <div class="section">
+ <div class="sec-head"> Méthode de paiement</div>
+ <div class="sec-body">
+ <div class="pay-grid" id="payGrid">
+ <label class="pay-opt sel">
+ <input type="radio" name="pay" value="cod" checked onchange="selPay(this)">
+ <span class="pay-ico"></span>
+ <div><div class="pay-lbl">Paiement à la livraison</div><div class="pay-sub">Payez en espèces à la réception</div></div>
+ </label>
+ <label class="pay-opt">
+ <input type="radio" name="pay" value="d17" onchange="selPay(this)">
+ <span class="pay-ico"></span>
+ <div><div class="pay-lbl">D17 / Poste Tunisienne</div><div class="pay-sub">Paiement mobile instantané</div></div>
+ </label>
+ <label class="pay-opt">
+ <input type="radio" name="pay" value="virement" onchange="selPay(this)">
+ <span class="pay-ico"></span>
+ <div><div class="pay-lbl">Virement bancaire</div><div class="pay-sub">Contactez-nous pour les détails</div></div>
+ </label>
+ <label class="pay-opt">
+ <input type="radio" name="pay" value="whatsapp" onchange="selPay(this)">
+ <span class="pay-ico"></span>
+ <div><div class="pay-lbl">Finaliser via WhatsApp</div><div class="pay-sub">Discutez directement avec nous</div></div>
+ </label>
+ </div>
+ </div>
+ </div>
+ </div>
 
-  <!-- SUMMARY -->
-  <div>
-    <div class="section">
-      <div class="sec-head">🛒 Récapitulatif</div>
-      <div class="sec-body" id="summaryBox"></div>
-    </div>
-  </div>
+ <!-- SUMMARY -->
+ <div>
+ <div class="section">
+ <div class="sec-head"> Récapitulatif</div>
+ <div class="sec-body" id="summaryBox"></div>
+ </div>
+ </div>
 </div>
 
-<footer><strong>Odette ♛</strong> &nbsp;|&nbsp; © 2026 — Tous droits réservés</footer>
+<footer><strong>Odette </strong> &nbsp;|&nbsp; © 2026 — Tous droits réservés</footer>
 
 <script type="module">
 import { supabase } from '/js/supabase.js';
@@ -127,119 +127,119 @@ import { getUser } from '/js/auth.js';
 import { getCart, getTotal, clearCart } from '/js/cart.js';
 import { WA_NUMBER, FORMSUBMIT } from '/js/supabase.js';
 
-const CAT_ICON = { classique:'👜', luxe:'💎', casual:'🎒', mini:'👛', tote:'👝' };
+const CAT_ICON = { classique:'', luxe:'', casual:'', mini:'', tote:'' };
 let selectedPay = 'cod';
 
 async function init() {
-  const cart = getCart();
-  if (!cart.length) {
-    document.getElementById('mainWrap').innerHTML = `<div class="empty-cart" style="grid-column:1/-1"><div style="font-size:60px;margin-bottom:16px">🛒</div><h2>Votre panier est vide</h2><p style="margin:12px 0 20px">Ajoutez des produits avant de commander.</p><a href="/" class="btn-back">← Retour à la boutique</a></div>`;
-    return;
-  }
-  renderSummary(cart);
+ const cart = getCart();
+ if (!cart.length) {
+ document.getElementById('mainWrap').innerHTML = `<div class="empty-cart" style="grid-column:1/-1"><div style="font-size:60px;margin-bottom:16px"></div><h2>Votre panier est vide</h2><p style="margin:12px 0 20px">Ajoutez des produits avant de commander.</p><a href="/" class="btn-back">← Retour à la boutique</a></div>`;
+ return;
+ }
+ renderSummary(cart);
 }
 
 function renderSummary(cart) {
-  const total = getTotal();
-  const shipping = total >= 200 ? 0 : 8;
-  const finalTotal = total + shipping;
+ const total = getTotal();
+ const shipping = total >= 200 ? 0 : 8;
+ const finalTotal = total + shipping;
 
-  document.getElementById('summaryBox').innerHTML = `
-    ${cart.map(it => `
-    <div class="order-item">
-      <div class="order-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '👜')}</div>
-      <div style="flex:1;min-width:0">
-        <div class="order-name">${it.title}</div>
-        <div class="order-qty">Qté: ${it.qty}${it.selectedColor ? ` · <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${it.selectedColor};vertical-align:middle;border:1px solid rgba(0,0,0,.12)"></span>` : ''}${it.selectedSize ? ` · ${it.selectedSize}` : ''}</div>
-      </div>
-      <span class="order-price">${(it.price * it.qty).toFixed(2)} DT</span>
-    </div>`).join('')}
-    <div class="divider"></div>
-    <div class="total-row"><span>Sous-total</span><span>${total.toFixed(2)} DT</span></div>
-    <div class="total-row"><span>Livraison</span><span>${shipping === 0 ? '<span style="color:var(--green)">Gratuite</span>' : shipping.toFixed(2) + ' DT'}</span></div>
-    <div class="total-final"><span>Total</span><span>${finalTotal.toFixed(2)} DT</span></div>
-    <button class="btn-order" id="orderBtn" onclick="placeOrder()">🛍️ Confirmer la commande</button>
-  `;
+ document.getElementById('summaryBox').innerHTML = `
+ ${cart.map(it => `
+ <div class="order-item">
+ <div class="order-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '')}</div>
+ <div style="flex:1;min-width:0">
+ <div class="order-name">${it.title}</div>
+ <div class="order-qty">Qté: ${it.qty}${it.selectedColor ? ` · <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${it.selectedColor};vertical-align:middle;border:1px solid rgba(0,0,0,.12)"></span>` : ''}${it.selectedSize ? ` · ${it.selectedSize}` : ''}</div>
+ </div>
+ <span class="order-price">${(it.price * it.qty).toFixed(2)} DT</span>
+ </div>`).join('')}
+ <div class="divider"></div>
+ <div class="total-row"><span>Sous-total</span><span>${total.toFixed(2)} DT</span></div>
+ <div class="total-row"><span>Livraison</span><span>${shipping === 0 ? '<span style="color:var(--green)">Gratuite</span>' : shipping.toFixed(2) + ' DT'}</span></div>
+ <div class="total-final"><span>Total</span><span>${finalTotal.toFixed(2)} DT</span></div>
+ <button class="btn-order" id="orderBtn" onclick="placeOrder()"> Confirmer la commande</button>
+ `;
 }
 
 window.selPay = function(radio) {
-  selectedPay = radio.value;
-  document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('sel'));
-  radio.closest('.pay-opt').classList.add('sel');
+ selectedPay = radio.value;
+ document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('sel'));
+ radio.closest('.pay-opt').classList.add('sel');
 };
 
 window.placeOrder = async function() {
-  const name  = document.getElementById('cName').value.trim();
-  const phone = document.getElementById('cPhone').value.trim();
-  const addr  = document.getElementById('cAddr').value.trim();
-  if (!name || !phone || !addr) { alert('Veuillez remplir tous les champs obligatoires.'); return; }
+ const name = document.getElementById('cName').value.trim();
+ const phone = document.getElementById('cPhone').value.trim();
+ const addr = document.getElementById('cAddr').value.trim();
+ if (!name || !phone || !addr) { alert('Veuillez remplir tous les champs obligatoires.'); return; }
 
-  const cart = getCart();
-  const total = getTotal();
-  const shipping = total >= 200 ? 0 : 8;
-  const finalTotal = total + shipping;
+ const cart = getCart();
+ const total = getTotal();
+ const shipping = total >= 200 ? 0 : 8;
+ const finalTotal = total + shipping;
 
-  const btn = document.getElementById('orderBtn');
-  btn.disabled = true; btn.textContent = 'Envoi en cours…';
+ const btn = document.getElementById('orderBtn');
+ btn.disabled = true; btn.textContent = 'Envoi en cours…';
 
-  // WhatsApp redirect
-  if (selectedPay === 'whatsapp') {
-    const items = cart.map(i => `• ${i.title} ×${i.qty} — ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
-    const msg = `🛍️ Nouvelle commande Odette\n\n👤 ${name}\n📞 ${phone}\n📍 ${addr}\n\n${items}\n\n💰 Total: ${finalTotal.toFixed(2)} DT\n💳 Paiement: WhatsApp`;
-    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-    showSuccess();
-    return;
-  }
+ // WhatsApp redirect
+ if (selectedPay === 'whatsapp') {
+ const items = cart.map(i => `• ${i.title} ×${i.qty} — ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
+ const msg = ` Nouvelle commande Odette\n\n ${name}\n ${phone}\n ${addr}\n\n${items}\n\n Total: ${finalTotal.toFixed(2)} DT\n Paiement: WhatsApp`;
+ window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+ showSuccess();
+ return;
+ }
 
-  // FormSubmit email
-  try {
-    const itemsText = cart.map(i => `${i.title} ×${i.qty}${i.selectedSize ? ` | Taille: ${i.selectedSize}` : ''}${i.selectedColor ? ` | Couleur: ${i.selectedColor}` : ''} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
-    const fd = new FormData();
-    fd.append('_subject', `🛍️ Nouvelle commande Odette — ${name}`);
-    fd.append('_template', 'table');
-    fd.append('_captcha', 'false');
-    fd.append('Nom', name);
-    fd.append('Téléphone', phone);
-    fd.append('Email', document.getElementById('cEmail').value || '—');
-    fd.append('Adresse', addr);
-    fd.append('Commande', itemsText);
-    fd.append('Total', finalTotal.toFixed(2) + ' DT');
-    fd.append('Livraison', shipping === 0 ? 'Gratuite' : shipping.toFixed(2) + ' DT');
-    fd.append('Paiement', selectedPay);
-    fd.append('Notes', document.getElementById('cNotes').value || '—');
-    await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
+ // FormSubmit email
+ try {
+ const itemsText = cart.map(i => `${i.title} ×${i.qty}${i.selectedSize ? ` | Taille: ${i.selectedSize}` : ''}${i.selectedColor ? ` | Couleur: ${i.selectedColor}` : ''} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
+ const fd = new FormData();
+ fd.append('_subject', ` Nouvelle commande Odette — ${name}`);
+ fd.append('_template', 'table');
+ fd.append('_captcha', 'false');
+ fd.append('Nom', name);
+ fd.append('Téléphone', phone);
+ fd.append('Email', document.getElementById('cEmail').value || '—');
+ fd.append('Adresse', addr);
+ fd.append('Commande', itemsText);
+ fd.append('Total', finalTotal.toFixed(2) + ' DT');
+ fd.append('Livraison', shipping === 0 ? 'Gratuite' : shipping.toFixed(2) + ' DT');
+ fd.append('Paiement', selectedPay);
+ fd.append('Notes', document.getElementById('cNotes').value || '—');
+ await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
 
-    // Save to Supabase (optional, if logged in)
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      await supabase.from('orders').insert({
-        user_id: user?.id || null,
-        items: cart,
-        total: finalTotal,
-        customer_name: name,
-        phone, email: document.getElementById('cEmail').value || null,
-        address: addr,
-        notes: document.getElementById('cNotes').value || null,
-        payment: selectedPay,
-        status: 'pending'
-      });
-    } catch (_) {}
-  } catch (_) {}
+ // Save to Supabase (optional, if logged in)
+ try {
+ const { data: { user } } = await supabase.auth.getUser();
+ await supabase.from('orders').insert({
+ user_id: user?.id || null,
+ items: cart,
+ total: finalTotal,
+ customer_name: name,
+ phone, email: document.getElementById('cEmail').value || null,
+ address: addr,
+ notes: document.getElementById('cNotes').value || null,
+ payment: selectedPay,
+ status: 'pending'
+ });
+ } catch (_) {}
+ } catch (_) {}
 
-  showSuccess();
+ showSuccess();
 };
 
 function showSuccess() {
-  clearCart();
-  document.getElementById('mainWrap').innerHTML = `
-    <div class="section" style="grid-column:1/-1">
-      <div class="success-box">
-        <span class="suc-ico">🎀</span>
-        <h2>Commande confirmée !</h2>
-        <p>Merci pour votre commande. Notre équipe vous contactera dans les <strong>24 heures</strong> pour confirmer la livraison et les détails du paiement.</p>
-        <a href="/" class="btn-back">← Continuer mes achats</a>
-      </div>
-    </div>`;
+ clearCart();
+ document.getElementById('mainWrap').innerHTML = `
+ <div class="section" style="grid-column:1/-1">
+ <div class="success-box">
+ <span class="suc-ico"></span>
+ <h2>Commande confirmée !</h2>
+ <p>Merci pour votre commande. Notre équipe vous contactera dans les <strong>24 heures</strong> pour confirmer la livraison et les détails du paiement.</p>
+ <a href="/" class="btn-back">← Continuer mes achats</a>
+ </div>
+ </div>`;
 }
 
 init();

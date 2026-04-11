@@ -8,9 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --rose:#d4879a; --rose-lt:#fdf0f3; --rose-md:#f2d0d9; --rose-dk:#b5607a;
-  --white:#ffffff; --ink:#1f1419; --muted:#9a7d84; --border:#f0dde3;
-  --green:#2ecc71; --red:#e74c3c; --sale:#e8445a;
+ --rose:#d4879a; --rose-lt:#fdf0f3; --rose-md:#f2d0d9; --rose-dk:#b5607a;
+ --white:#ffffff; --ink:#1f1419; --muted:#9a7d84; --border:#f0dde3;
+ --green:#2ecc71; --red:#e74c3c; --sale:#e8445a;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -154,96 +154,96 @@ footer strong{color:var(--rose)}
 @keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
 
 @media(max-width:768px){
-  .prod-wrap{grid-template-columns:1fr}
-  .prod-gallery{position:static}
-  .prod-title{font-size:26px}
-  .price-now{font-size:26px}
-  .fg2{grid-template-columns:1fr}
+ .prod-wrap{grid-template-columns:1fr}
+ .prod-gallery{position:static}
+ .prod-title{font-size:26px}
+ .price-now{font-size:26px}
+ .fg2{grid-template-columns:1fr}
 }
 @media(max-width:640px){
-  .h-ico .lbl{display:none}
-  .prod-perks{grid-template-columns:1fr}
+ .h-ico .lbl{display:none}
+ .prod-perks{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
 <!-- TOP BAR -->
-<div class="topbar"><div class="topbar-inner">🚚 Livraison gratuite dès 200 DT &nbsp;|&nbsp; 🎀 Emballage cadeau offert &nbsp;|&nbsp; ✨ Nouvelle collection Printemps 2026 &nbsp;|&nbsp; 💕 -20% code: ODETTE20 &nbsp;|&nbsp; 🚚 Livraison gratuite dès 200 DT</div></div>
+<div class="topbar"><div class="topbar-inner"> Livraison gratuite dès 200 DT &nbsp;|&nbsp; Emballage cadeau offert &nbsp;|&nbsp; Nouvelle collection Printemps 2026 &nbsp;|&nbsp; -20% code: ODETTE20 &nbsp;|&nbsp; Livraison gratuite dès 200 DT</div></div>
 
 <!-- HEADER -->
 <header>
-  <div class="header-main">
-    <a class="logo" href="/">Od<span>e</span>tte</a>
-    <div class="h-icons" style="margin-left:auto">
-      <button class="h-ico" onclick="openCart()">🛒<span class="badge on" id="cartBadge">0</span><span class="lbl">Panier</span></button>
-      <a class="h-ico" href="/" >🏠<span class="lbl">Accueil</span></a>
-      <a class="h-ico" id="navLogin" href="/login.html">👤<span class="lbl">Connexion</span></a>
-      <a class="h-ico" id="navLogout" href="#" onclick="doLogout()" style="display:none">🚪<span class="lbl" id="navUser">Compte</span></a>
-    </div>
-  </div>
+ <div class="header-main">
+ <a class="logo" href="/">Od<span>e</span>tte</a>
+ <div class="h-icons" style="margin-left:auto">
+ <button class="h-ico" onclick="openCart()"><span class="badge on" id="cartBadge">0</span><span class="lbl">Panier</span></button>
+ <a class="h-ico" href="/" ><span class="lbl">Accueil</span></a>
+ <a class="h-ico" id="navLogin" href="/login.html"><span class="lbl">Connexion</span></a>
+ <a class="h-ico" id="navLogout" href="#" onclick="doLogout()" style="display:none"><span class="lbl" id="navUser">Compte</span></a>
+ </div>
+ </div>
 </header>
 
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
-  <a href="/">Accueil</a> &rsaquo; <a href="/">Boutique</a> &rsaquo; <span id="bcTitle">Chargement…</span>
+ <a href="/">Accueil</a> &rsaquo; <a href="/">Boutique</a> &rsaquo; <span id="bcTitle">Chargement…</span>
 </div>
 
 <!-- PRODUCT WRAP -->
 <div class="prod-wrap" id="prodWrap">
-  <!-- Loading state -->
-  <div class="skeleton" style="aspect-ratio:4/5;border-radius:16px"></div>
-  <div style="display:flex;flex-direction:column;gap:14px">
-    <div class="skeleton" style="height:20px;width:80px;border-radius:6px"></div>
-    <div class="skeleton" style="height:48px;border-radius:8px"></div>
-    <div class="skeleton" style="height:20px;width:60%;border-radius:6px"></div>
-    <div class="skeleton" style="height:80px;border-radius:10px"></div>
-    <div class="skeleton" style="height:52px;border-radius:10px"></div>
-    <div class="skeleton" style="height:52px;border-radius:10px"></div>
-  </div>
+ <!-- Loading state -->
+ <div class="skeleton" style="aspect-ratio:4/5;border-radius:16px"></div>
+ <div style="display:flex;flex-direction:column;gap:14px">
+ <div class="skeleton" style="height:20px;width:80px;border-radius:6px"></div>
+ <div class="skeleton" style="height:48px;border-radius:8px"></div>
+ <div class="skeleton" style="height:20px;width:60%;border-radius:6px"></div>
+ <div class="skeleton" style="height:80px;border-radius:10px"></div>
+ <div class="skeleton" style="height:52px;border-radius:10px"></div>
+ <div class="skeleton" style="height:52px;border-radius:10px"></div>
+ </div>
 </div>
 
 <!-- FOOTER -->
-<footer><strong>Odette ♛</strong> &nbsp;|&nbsp; © 2026 — Tous droits réservés &nbsp;|&nbsp; 💬 WhatsApp: +216 96 672 771</footer>
+<footer><strong>Odette </strong> &nbsp;|&nbsp; © 2026 — Tous droits réservés &nbsp;|&nbsp; WhatsApp: +216 96 672 771</footer>
 
 <!-- CART DRAWER -->
 <div class="cart-bg" id="cartBg" onclick="closeCart()"></div>
 <div class="cart-drawer" id="cartDrawer">
-  <div class="cd-head"><h2>🛒 Mon Panier</h2><button class="cd-close" onclick="closeCart()">✕</button></div>
-  <div class="cd-items" id="cdItems"></div>
-  <div class="cd-foot">
-    <div class="cd-subtotal"><span>Total</span><strong id="cdTotal">0.00 DT</strong></div>
-    <a href="/checkout.html" class="btn-checkout" id="checkoutBtn" style="pointer-events:none;opacity:.4">Commander →</a>
-  </div>
+ <div class="cd-head"><h2> Mon Panier</h2><button class="cd-close" onclick="closeCart()"></button></div>
+ <div class="cd-items" id="cdItems"></div>
+ <div class="cd-foot">
+ <div class="cd-subtotal"><span>Total</span><strong id="cdTotal">0.00 DT</strong></div>
+ <a href="/checkout.html" class="btn-checkout" id="checkoutBtn" style="pointer-events:none;opacity:.4">Commander →</a>
+ </div>
 </div>
 
 <!-- QUICK ORDER MODAL -->
 <div class="qo-bg" id="qoBg" onclick="if(event.target===this)closeQO()">
-  <div class="qo-box">
-    <div class="qo-head">
-      <div class="qo-head-txt"><h2>🛍️ Commande Rapide</h2><p>Remplissez vos coordonnées</p></div>
-      <button class="qo-close" onclick="closeQO()">✕</button>
-    </div>
-    <div class="qo-success" id="qoSucc">
-      <div class="suc-ico">🎀</div>
-      <h3>Commande envoyée !</h3>
-      <p>Merci ! Nous vous contacterons dans les 24h pour confirmer votre commande.</p>
-      <button class="sub-btn" style="margin-top:16px;max-width:220px" onclick="closeQO()">Continuer →</button>
-    </div>
-    <div class="qo-body" id="qoFormW">
-      <div class="summ" id="qoSumm"></div>
-      <form id="qoForm" onsubmit="submitQuick(event)">
-        <div class="fg2">
-          <div class="fg"><label class="fl">Nom complet *</label><input class="fi" type="text" name="name" required placeholder="Fatma Ben Ali" id="qiName"></div>
-          <div class="fg"><label class="fl">Téléphone *</label><input class="fi" type="tel" name="phone" required placeholder="+216 XX XXX" id="qiPhone"></div>
-        </div>
-        <div class="fg"><label class="fl">Email</label><input class="fi" type="email" name="email" placeholder="vous@exemple.com" id="qiEmail"></div>
-        <div class="fg"><label class="fl">Adresse *</label><input class="fi" type="text" name="address" required placeholder="Rue, Ville, Gouvernorat" id="qiAddr"></div>
-        <div class="fg"><label class="fl">Notes</label><textarea class="fta" name="notes" placeholder="Couleur souhaitée…" id="qiNotes"></textarea></div>
-        <button type="submit" class="sub-btn" id="qSubBtn">🛍️ <span id="qSubBtnT">Envoyer la commande</span></button>
-      </form>
-    </div>
-  </div>
+ <div class="qo-box">
+ <div class="qo-head">
+ <div class="qo-head-txt"><h2> Commande Rapide</h2><p>Remplissez vos coordonnées</p></div>
+ <button class="qo-close" onclick="closeQO()"></button>
+ </div>
+ <div class="qo-success" id="qoSucc">
+ <div class="suc-ico"></div>
+ <h3>Commande envoyée !</h3>
+ <p>Merci ! Nous vous contacterons dans les 24h pour confirmer votre commande.</p>
+ <button class="sub-btn" style="margin-top:16px;max-width:220px" onclick="closeQO()">Continuer →</button>
+ </div>
+ <div class="qo-body" id="qoFormW">
+ <div class="summ" id="qoSumm"></div>
+ <form id="qoForm" onsubmit="submitQuick(event)">
+ <div class="fg2">
+ <div class="fg"><label class="fl">Nom complet *</label><input class="fi" type="text" name="name" required placeholder="Fatma Ben Ali" id="qiName"></div>
+ <div class="fg"><label class="fl">Téléphone *</label><input class="fi" type="tel" name="phone" required placeholder="+216 XX XXX" id="qiPhone"></div>
+ </div>
+ <div class="fg"><label class="fl">Email</label><input class="fi" type="email" name="email" placeholder="vous@exemple.com" id="qiEmail"></div>
+ <div class="fg"><label class="fl">Adresse *</label><input class="fi" type="text" name="address" required placeholder="Rue, Ville, Gouvernorat" id="qiAddr"></div>
+ <div class="fg"><label class="fl">Notes</label><textarea class="fta" name="notes" placeholder="Couleur souhaitée…" id="qiNotes"></textarea></div>
+ <button type="submit" class="sub-btn" id="qSubBtn"> <span id="qSubBtnT">Envoyer la commande</span></button>
+ </form>
+ </div>
+ </div>
 </div>
 
 <!-- TOAST -->
@@ -255,220 +255,220 @@ import { getUser, logout, updateNav } from '/js/auth.js';
 import { addToCart, removeFromCart, updateQty, getCart, getTotal, getCount } from '/js/cart.js';
 import { WA_NUMBER, FORMSUBMIT } from '/js/supabase.js';
 
-const CAT_ICON = { classique:'👜', luxe:'💎', casual:'🎒', mini:'👛', tote:'👝' };
+const CAT_ICON = { classique:'', luxe:'', casual:'', mini:'', tote:'' };
 const BADGE_COLORS = { sale:'b-sale', new:'b-new', hot:'b-hot', vip:'b-vip' };
 let currentProduct = null;
 
 async function init() {
-  await updateNav();
-  syncCartUI();
-  window.addEventListener('cartUpdated', syncCartUI);
+ await updateNav();
+ syncCartUI();
+ window.addEventListener('cartUpdated', syncCartUI);
 
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-  if (!id) { window.location.href = '/'; return; }
+ const params = new URLSearchParams(window.location.search);
+ const id = params.get('id');
+ if (!id) { window.location.href = '/'; return; }
 
-  const { data: p, error } = await supabase.from('products').select('*').eq('id', id).single();
-  if (error || !p) { window.location.href = '/'; return; }
+ const { data: p, error } = await supabase.from('products').select('*').eq('id', id).single();
+ if (error || !p) { window.location.href = '/'; return; }
 
-  currentProduct = p;
-  renderProduct(p);
-  // تحديد أول لون ومقاس افتراضياً
-  if (p.colors?.length) selectedColor = p.colors[0];
-  if (p.sizes?.length)  selectedSize  = p.sizes[0];
+ currentProduct = p;
+ renderProduct(p);
+ // تحديد أول لون ومقاس افتراضياً
+ if (p.colors?.length) selectedColor = p.colors[0];
+ if (p.sizes?.length) selectedSize = p.sizes[0];
 }
 
 function renderProduct(p) {
-  const pct = p.old_price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
-  const stars = '★'.repeat(Math.floor(p.stars || 4)) + ((p.stars || 4) % 1 >= .5 ? '☆' : '');
-  const badgeCls = BADGE_COLORS[p.badge] || '';
-  const badgeTxt = p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? 'Nouveau' : p.badge === 'hot' ? '🔥 Tendance' : p.badge === 'vip' ? 'VIP' : '';
+ const pct = p.old_price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
+ const stars = ''.repeat(Math.floor(p.stars || 4)) + ((p.stars || 4) % 1 >= .5 ? '' : '');
+ const badgeCls = BADGE_COLORS[p.badge] || '';
+ const badgeTxt = p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? 'Nouveau' : p.badge === 'hot' ? ' Tendance' : p.badge === 'vip' ? 'VIP' : '';
 
-  document.title = `${p.title} — Odette`;
-  document.getElementById('bcTitle').textContent = p.title;
+ document.title = `${p.title} — Odette`;
+ document.getElementById('bcTitle').textContent = p.title;
 
-  document.getElementById('prodWrap').innerHTML = `
-    <!-- GALLERY -->
-    <div class="prod-gallery">
-      <div class="prod-main-img">
-        ${p.img_url ? `<img src="${p.img_url}" alt="${p.title}" onerror="this.style.display='none';document.querySelector('.img-ph').style.display='flex'">` : ''}
-        <div class="img-ph" style="${p.img_url ? 'display:none' : ''}">${CAT_ICON[p.category] || '👜'}</div>
-        ${p.badge ? `<div class="prod-badge-abs"><span class="b-tag ${badgeCls}">${badgeTxt}</span></div>` : ''}
-      </div>
-    </div>
+ document.getElementById('prodWrap').innerHTML = `
+ <!-- GALLERY -->
+ <div class="prod-gallery">
+ <div class="prod-main-img">
+ ${p.img_url ? `<img src="${p.img_url}" alt="${p.title}" onerror="this.style.display='none';document.querySelector('.img-ph').style.display='flex'">` : ''}
+ <div class="img-ph" style="${p.img_url ? 'display:none' : ''}">${CAT_ICON[p.category] || ''}</div>
+ ${p.badge ? `<div class="prod-badge-abs"><span class="b-tag ${badgeCls}">${badgeTxt}</span></div>` : ''}
+ </div>
+ </div>
 
-    <!-- INFO -->
-    <div class="prod-info">
-      <div class="prod-cat-lbl">${(p.category || '').toUpperCase()}</div>
-      <h1 class="prod-title">${p.title}</h1>
-      <div class="prod-stars">
-        <span class="stars">${stars}</span>
-        <span class="stars-count">${p.stars || 4.5} / 5 &nbsp;·&nbsp; ${p.sold || 0} ventes</span>
-      </div>
-      <div class="prod-prices">
-        <span class="price-now">${Number(p.price).toFixed(2)} DT</span>
-        ${p.old_price ? `<span class="price-old">${p.old_price} DT</span><span class="price-pct">−${pct}%</span>` : ''}
-      </div>
-      <div class="prod-sold">✅ ${p.sold || 0}+ clientes satisfaites</div>
+ <!-- INFO -->
+ <div class="prod-info">
+ <div class="prod-cat-lbl">${(p.category || '').toUpperCase()}</div>
+ <h1 class="prod-title">${p.title}</h1>
+ <div class="prod-stars">
+ <span class="stars">${stars}</span>
+ <span class="stars-count">${p.stars || 4.5} / 5 &nbsp;·&nbsp; ${p.sold || 0} ventes</span>
+ </div>
+ <div class="prod-prices">
+ <span class="price-now">${Number(p.price).toFixed(2)} DT</span>
+ ${p.old_price ? `<span class="price-old">${p.old_price} DT</span><span class="price-pct">−${pct}%</span>` : ''}
+ </div>
+ <div class="prod-sold"> ${p.sold || 0}+ clientes satisfaites</div>
 
-      ${p.description ? `<div class="prod-desc">${p.description}</div>` : ''}
+ ${p.description ? `<div class="prod-desc">${p.description}</div>` : ''}
 
-      ${p.colors?.length ? `
-      <div style="margin-bottom:18px">
-        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Couleur</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap" id="colorSelector">
-          ${p.colors.map((c,i) => `
-          <button onclick="selectColor(this,'${c}')" title="${c}" style="width:30px;height:30px;border-radius:50%;background:${c};border:3px solid ${i===0?'var(--rose-dk)':'transparent'};cursor:pointer;transition:border-color .2s;outline:2px solid rgba(0,0,0,.08)"></button>`).join('')}
-        </div>
-        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedColorTxt">Couleur sélectionnée: ${p.colors[0]}</div>
-      </div>` : ''}
+ ${p.colors?.length ? `
+ <div style="margin-bottom:18px">
+ <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Couleur</div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap" id="colorSelector">
+ ${p.colors.map((c,i) => `
+ <button onclick="selectColor(this,'${c}')" title="${c}" style="width:30px;height:30px;border-radius:50%;background:${c};border:3px solid ${i===0?'var(--rose-dk)':'transparent'};cursor:pointer;transition:border-color .2s;outline:2px solid rgba(0,0,0,.08)"></button>`).join('')}
+ </div>
+ <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedColorTxt">Couleur sélectionnée: ${p.colors[0]}</div>
+ </div>` : ''}
 
-      ${p.sizes?.length ? `
-      <div style="margin-bottom:18px">
-        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Taille</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap" id="sizeSelector">
-          ${p.sizes.map((s,i) => `
-          <button onclick="selectSize(this,'${s}')" style="min-width:44px;padding:8px 12px;border-radius:8px;border:2px solid ${i===0?'var(--rose-dk)':'var(--border)'};background:${i===0?'var(--rose-lt)':'white'};font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:${i===0?'var(--rose-dk)':'var(--muted)'};cursor:pointer;transition:all .2s">${s}</button>`).join('')}
-        </div>
-        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedSizeTxt">Taille sélectionnée: ${p.sizes[0]}</div>
-      </div>` : ''}
+ ${p.sizes?.length ? `
+ <div style="margin-bottom:18px">
+ <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Taille</div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap" id="sizeSelector">
+ ${p.sizes.map((s,i) => `
+ <button onclick="selectSize(this,'${s}')" style="min-width:44px;padding:8px 12px;border-radius:8px;border:2px solid ${i===0?'var(--rose-dk)':'var(--border)'};background:${i===0?'var(--rose-lt)':'white'};font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:${i===0?'var(--rose-dk)':'var(--muted)'};cursor:pointer;transition:all .2s">${s}</button>`).join('')}
+ </div>
+ <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedSizeTxt">Taille sélectionnée: ${p.sizes[0]}</div>
+ </div>` : ''}
 
-      <div class="prod-actions">
-        <button class="btn-quick" onclick="openQO()">⚡ Commande rapide</button>
-        <button class="btn-atc" id="btnAtc" onclick="doATC()">🛒 Ajouter au panier</button>
-      </div>
+ <div class="prod-actions">
+ <button class="btn-quick" onclick="openQO()"> Commande rapide</button>
+ <button class="btn-atc" id="btnAtc" onclick="doATC()"> Ajouter au panier</button>
+ </div>
 
-      <div class="prod-perks">
-        <div class="perk"><span class="perk-ico">🚚</span>Livraison rapide</div>
-      </div>
-    </div>
-  `;
+ <div class="prod-perks">
+ <div class="perk"><span class="perk-ico"></span>Livraison rapide</div>
+ </div>
+ </div>
+ `;
 }
 
 /* ── COLOR / SIZE SELECTION ── */
 let selectedColor = null;
-let selectedSize  = null;
+let selectedSize = null;
 
 window.selectColor = function(btn, color) {
-  selectedColor = color;
-  document.querySelectorAll('#colorSelector button').forEach(b => b.style.borderColor = 'transparent');
-  btn.style.borderColor = 'var(--rose-dk)';
-  const txt = document.getElementById('selectedColorTxt');
-  if (txt) txt.textContent = `Couleur sélectionnée: ${color}`;
+ selectedColor = color;
+ document.querySelectorAll('#colorSelector button').forEach(b => b.style.borderColor = 'transparent');
+ btn.style.borderColor = 'var(--rose-dk)';
+ const txt = document.getElementById('selectedColorTxt');
+ if (txt) txt.textContent = `Couleur sélectionnée: ${color}`;
 };
 
 window.selectSize = function(btn, size) {
-  selectedSize = size;
-  document.querySelectorAll('#sizeSelector button').forEach(b => {
-    b.style.borderColor = 'var(--border)';
-    b.style.background  = 'white';
-    b.style.color       = 'var(--muted)';
-  });
-  btn.style.borderColor = 'var(--rose-dk)';
-  btn.style.background  = 'var(--rose-lt)';
-  btn.style.color       = 'var(--rose-dk)';
-  const txt = document.getElementById('selectedSizeTxt');
-  if (txt) txt.textContent = `Taille sélectionnée: ${size}`;
+ selectedSize = size;
+ document.querySelectorAll('#sizeSelector button').forEach(b => {
+ b.style.borderColor = 'var(--border)';
+ b.style.background = 'white';
+ b.style.color = 'var(--muted)';
+ });
+ btn.style.borderColor = 'var(--rose-dk)';
+ btn.style.background = 'var(--rose-lt)';
+ btn.style.color = 'var(--rose-dk)';
+ const txt = document.getElementById('selectedSizeTxt');
+ if (txt) txt.textContent = `Taille sélectionnée: ${size}`;
 };
 
 function getVariantNote() {
-  const parts = [];
-  if (selectedColor) parts.push(`Couleur: ${selectedColor}`);
-  if (selectedSize)  parts.push(`Taille: ${selectedSize}`);
-  return parts.join(' | ');
+ const parts = [];
+ if (selectedColor) parts.push(`Couleur: ${selectedColor}`);
+ if (selectedSize) parts.push(`Taille: ${selectedSize}`);
+ return parts.join(' | ');
 }
 
 function doATC() {
-  if (!currentProduct) return;
-  const p = currentProduct;
-  // Vérification taille obligatoire pour vêtements
-  if (p.sizes?.length && !selectedSize) { toast('⚠️ Veuillez choisir une taille'); return; }
-  const item = { ...p, selectedColor, selectedSize, variantNote: getVariantNote() };
-  addToCart(item);
-  toast(`🛒 "${p.title}" ajouté !`);
-  const btn = document.getElementById('btnAtc');
-  if (btn) { btn.classList.add('done'); btn.textContent = '✓ Ajouté au panier'; setTimeout(() => { btn.classList.remove('done'); btn.textContent = '🛒 Ajouter au panier'; }, 2500); }
+ if (!currentProduct) return;
+ const p = currentProduct;
+ // Vérification taille obligatoire pour vêtements
+ if (p.sizes?.length && !selectedSize) { toast(' Veuillez choisir une taille'); return; }
+ const item = { ...p, selectedColor, selectedSize, variantNote: getVariantNote() };
+ addToCart(item);
+ toast(` "${p.title}" ajouté !`);
+ const btn = document.getElementById('btnAtc');
+ if (btn) { btn.classList.add('done'); btn.textContent = ' Ajouté au panier'; setTimeout(() => { btn.classList.remove('done'); btn.textContent = ' Ajouter au panier'; }, 2500); }
 }
 
 function openQO() {
-  const p = currentProduct;
-  const variant = getVariantNote();
-  const livraison = 8;
-  const total = Number(p.price) + livraison;
-  document.getElementById('qoSumm').innerHTML = `
-    <div class="summ-lbl">Récapitulatif</div>
-    <div class="summ-row"><span>${p.title}</span><span>${Number(p.price).toFixed(2)} DT</span></div>
-    ${variant ? `<div class="summ-row"><span style="color:var(--rose-dk)">${variant}</span></div>` : ''}
-    <div class="summ-row"><span>🚚 Livraison</span><span>${livraison.toFixed(2)} DT</span></div>
-    <div class="summ-total"><span>Total</span><span>${total.toFixed(2)} DT</span></div>`;
-  document.getElementById('qoSucc').classList.remove('on');
-  document.getElementById('qoFormW').style.display = 'block';
-  document.getElementById('qoBg').classList.add('on');
-  document.body.style.overflow = 'hidden';
+ const p = currentProduct;
+ const variant = getVariantNote();
+ const livraison = 8;
+ const total = Number(p.price) + livraison;
+ document.getElementById('qoSumm').innerHTML = `
+ <div class="summ-lbl">Récapitulatif</div>
+ <div class="summ-row"><span>${p.title}</span><span>${Number(p.price).toFixed(2)} DT</span></div>
+ ${variant ? `<div class="summ-row"><span style="color:var(--rose-dk)">${variant}</span></div>` : ''}
+ <div class="summ-row"><span> Livraison</span><span>${livraison.toFixed(2)} DT</span></div>
+ <div class="summ-total"><span>Total</span><span>${total.toFixed(2)} DT</span></div>`;
+ document.getElementById('qoSucc').classList.remove('on');
+ document.getElementById('qoFormW').style.display = 'block';
+ document.getElementById('qoBg').classList.add('on');
+ document.body.style.overflow = 'hidden';
 }
 function closeQO() { document.getElementById('qoBg').classList.remove('on'); document.body.style.overflow = ''; }
 
 async function submitQuick(e) {
-  e.preventDefault();
-  const p = currentProduct;
-  if (p.sizes?.length && !selectedSize) { toast('⚠️ Veuillez choisir une taille'); return; }
-  const btn = document.getElementById('qSubBtn');
-  btn.disabled = true;
-  document.getElementById('qSubBtnT').textContent = 'Envoi…';
-  try {
-    const fd = new FormData();
-    fd.append('_subject', `🛍️ Commande Rapide Odette — ${document.getElementById('qiName').value}`);
-    fd.append('_template', 'table');
-    fd.append('_captcha', 'false');
-    fd.append('Nom',       document.getElementById('qiName').value);
-    fd.append('Téléphone', document.getElementById('qiPhone').value);
-    fd.append('Email',     document.getElementById('qiEmail').value || '—');
-    fd.append('Adresse',   document.getElementById('qiAddr').value);
-    fd.append('Produit',   `${p.title} — ${Number(p.price).toFixed(2)} DT`);
-    if (selectedColor) fd.append('Couleur', selectedColor);
-    if (selectedSize)  fd.append('Taille',  selectedSize);
-    fd.append('Notes', document.getElementById('qiNotes').value || '—');
-    await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
-  } catch (_) {}
-  document.getElementById('qoFormW').style.display = 'none';
-  document.getElementById('qoSucc').classList.add('on');
-  document.getElementById('qoForm').reset();
-  btn.disabled = false;
-  document.getElementById('qSubBtnT').textContent = 'Envoyer la commande';
+ e.preventDefault();
+ const p = currentProduct;
+ if (p.sizes?.length && !selectedSize) { toast(' Veuillez choisir une taille'); return; }
+ const btn = document.getElementById('qSubBtn');
+ btn.disabled = true;
+ document.getElementById('qSubBtnT').textContent = 'Envoi…';
+ try {
+ const fd = new FormData();
+ fd.append('_subject', ` Commande Rapide Odette — ${document.getElementById('qiName').value}`);
+ fd.append('_template', 'table');
+ fd.append('_captcha', 'false');
+ fd.append('Nom', document.getElementById('qiName').value);
+ fd.append('Téléphone', document.getElementById('qiPhone').value);
+ fd.append('Email', document.getElementById('qiEmail').value || '—');
+ fd.append('Adresse', document.getElementById('qiAddr').value);
+ fd.append('Produit', `${p.title} — ${Number(p.price).toFixed(2)} DT`);
+ if (selectedColor) fd.append('Couleur', selectedColor);
+ if (selectedSize) fd.append('Taille', selectedSize);
+ fd.append('Notes', document.getElementById('qiNotes').value || '—');
+ await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
+ } catch (_) {}
+ document.getElementById('qoFormW').style.display = 'none';
+ document.getElementById('qoSucc').classList.add('on');
+ document.getElementById('qoForm').reset();
+ btn.disabled = false;
+ document.getElementById('qSubBtnT').textContent = 'Envoyer la commande';
 }
 
 function syncCartUI() {
-  const cart = getCart();
-  const cnt = getCount();
-  const b = document.getElementById('cartBadge');
-  b.textContent = cnt; b.classList.toggle('on', cnt > 0);
-  document.getElementById('cdTotal').textContent = getTotal().toFixed(2) + ' DT';
-  const cbtn = document.getElementById('checkoutBtn');
-  cbtn.style.pointerEvents = cart.length ? 'auto' : 'none';
-  cbtn.style.opacity = cart.length ? '1' : '.4';
-  const el = document.getElementById('cdItems');
-  if (!cart.length) { el.innerHTML = `<div class="cd-empty"><div class="cd-empty-ico">🛒</div><p>Votre panier est vide</p></div>`; return; }
-  el.innerHTML = cart.map(it => `
-  <div class="cd-item">
-    <div class="cd-item-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '👜')}</div>
-    <div class="cd-item-info">
-      <div class="cd-item-name">${it.title}</div>
-      <div class="cd-item-price">${(it.price * it.qty).toFixed(2)} DT</div>
-      <div class="cd-ctrl">
-        <button class="q-b" onclick="doChQty(${it.id},-1)">−</button>
-        <span class="q-n">${it.qty}</span>
-        <button class="q-b" onclick="doChQty(${it.id},1)">+</button>
-        <button class="cd-rm" onclick="doRmItem(${it.id})">🗑️</button>
-      </div>
-    </div>
-  </div>`).join('');
+ const cart = getCart();
+ const cnt = getCount();
+ const b = document.getElementById('cartBadge');
+ b.textContent = cnt; b.classList.toggle('on', cnt > 0);
+ document.getElementById('cdTotal').textContent = getTotal().toFixed(2) + ' DT';
+ const cbtn = document.getElementById('checkoutBtn');
+ cbtn.style.pointerEvents = cart.length ? 'auto' : 'none';
+ cbtn.style.opacity = cart.length ? '1' : '.4';
+ const el = document.getElementById('cdItems');
+ if (!cart.length) { el.innerHTML = `<div class="cd-empty"><div class="cd-empty-ico"></div><p>Votre panier est vide</p></div>`; return; }
+ el.innerHTML = cart.map(it => `
+ <div class="cd-item">
+ <div class="cd-item-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '')}</div>
+ <div class="cd-item-info">
+ <div class="cd-item-name">${it.title}</div>
+ <div class="cd-item-price">${(it.price * it.qty).toFixed(2)} DT</div>
+ <div class="cd-ctrl">
+ <button class="q-b" onclick="doChQty(${it.id},-1)">−</button>
+ <span class="q-n">${it.qty}</span>
+ <button class="q-b" onclick="doChQty(${it.id},1)">+</button>
+ <button class="cd-rm" onclick="doRmItem(${it.id})"></button>
+ </div>
+ </div>
+ </div>`).join('');
 }
 
 function toast(msg) {
-  const t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  t.classList.add('on'); clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove('on'), 3200);
+ const t = document.getElementById('toast');
+ document.getElementById('toastMsg').textContent = msg;
+ t.classList.add('on'); clearTimeout(t._t);
+ t._t = setTimeout(() => t.classList.remove('on'), 3200);
 }
 
 async function doLogout() { await logout(); }
