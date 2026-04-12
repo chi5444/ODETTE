@@ -31,7 +31,7 @@ body { font-family: 'Nunito', sans-serif; background: #fde8ee; color: var(--ink)
 header { background: #C9A0BC; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 200; box-shadow: 0 1px 8px rgba(212,135,154,.1); }
 .header-main { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 14px 20px; max-width: 1280px; margin: 0 auto; }
 .header-left { display: flex; align-items: center; gap: 8px; }
-.header-center { text-align: center; }
+.header-center { text-align: center; display:flex; align-items:center; justify-content:center; gap:10px; }
 .header-right { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
 .logo { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; font-style: italic; color: white; letter-spacing: 2px; text-decoration: none; }
 /* hamburger */
@@ -280,7 +280,10 @@ footer strong { color: var(--rose); }
       </button>
     </div>
     <div class="header-center">
-      <a class="logo" href="/"><img src="20CDC8EB-1D0C-4DB3-9283-5A57D9AF5C4C.jpeg" alt="Odette" style="height:48px;width:auto;object-fit:contain;display:block;mix-blend-mode:multiply;border-radius:8px"></a>
+      <a class="logo" href="/" style="text-decoration:none;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#b5607a,#C9A0BC);box-shadow:0 4px 14px rgba(181,96,122,.35);flex-shrink:0">
+        <span style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;font-style:italic;color:white;letter-spacing:1px;line-height:1">Od</span>
+      </a>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;font-style:italic;color:white;letter-spacing:2px;text-shadow:0 1px 6px rgba(0,0,0,.15)">Odette</span>
     </div>
     <div class="header-right">
       <button class="h-ico" onclick="toggleSearch()" title="Rechercher">
