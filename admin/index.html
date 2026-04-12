@@ -712,17 +712,31 @@ function renderMultiImgGrid() {
     </div>`).join('');
 }
 
-window.removeImage = function(idx) {
+window.removeImage = async function(idx) {
   const url = productImages[idx];
-  // Try delete from Supabase storage if hosted there
+
+  // 1. Delete from Supabase Storage
   if (url && url.includes('supabase')) {
     try {
       const path = url.split('/products/').pop().split('?')[0];
-      supabase.storage.from('products').remove([path]).catch(() => {});
+      await supabase.storage.from('products').remove([path]);
     } catch (_) {}
   }
+
+  // 2. Remove from local array
   productImages.splice(idx, 1);
   renderMultiImgGrid();
+
+  // 3. Save to database immediately if editing existing product
+  if (editingId) {
+    const { error } = await supabase.from('products').update({
+      images:  productImages,
+      img_url: productImages[0] || null,
+    }).eq('id', editingId);
+    if (error) toast('Erreur: ' + error.message);
+    else toast('Image supprimee !');
+    await loadProducts();
+  }
 };
 
 window.addImageUrl = function() {
