@@ -168,18 +168,16 @@ footer strong{color:var(--rose)}
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar"><div class="topbar-inner"> Livraison gratuite dès 200 DT &nbsp;|&nbsp; Emballage cadeau offert &nbsp;|&nbsp; Nouvelle collection Printemps 2026 &nbsp;|&nbsp; -20% code: ODETTE20 &nbsp;|&nbsp; Livraison gratuite dès 200 DT</div></div>
-
 <!-- HEADER -->
 <header>
  <div class="header-main">
  <a class="logo" href="/">Od<span>e</span>tte</a>
- <div class="h-icons" style="margin-left:auto">
+ <div class="h-icons" style="margin-left:auto;align-items:center">
  <button class="h-ico" onclick="openCart()"><span class="badge on" id="cartBadge">0</span><span class="lbl">Panier</span></button>
  <a class="h-ico" href="/" ><span class="lbl">Accueil</span></a>
- <a class="h-ico" id="navLogin" href="/login.html"><span class="lbl">Connexion</span></a>
+ <a class="h-ico" id="navLogin" href="/login.html"><span class="lbl" id="lblLogin">Connexion</span></a>
  <a class="h-ico" id="navLogout" href="#" onclick="doLogout()" style="display:none"><span class="lbl" id="navUser">Compte</span></a>
+ <div id="langSwitcherMount"></div>
  </div>
  </div>
 </header>
@@ -254,6 +252,8 @@ import { supabase } from '/js/supabase.js';
 import { getUser, logout, updateNav } from '/js/auth.js';
 import { addToCart, removeFromCart, updateQty, getCart, getTotal, getCount } from '/js/cart.js';
 import { WA_NUMBER, FORMSUBMIT } from '/js/supabase.js';
+import { t, currentLang, setLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
+
 
 const CAT_ICON = { classique:'', luxe:'', casual:'', mini:'', tote:'' };
 const BADGE_COLORS = { sale:'b-sale', new:'b-new', hot:'b-hot', vip:'b-vip' };
@@ -263,6 +263,11 @@ async function init() {
  await updateNav();
  syncCartUI();
  window.addEventListener('cartUpdated', syncCartUI);
+ // Lang switcher
+ const lsm = document.getElementById('langSwitcherMount');
+ if (lsm) lsm.innerHTML = getLangSwitcherHTML();
+ initLangSwitcher(applyLang);
+ applyLang();
 
  const params = new URLSearchParams(window.location.search);
  const id = params.get('id');
@@ -282,7 +287,7 @@ function renderProduct(p) {
  const pct = p.old_price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
  const stars = ''.repeat(Math.floor(p.stars || 4)) + ((p.stars || 4) % 1 >= .5 ? '' : '');
  const badgeCls = BADGE_COLORS[p.badge] || '';
- const badgeTxt = p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? 'Nouveau' : p.badge === 'hot' ? ' Tendance' : p.badge === 'vip' ? 'VIP' : '';
+ const badgeTxt = p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? t('badge_new') : p.badge === 'hot' ? t('badge_hot') : p.badge === 'vip' ? 'VIP' : '';
 
  document.title = `${p.title} — Odette`;
  document.getElementById('bcTitle').textContent = p.title;
@@ -303,7 +308,7 @@ function renderProduct(p) {
  <h1 class="prod-title">${p.title}</h1>
  <div class="prod-stars">
  <span class="stars">${stars}</span>
- <span class="stars-count">${p.stars || 4.5} / 5 &nbsp;·&nbsp; ${p.sold || 0} ventes</span>
+ <span class="stars-count">${p.stars || 4.5} / 5 &nbsp;·&nbsp; ${p.sold || 0} ${t('sales')}</span>
  </div>
  <div class="prod-prices">
  <span class="price-now">${Number(p.price).toFixed(2)} DT</span>
@@ -334,12 +339,12 @@ function renderProduct(p) {
  </div>` : ''}
 
  <div class="prod-actions">
- <button class="btn-quick" onclick="openQO()"> Commande rapide</button>
- <button class="btn-atc" id="btnAtc" onclick="doATC()"> Ajouter au panier</button>
+ <button class="btn-quick" onclick="openQO()">`${t('quick_order')}`</button>
+ <button class="btn-atc" id="btnAtc" onclick="doATC()">Ajouter au panier</button>
  </div>
 
  <div class="prod-perks">
- <div class="perk"><span class="perk-ico"></span>Livraison rapide</div>
+ <div class="perk"><span class="perk-ico"></span>${t('fast_delivery')}</div>
  </div>
  </div>
  `;
@@ -354,7 +359,7 @@ window.selectColor = function(btn, color) {
  document.querySelectorAll('#colorSelector button').forEach(b => b.style.borderColor = 'transparent');
  btn.style.borderColor = 'var(--rose-dk)';
  const txt = document.getElementById('selectedColorTxt');
- if (txt) txt.textContent = `Couleur sélectionnée: ${color}`;
+ if (txt) txt.textContent = t('color_selected')(color);
 };
 
 window.selectSize = function(btn, size) {
@@ -385,9 +390,9 @@ function doATC() {
  if (p.sizes?.length && !selectedSize) { toast(' Veuillez choisir une taille'); return; }
  const item = { ...p, selectedColor, selectedSize, variantNote: getVariantNote() };
  addToCart(item);
- toast(` "${p.title}" ajouté !`);
+ toast(`"${p.title}" ${t('added')} !`);
  const btn = document.getElementById('btnAtc');
- if (btn) { btn.classList.add('done'); btn.textContent = ' Ajouté au panier'; setTimeout(() => { btn.classList.remove('done'); btn.textContent = ' Ajouter au panier'; }, 2500); }
+ if (btn) { btn.classList.add('done'); btn.textContent = t('added'); setTimeout(() => { btn.classList.remove('done'); btn.textContent = t('add_cart'); }, 2500); }
 }
 
 function openQO() {
@@ -447,7 +452,7 @@ function syncCartUI() {
  cbtn.style.pointerEvents = cart.length ? 'auto' : 'none';
  cbtn.style.opacity = cart.length ? '1' : '.4';
  const el = document.getElementById('cdItems');
- if (!cart.length) { el.innerHTML = `<div class="cd-empty"><div class="cd-empty-ico"></div><p>Votre panier est vide</p></div>`; return; }
+ if (!cart.length) { el.innerHTML = `<div class="cd-empty"><div class="cd-empty-ico"></div><p>${t('cart_empty')}</p></div>`; return; }
  el.innerHTML = cart.map(it => `
  <div class="cd-item">
  <div class="cd-item-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '')}</div>
@@ -486,6 +491,52 @@ window.openCart = openCart;
 window.closeCart = closeCart;
 window.doRmItem = doRmItem;
 window.doChQty = doChQty;
+
+
+function applyLang() {
+  document.documentElement.lang = currentLang;
+  // breadcrumb
+  const bc = document.querySelector('.breadcrumb');
+  if (bc) {
+    const links = bc.querySelectorAll('a');
+    if (links[0]) links[0].textContent = t('home');
+    if (links[1]) links[1].textContent = t('store');
+  }
+  // header labels
+  const lblLogin = document.getElementById('lblLogin');
+  if (lblLogin) lblLogin.textContent = t('login');
+  // cart drawer
+  const cdHead = document.querySelector('.cd-head h2');
+  if (cdHead) cdHead.textContent = t('cart_title');
+  const cdTotalLbl = document.querySelector('.cd-subtotal span');
+  if (cdTotalLbl) cdTotalLbl.textContent = t('cart_total');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  if (checkoutBtn) checkoutBtn.textContent = t('checkout_btn');
+  // quick order modal static texts
+  const qoH2 = document.querySelector('.qo-head-txt h2');
+  if (qoH2) qoH2.textContent = t('qo_title');
+  const qoP = document.querySelector('.qo-head-txt p');
+  if (qoP) qoP.textContent = t('qo_sub');
+  const qoSuccH3 = document.querySelector('.qo-success h3');
+  if (qoSuccH3) qoSuccH3.textContent = t('order_sent');
+  const qoSuccP = document.querySelector('.qo-success p');
+  if (qoSuccP) qoSuccP.textContent = t('order_sent_msg');
+  const qSubBtnT = document.getElementById('qSubBtnT');
+  if (qSubBtnT) qSubBtnT.textContent = t('send_order');
+  // form labels
+  const formLabels = document.querySelectorAll('.fl');
+  const labelMap = ['full_name','phone','email','address','notes'];
+  formLabels.forEach((l, i) => { if (labelMap[i]) l.textContent = t(labelMap[i]) + (i<2||i===3?' *':''); });
+  // product page elements (re-rendered)
+  const btnAtc = document.getElementById('btnAtc');
+  if (btnAtc && !btnAtc.classList.contains('done')) btnAtc.textContent = t('add_cart');
+  const btnQuick = document.querySelector('.btn-quick');
+  if (btnQuick) btnQuick.textContent = t('quick_order');
+  // perks
+  const perks = document.querySelectorAll('.perk');
+  if (perks[0]) perks[0].lastChild.textContent = t('fast_delivery');
+  syncCartUI();
+}
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeCart(); closeQO(); } });
 

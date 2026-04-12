@@ -38,7 +38,8 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#f9d5df,#
 <div class="card">
   <div class="card-top">
     <a class="logo" href="/">Od<span>e</span>tte</a>
-    <p>Bienvenue dans votre espace</p>
+    <p id="welcomeMsg">Bienvenue dans votre espace</p>
+    <div id="langSwitcherMount" style="margin-top:10px;display:flex;justify-content:center;filter:brightness(10)"></div>
   </div>
   <div class="card-body">
     <div class="tabs">
@@ -70,10 +71,48 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#f9d5df,#
 
 <script type="module">
 import { supabase } from '/js/supabase.js';
+import { t, currentLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
+
 import { getUser } from '/js/auth.js';
+
+
+function applyLang() {
+  document.documentElement.lang = currentLang;
+  document.title = t('login_title') + ' — Odette';
+  const wm = document.getElementById('welcomeMsg');
+  if (wm) wm.textContent = t('login_welcome');
+  // tabs
+  const tabLogin = document.getElementById('tabLogin');
+  if (tabLogin) tabLogin.textContent = t('sign_in');
+  const tabReg = document.getElementById('tabReg');
+  if (tabReg) tabReg.textContent = t('create_account');
+  // labels
+  const fls = document.querySelectorAll('.fl');
+  const map = ['email','password','email','password','confirm_password'];
+  fls.forEach((l,i) => { if (map[i]) l.textContent = t(map[i]); });
+  // placeholders
+  const lPass = document.getElementById('lPass');
+  if (lPass) lPass.placeholder = t('password_ph');
+  const rPass = document.getElementById('rPass');
+  if (rPass) rPass.placeholder = t('password_min');
+  const rPass2 = document.getElementById('rPass2');
+  if (rPass2) rPass2.placeholder = t('password_repeat');
+  // buttons
+  const lBtn = document.getElementById('lBtn');
+  if (lBtn && !lBtn.disabled) lBtn.textContent = t('sign_in_btn');
+  const rBtn = document.getElementById('rBtn');
+  if (rBtn && !rBtn.disabled) rBtn.textContent = t('create_btn');
+  // back link
+  const backLink = document.querySelector('.back-link');
+  if (backLink) backLink.textContent = t('back_store_link');
+}
 
 // Redirect if already logged in
 getUser().then(user => { if (user) window.location.href = '/'; });
+const lsm = document.getElementById('langSwitcherMount');
+if (lsm) lsm.innerHTML = getLangSwitcherHTML();
+initLangSwitcher(applyLang);
+applyLang();
 
 function showErr(msg) { const e = document.getElementById('errBox'); e.textContent = msg; e.classList.add('on'); document.getElementById('sucBox').classList.remove('on'); }
 function showSuc(msg) { const s = document.getElementById('sucBox'); s.textContent = msg; s.classList.add('on'); document.getElementById('errBox').classList.remove('on'); }
@@ -91,12 +130,12 @@ window.doLogin = async function(e) {
   e.preventDefault();
   clearMsg();
   const btn = document.getElementById('lBtn');
-  btn.disabled = true; btn.textContent = 'Connexion…';
+  btn.disabled = true; btn.textContent = t('signing_in');
   const { data, error } = await supabase.auth.signInWithPassword({
     email: document.getElementById('lEmail').value,
     password: document.getElementById('lPass').value,
   });
-  if (error) { showErr('Email ou mot de passe incorrect.'); btn.disabled = false; btn.textContent = 'Se connecter →'; return; }
+  if (error) { showErr(t('wrong_credentials')); btn.disabled = false; btn.textContent = t('sign_in_btn'); return; }
   window.location.href = data.user.email === 'admin@odette.com' ? '/admin/' : '/';
 };
 
@@ -105,17 +144,17 @@ window.doRegister = async function(e) {
   clearMsg();
   const p1 = document.getElementById('rPass').value;
   const p2 = document.getElementById('rPass2').value;
-  if (p1 !== p2) { showErr('Les mots de passe ne correspondent pas.'); return; }
+  if (p1 !== p2) { showErr(t('passwords_mismatch')); return; }
   const btn = document.getElementById('rBtn');
-  btn.disabled = true; btn.textContent = 'Création…';
+  btn.disabled = true; btn.textContent = t('creating');
   const { error } = await supabase.auth.signUp({
     email: document.getElementById('rEmail').value,
     password: p1,
     options: { emailRedirectTo: window.location.origin }
   });
-  if (error) { showErr(error.message); btn.disabled = false; btn.textContent = 'Créer mon compte →'; return; }
-  showSuc('Compte créé ! Vous pouvez maintenant vous connecter.');
-  btn.disabled = false; btn.textContent = 'Créer mon compte →';
+  if (error) { showErr(error.message); btn.disabled = false; btn.textContent = t('create_btn'); return; }
+  showSuc(t('account_created'));
+  btn.disabled = false; btn.textContent = t('create_btn');
   switchTab('login');
 };
 </script>

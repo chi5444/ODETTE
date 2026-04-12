@@ -62,14 +62,17 @@ footer strong{color:var(--rose)}
 <div class="topbar">🔒 Commande sécurisée — Odette</div>
 <header>
   <a class="logo" href="/">Od<span>e</span>tte</a>
-  <a href="/" style="font-size:13px;font-weight:700;color:var(--muted);text-decoration:none">← Retour à la boutique</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="/" style="font-size:13px;font-weight:700;color:var(--muted);text-decoration:none" id="backLink">← Retour à la boutique</a>
+    <div id="langSwitcherMount"></div>
+  </div>
 </header>
 
 <div class="wrap" id="mainWrap">
   <!-- FORM -->
   <div>
     <div class="section" style="margin-bottom:18px">
-      <div class="sec-head">📍 Vos coordonnées</div>
+      <div class="sec-head" id="sh1">Vos coordonnées</div>
       <div class="sec-body">
         <div class="fg2">
           <div class="fg"><label class="fl">Nom complet *</label><input class="fi" type="text" id="cName" required placeholder="Fatma Ben Ali"></div>
@@ -82,7 +85,7 @@ footer strong{color:var(--rose)}
     </div>
 
     <div class="section">
-      <div class="sec-head">💳 Méthode de paiement</div>
+      <div class="sec-head" id="sh2">Méthode de paiement</div>
       <div class="sec-body">
         <div class="pay-grid" id="payGrid">
           <label class="pay-opt sel">
@@ -98,7 +101,7 @@ footer strong{color:var(--rose)}
   <!-- SUMMARY -->
   <div>
     <div class="section">
-      <div class="sec-head">🛒 Récapitulatif</div>
+      <div class="sec-head" id="sh3">Récapitulatif</div>
       <div class="sec-body" id="summaryBox"></div>
     </div>
   </div>
@@ -111,14 +114,50 @@ import { supabase } from '/js/supabase.js';
 import { getUser } from '/js/auth.js';
 import { getCart, getTotal, clearCart } from '/js/cart.js';
 import { FORMSUBMIT } from '/js/supabase.js';
+import { t, currentLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
+
 
 const CAT_ICON = { classique:'👜', luxe:'💎', casual:'🎒', mini:'👛', tote:'👝' };
 let selectedPay = 'cod';
 
+
+function applyLang() {
+  document.documentElement.lang = currentLang;
+  document.title = t('checkout_title') + ' — Odette';
+  // header back link
+  const back = document.getElementById('backLink');
+  if (back) back.textContent = t('back_store');
+  // section headers
+  const secHeads = document.querySelectorAll('.sec-head');
+  if (secHeads[0]) secHeads[0].textContent = t('your_info');
+  if (secHeads[1]) secHeads[1].textContent = t('payment_method');
+  if (secHeads[2]) secHeads[2].textContent = t('summary');
+  // form labels
+  const fls = document.querySelectorAll('.fl');
+  const map = ['full_name','phone','email','address','notes'];
+  fls.forEach((l,i) => { if (map[i]) l.textContent = t(map[i]) + (i<2||i===3?' *':''); });
+  // payment option
+  const payLbl = document.querySelector('.pay-lbl');
+  if (payLbl) payLbl.textContent = t('payment_cod');
+  const paySub = document.querySelector('.pay-sub');
+  if (paySub) paySub.textContent = t('payment_cod_sub');
+  // placeholders
+  const cName = document.getElementById('cName');
+  if (cName) cName.placeholder = t('full_name');
+  const cAddr = document.getElementById('cAddr');
+  if (cAddr) cAddr.placeholder = t('address');
+  const cNotes = document.getElementById('cNotes');
+  if (cNotes) cNotes.placeholder = t('notes_ph');
+}
+
 async function init() {
+  const lsm = document.getElementById('langSwitcherMount');
+  if (lsm) lsm.innerHTML = getLangSwitcherHTML();
+  initLangSwitcher(() => { applyLang(); renderSummary(getCart()); });
+  applyLang();
   const cart = getCart();
   if (!cart.length) {
-    document.getElementById('mainWrap').innerHTML = `<div class="empty-cart" style="grid-column:1/-1"><div style="font-size:60px;margin-bottom:16px">🛒</div><h2>Votre panier est vide</h2><p style="margin:12px 0 20px">Ajoutez des produits avant de commander.</p><a href="/" class="btn-back">← Retour à la boutique</a></div>`;
+    document.getElementById('mainWrap').innerHTML = `<div class="empty-cart" style="grid-column:1/-1"><div style="font-size:60px;margin-bottom:16px">🛒</div><h2>${t('cart_empty_msg')}</h2><p style="margin:12px 0 20px">${t('cart_empty_sub')}</p><a href="/" class="btn-back">${t('back_store')}</a></div>`;
     return;
   }
   renderSummary(cart);
@@ -135,15 +174,15 @@ function renderSummary(cart) {
       <div class="order-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '👜')}</div>
       <div style="flex:1;min-width:0">
         <div class="order-name">${it.title}</div>
-        <div class="order-qty">Qté: ${it.qty}${it.selectedColor ? ` · <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${it.selectedColor};vertical-align:middle;border:1px solid rgba(0,0,0,.12)"></span>` : ''}${it.selectedSize ? ` · ${it.selectedSize}` : ''}</div>
+        <div class="order-qty">${t('qty')}: ${it.qty}${it.selectedColor ? ` · <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${it.selectedColor};vertical-align:middle;border:1px solid rgba(0,0,0,.12)"></span>` : ''}${it.selectedSize ? ` · ${it.selectedSize}` : ''}</div>
       </div>
       <span class="order-price">${(it.price * it.qty).toFixed(2)} DT</span>
     </div>`).join('')}
     <div class="divider"></div>
-    <div class="total-row"><span>Sous-total</span><span>${total.toFixed(2)} DT</span></div>
-    <div class="total-row"><span>Livraison</span><span>${shipping === 0 ? '<span style="color:var(--green)">Gratuite</span>' : shipping.toFixed(2) + ' DT'}</span></div>
-    <div class="total-final"><span>Total</span><span>${finalTotal.toFixed(2)} DT</span></div>
-    <button class="btn-order" id="orderBtn" onclick="placeOrder()">🛍️ Confirmer la commande</button>
+    <div class="total-row"><span>${t('subtotal')}</span><span>${total.toFixed(2)} DT</span></div>
+    <div class="total-row"><span>${t('shipping')}</span><span>${shipping === 0 ? `<span style="color:var(--green)">${t('shipping_free')}</span>` : shipping.toFixed(2) + ' DT'}</span></div>
+    <div class="total-final"><span>${t('total')}</span><span>${finalTotal.toFixed(2)} DT</span></div>
+    <button class="btn-order" id="orderBtn" onclick="placeOrder()">${t('confirm_order')}</button>
   `;
 }
 
@@ -152,7 +191,7 @@ window.placeOrder = async function() {
   const name  = document.getElementById('cName').value.trim();
   const phone = document.getElementById('cPhone').value.trim();
   const addr  = document.getElementById('cAddr').value.trim();
-  if (!name || !phone || !addr) { alert('Veuillez remplir tous les champs obligatoires.'); return; }
+  if (!name || !phone || !addr) { alert(t('required_fields')); return; }
 
   const cart = getCart();
   const total = getTotal();
@@ -160,7 +199,7 @@ window.placeOrder = async function() {
   const finalTotal = total + shipping;
 
   const btn = document.getElementById('orderBtn');
-  btn.disabled = true; btn.textContent = 'Envoi en cours…';
+  btn.disabled = true; btn.textContent = t('sending');
 
   // FormSubmit email
   try {
@@ -175,7 +214,7 @@ window.placeOrder = async function() {
     fd.append('Adresse', addr);
     fd.append('Commande', itemsText);
     fd.append('Total', finalTotal.toFixed(2) + ' DT');
-    fd.append('Livraison', shipping === 0 ? 'Gratuite' : shipping.toFixed(2) + ' DT');
+    fd.append('${t('shipping')}', shipping === 0 ? 'Gratuite' : shipping.toFixed(2) + ' DT');
     fd.append('Paiement', selectedPay);
     fd.append('Notes', document.getElementById('cNotes').value || '—');
     await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
@@ -206,9 +245,9 @@ function showSuccess() {
     <div class="section" style="grid-column:1/-1">
       <div class="success-box">
         <span class="suc-ico">🎀</span>
-        <h2>Commande confirmée !</h2>
-        <p>Merci pour votre commande. Notre équipe vous contactera dans les <strong>24 heures</strong> pour confirmer la livraison et les détails du paiement.</p>
-        <a href="/" class="btn-back">← Continuer mes achats</a>
+        <h2>${t('order_confirmed')}</h2>
+        <p>${t('order_thanks')}</p>
+        <a href="/" class="btn-back">${t('continue_shopping')}</a>
       </div>
     </div>`;
 }
