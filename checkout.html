@@ -59,7 +59,7 @@ footer strong{color:var(--rose)}
 </style>
 </head>
 <body>
-<div class="topbar">🔒 Commande sécurisée — Odette</div>
+<div class="topbar"> Commande sécurisée — Odette</div>
 <header>
   <a class="logo" href="/">Od<span>e</span>tte</a>
   <div style="display:flex;align-items:center;gap:12px">
@@ -90,7 +90,7 @@ footer strong{color:var(--rose)}
         <div class="pay-grid" id="payGrid">
           <label class="pay-opt sel">
             <input type="radio" name="pay" value="cod" checked>
-            <span class="pay-ico">💵</span>
+            <span class="pay-ico"></span>
             <div><div class="pay-lbl">Paiement à la livraison</div><div class="pay-sub">Payez en espèces à la réception</div></div>
           </label>
         </div>
@@ -107,7 +107,7 @@ footer strong{color:var(--rose)}
   </div>
 </div>
 
-<footer><strong>Odette ♛</strong> &nbsp;|&nbsp; © 2026 — Tous droits réservés</footer>
+<footer><strong>Odette </strong> &nbsp;|&nbsp;  2026 — Tous droits réservés</footer>
 
 <script type="module">
 import { supabase } from '/js/supabase.js';
@@ -117,7 +117,7 @@ import { FORMSUBMIT } from '/js/supabase.js';
 import { t, currentLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
 
 
-const CAT_ICON = { classique:'👜', luxe:'💎', casual:'🎒', mini:'👛', tote:'👝' };
+const CAT_ICON = { classique:'', luxe:'', casual:'', mini:'', tote:'' };
 let selectedPay = 'cod';
 
 
@@ -157,7 +157,7 @@ async function init() {
   applyLang();
   const cart = getCart();
   if (!cart.length) {
-    document.getElementById('mainWrap').innerHTML = `<div class="empty-cart" style="grid-column:1/-1"><div style="font-size:60px;margin-bottom:16px">🛒</div><h2>${t('cart_empty_msg')}</h2><p style="margin:12px 0 20px">${t('cart_empty_sub')}</p><a href="/" class="btn-back">${t('back_store')}</a></div>`;
+    document.getElementById('mainWrap').innerHTML = `<div class="empty-cart" style="grid-column:1/-1"><div style="font-size:60px;margin-bottom:16px"></div><h2>${t('cart_empty_msg')}</h2><p style="margin:12px 0 20px">${t('cart_empty_sub')}</p><a href="/" class="btn-back">${t('back_store')}</a></div>`;
     return;
   }
   renderSummary(cart);
@@ -171,7 +171,7 @@ function renderSummary(cart) {
   document.getElementById('summaryBox').innerHTML = `
     ${cart.map(it => `
     <div class="order-item">
-      <div class="order-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '👜')}</div>
+      <div class="order-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '')}</div>
       <div style="flex:1;min-width:0">
         <div class="order-name">${it.title}</div>
         <div class="order-qty">${t('qty')}: ${it.qty}${it.selectedColor ? ` · <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${it.selectedColor};vertical-align:middle;border:1px solid rgba(0,0,0,.12)"></span>` : ''}${it.selectedSize ? ` · ${it.selectedSize}` : ''}</div>
@@ -205,7 +205,7 @@ window.placeOrder = async function() {
   try {
     const itemsText = cart.map(i => `${i.title} ×${i.qty}${i.selectedSize ? ` | Taille: ${i.selectedSize}` : ''}${i.selectedColor ? ` | Couleur: ${i.selectedColor}` : ''} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
     const fd = new FormData();
-    fd.append('_subject', `🛍️ Nouvelle commande Odette — ${name}`);
+    fd.append('_subject', ` Nouvelle commande Odette — ${name}`);
     fd.append('_template', 'table');
     fd.append('_captcha', 'false');
     fd.append('Nom', name);
@@ -244,7 +244,7 @@ function showSuccess() {
   document.getElementById('mainWrap').innerHTML = `
     <div class="section" style="grid-column:1/-1">
       <div class="success-box">
-        <span class="suc-ico">🎀</span>
+        <span class="suc-ico"></span>
         <h2>${t('order_confirmed')}</h2>
         <p>${t('order_thanks')}</p>
         <a href="/" class="btn-back">${t('continue_shopping')}</a>

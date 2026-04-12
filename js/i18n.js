@@ -1,4 +1,4 @@
-// ══ Odette i18n — shared language system ══
+//  Odette i18n — shared language system 
 // Usage: import { t, currentLang, setLang, applyLang } from '/js/i18n.js';
 
 export const TRANSLATIONS = {
@@ -252,8 +252,8 @@ export function getLangSwitcherHTML() {
       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
     <div id="langDropdown" style="position:absolute;top:calc(100% + 6px);right:0;background:white;border:1.5px solid #f0dde3;border-radius:10px;padding:6px;min-width:130px;box-shadow:0 8px 24px rgba(0,0,0,.1);display:none;z-index:300">
-      <button onclick="setLangGlobal('fr')" id="optFR" style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:700;color:#1f1419;border:none;background:${currentLang==='fr'?'#fdf0f3':'none'};width:100%;text-align:left">🇫🇷 Français</button>
-      <button onclick="setLangGlobal('en')" id="optEN" style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:700;color:#1f1419;border:none;background:${currentLang==='en'?'#fdf0f3':'none'};width:100%;text-align:left">🇬🇧 English</button>
+      <button onclick="setLangGlobal('fr')" id="optFR" style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:700;color:#1f1419;border:none;background:${currentLang==='fr'?'#fdf0f3':'none'};width:100%;text-align:left"> Français</button>
+      <button onclick="setLangGlobal('en')" id="optEN" style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:700;color:#1f1419;border:none;background:${currentLang==='en'?'#fdf0f3':'none'};width:100%;text-align:left"> English</button>
     </div>
   </div>`;
 }
