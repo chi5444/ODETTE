@@ -215,6 +215,16 @@ tr:hover td{background:var(--rose-lt)}
   .modal-bg{align-items:center;padding:16px}
   .modal-box{border-radius:16px;max-height:92vh}
 }
+
+/* ══ MULTI-IMAGE ADMIN ══ */
+.mi-item { position: relative; aspect-ratio: 3/4; border-radius: 8px; overflow: hidden; border: 2px solid var(--border); background: var(--rose-lt); }
+.mi-item:first-child { border-color: var(--rose-dk); }
+.mi-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mi-item .mi-del { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: rgba(231,76,60,.9); border: none; color: white; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .15s; }
+.mi-item .mi-del:hover { transform: scale(1.15); background: #c0392b; }
+.mi-item .mi-main-badge { position: absolute; bottom: 4px; left: 4px; background: var(--rose-dk); color: white; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 3px; letter-spacing: .5px; text-transform: uppercase; }
+.mi-upload { aspect-ratio: 3/4; border-radius: 8px; border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 24px; cursor: pointer; transition: all .2s; background: var(--rose-lt); }
+.mi-upload:hover { border-color: var(--rose); color: var(--rose); }
 </style>
 </head>
 <body>
@@ -402,23 +412,21 @@ tr:hover td{background:var(--rose-lt)}
         </div>
       </div>
 
-      <!-- IMAGE -->
+      <!-- IMAGES MULTIPLES -->
       <div class="fg">
-        <label class="fl">Image du produit</label>
-        <div class="img-preview-wrap" id="imgPreviewWrap">
-          <img id="imgPreview" src="" alt="preview">
-          <button type="button" class="rm-img" onclick="removePreview()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </div>
+        <label class="fl">Photos du produit</label>
+        <div id="multiImgGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-bottom:10px;min-height:0"></div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <label style="flex-shrink:0;background:var(--rose-lt);border:1.5px solid var(--rose);color:var(--rose-dk);font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;padding:9px 14px;border-radius:8px;cursor:pointer">
-            Choisir
-            <input type="file" id="pImgFile" accept="image/*" style="display:none" onchange="previewImg(this)">
+          <label style="flex-shrink:0;background:var(--rose-lt);border:1.5px dashed var(--rose);color:var(--rose-dk);font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;padding:9px 16px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Ajouter photo(s)
+            <input type="file" id="pImgFiles" accept="image/*" multiple style="display:none" onchange="addImages(this)">
           </label>
-          <input class="fi" id="pImg" placeholder="Ou URL de l'image..." style="flex:1;min-width:120px;font-size:13px" oninput="previewUrl(this.value)">
+          <input class="fi" id="pImgUrl" placeholder="Ou coller une URL..." style="flex:1;min-width:130px;font-size:13px">
+          <button type="button" onclick="addImageUrl()" style="background:var(--rose-dk);color:white;border:none;padding:9px 14px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap">+ URL</button>
         </div>
-        <div class="upload-progress" id="uploadProgress">Upload en cours...</div>
+        <div class="upload-progress" id="uploadProgress" style="display:none;margin-top:8px;font-size:12px;font-weight:700;color:var(--rose-dk)">Upload en cours...</div>
+        <div style="font-size:11px;color:var(--muted);font-weight:600;margin-top:6px">La 1ère photo = photo principale. Cliquez X pour supprimer.</div>
       </div>
 
       <!-- COULEURS -->
@@ -572,6 +580,7 @@ function renderProductsCards() {
 
 window.openProdModal = function(prod = null) {
   editingId = prod ? prod.id : null;
+  productImages = [];
   document.getElementById('prodModalTitle').textContent = prod ? 'Modifier le produit' : 'Ajouter un produit';
   document.getElementById('pId').value         = prod?.id || '';
   document.getElementById('pTitle').value      = prod?.title || '';
@@ -597,13 +606,26 @@ window.openProdModal = function(prod = null) {
   renderColorPicker();
   document.getElementById('colorHex').value = '';
 
-  if (prod?.img_url) showPreview(prod.img_url);
-  else { document.getElementById('imgPreviewWrap').style.display = 'none'; }
+  // Load existing images
+  productImages = [];
+  if (Array.isArray(prod?.images) && prod.images.length) {
+    productImages = [...prod.images];
+    if (prod.img_url && !productImages.includes(prod.img_url)) productImages.unshift(prod.img_url);
+  } else if (prod?.img_url) {
+    productImages = [prod.img_url];
+  }
+  renderMultiImgGrid();
+  document.getElementById('pImgUrl').value = '';
 
   document.getElementById('prodModal').classList.add('on');
 };
 
-window.closeProdModal = function() { document.getElementById('prodModal').classList.remove('on'); };
+window.closeProdModal = function() {
+  document.getElementById('prodModal').classList.remove('on');
+  productImages = [];
+  const grid = document.getElementById('multiImgGrid');
+  if (grid) grid.innerHTML = '';
+};
 
 window.editProd = function(id) {
   const p = products.find(x => x.id === id);
@@ -677,51 +699,75 @@ function renderColorPicker() {
   </div>`).join('');
 }
 
-/* ── IMAGE ── */
-window.previewImg = function(input) {
-  const file = input.files[0];
-  if (!file) return;
-  showPreview(URL.createObjectURL(file));
-  document.getElementById('pImg').value = '';
-};
-window.previewUrl = function(url) {
-  if (url) showPreview(url); else document.getElementById('imgPreviewWrap').style.display = 'none';
-  document.getElementById('pImgFile').value = '';
-};
-window.removePreview = function() {
-  document.getElementById('imgPreviewWrap').style.display = 'none';
-  document.getElementById('pImg').value = '';
-  document.getElementById('pImgFile').value = '';
-};
-function showPreview(url) {
-  const wrap = document.getElementById('imgPreviewWrap');
-  document.getElementById('imgPreview').src = url;
-  wrap.style.display = 'flex';
+/* ── MULTI-IMAGE MANAGER ── */
+let productImages = []; // array of URLs (strings)
+
+function renderMultiImgGrid() {
+  const grid = document.getElementById('multiImgGrid');
+  if (!grid) return;
+  if (!productImages.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = productImages.map((url, i) => `
+    <div class="mi-item">
+      <img src="${url}" onerror="this.style.opacity='.3'">
+      ${i === 0 ? '<span class="mi-main-badge">Principal</span>' : ''}
+      <button type="button" class="mi-del" onclick="removeImage(${i})" title="Supprimer">✕</button>
+    </div>`).join('');
 }
 
+window.removeImage = function(idx) {
+  const url = productImages[idx];
+  // Try delete from Supabase storage if hosted there
+  if (url && url.includes('supabase')) {
+    try {
+      const path = url.split('/products/').pop().split('?')[0];
+      supabase.storage.from('products').remove([path]).catch(() => {});
+    } catch (_) {}
+  }
+  productImages.splice(idx, 1);
+  renderMultiImgGrid();
+};
+
+window.addImageUrl = function() {
+  const url = document.getElementById('pImgUrl').value.trim();
+  if (!url) return;
+  if (!productImages.includes(url)) productImages.push(url);
+  document.getElementById('pImgUrl').value = '';
+  renderMultiImgGrid();
+};
+
+window.addImages = async function(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  const prog = document.getElementById('uploadProgress');
+  prog.style.display = 'block';
+  for (const file of files) {
+    const ext  = file.name.split('.').pop();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from('products').upload(path, file, { upsert: true });
+    if (error) { toast('Upload echoue: ' + error.message); continue; }
+    const { data } = supabase.storage.from('products').getPublicUrl(path);
+    productImages.push(data.publicUrl);
+  }
+  prog.style.display = 'none';
+  input.value = '';
+  renderMultiImgGrid();
+};
+
 async function uploadImageIfNeeded() {
-  const file = document.getElementById('pImgFile').files[0];
-  if (!file) return document.getElementById('pImg').value.trim() || null;
-  document.getElementById('uploadProgress').style.display = 'block';
-  const ext  = file.name.split('.').pop();
-  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-  const { error } = await supabase.storage.from('products').upload(path, file, { upsert: true });
-  document.getElementById('uploadProgress').style.display = 'none';
-  if (error) { toast('Upload echoue: ' + error.message); return null; }
-  const { data } = supabase.storage.from('products').getPublicUrl(path);
-  return data.publicUrl;
+  // Legacy stub — images already uploaded via addImages
+  return productImages[0] || null;
 }
 
 /* ── SAVE PRODUCT ── */
 window.saveProd = async function() {
-  const img_url = await uploadImageIfNeeded();
   const payload = {
     title:              document.getElementById('pTitle').value.trim(),
     price:              parseFloat(document.getElementById('pPrice').value),
     old_price:          parseFloat(document.getElementById('pOldPrice').value) || null,
     category:           document.getElementById('pCat').value,
     badge:              document.getElementById('pBadge').value || null,
-    img_url,
+    img_url:            productImages[0] || null,
+    images:             productImages,
     description:        document.getElementById('pDesc').value.trim() || null,
     sold:               parseInt(document.getElementById('pSold').value) || 0,
     stars:              parseFloat(document.getElementById('pStars').value) || 4.5,
