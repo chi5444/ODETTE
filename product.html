@@ -173,8 +173,8 @@ footer strong{color:var(--rose)}
  <div class="header-main">
  <a class="logo" href="/">Od<span>e</span>tte</a>
  <div class="h-icons" style="margin-left:auto;align-items:center">
- <button class="h-ico" onclick="openCart()"><span class="badge on" id="cartBadge">0</span><span class="lbl">Panier</span></button>
- <a class="h-ico" href="/" ><span class="lbl">Accueil</span></a>
+ <button class="h-ico" onclick="openCart()"><span class="badge on" id="cartBadge">0</span><span class="lbl" id="lblCart">Panier</span></button>
+ <a class="h-ico" href="/" ><span class="lbl" id="lblHome">Accueil</span></a>
  <a class="h-ico" id="navLogin" href="/login.html"><span class="lbl" id="lblLogin">Connexion</span></a>
  <a class="h-ico" id="navLogout" href="#" onclick="doLogout()" style="display:none"><span class="lbl" id="navUser">Compte</span></a>
  <div id="langSwitcherMount"></div>
@@ -503,6 +503,10 @@ function applyLang() {
     if (links[1]) links[1].textContent = t('store');
   }
   // header labels
+  const lblCart = document.getElementById('lblCart');
+  if (lblCart) lblCart.textContent = t('cart');
+  const lblHome = document.getElementById('lblHome');
+  if (lblHome) lblHome.textContent = t('home');
   const lblLogin = document.getElementById('lblLogin');
   if (lblLogin) lblLogin.textContent = t('login');
   // cart drawer
