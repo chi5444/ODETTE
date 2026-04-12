@@ -302,6 +302,7 @@ footer strong { color: var(--rose); }
       <a class="h-ico" id="navAdmin" href="/admin/" style="display:none" title="Admin">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
       </a>
+      <div id="langSwitcherMount"></div>
     </div>
   </div>
   <!-- SEARCH BAR -->
@@ -478,6 +479,7 @@ footer strong { color: var(--rose); }
 import { supabase } from '/js/supabase.js';
 import { getUser, isAdmin, logout, updateNav } from '/js/auth.js';
 import { addToCart, removeFromCart, updateQty, getCart, getTotal, getCount } from '/js/cart.js';
+import { t, currentLang, setLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
 
 /* ── STATE ── */
 let allProducts = [], activeFilter = 'all', searchQ = '', wishCount = 0;
@@ -490,6 +492,11 @@ async function init() {
   await updateNav();
   syncCartUI();
   window.addEventListener('cartUpdated', syncCartUI);
+  // Lang switcher
+  const lsm = document.getElementById('langSwitcherMount');
+  if (lsm) lsm.innerHTML = getLangSwitcherHTML();
+  initLangSwitcher(() => { applyLang(); renderFlash(); renderMain(); });
+  applyLang();
   await loadProducts();
   loadHero();
 }
@@ -534,11 +541,12 @@ function renderMain() {
   if (sort === 'price-desc')  list.sort((a,b) => b.price - a.price);
   if (sort === 'discount')    list.sort((a,b) => (b.old_price?1:0) - (a.old_price?1:0));
 
-  document.getElementById('resultsCount').textContent = `${list.length} produit${list.length !== 1 ? 's' : ''}`;
+  const pc = typeof t('products_count') === 'function' ? t('products_count')(list.length) : `${list.length} produit${list.length !== 1 ? 's' : ''}`;
+  document.getElementById('resultsCount').textContent = pc;
   const grid = document.getElementById('mainGrid');
   grid.innerHTML = list.length
     ? list.map(p => cardHTML(p)).join('')
-    : `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-weight:700;font-size:15px;">😕 Aucun sac trouvé</div>`;
+    : `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-weight:700;font-size:15px;">😕 ${t('no_results')}</div>`;
 
   // Stagger reveal
   grid.querySelectorAll('.pc').forEach((c, i) => {
@@ -565,7 +573,7 @@ function cardHTML(p) {
         ${p.badge ? `<span class="b-tag ${badgeCls}">${p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? 'Nouveau' : p.badge === 'hot' ? '🔥 Tendance' : 'VIP'}</span>` : ''}
       </div>
       <button class="pc-wish" data-title="${p.title.replace(/"/g,'&quot;')}" onclick="event.stopPropagation();toggleWish(this,${p.id},this.dataset.title)">🤍</button>
-      <button class="pc-quick" onclick="event.stopPropagation();doAddToCart(${p.id})">+ Ajouter au panier</button>
+      <button class="pc-quick" onclick="event.stopPropagation();doAddToCart(${p.id})">${t('add_cart_quick')}</button>
     </div>
     <div class="pc-body">
       <div class="pc-name">${p.title}</div>
@@ -576,8 +584,8 @@ function cardHTML(p) {
       </div>
       ${p.colors?.length ? `<div class="pc-colors">${p.colors.map(c => `<span class="pc-color-dot" style="background:${c}" title="${c}"></span>`).join('')}</div>` : ''}
       ${p.sizes?.length  ? `<div class="pc-sizes">${p.sizes.map(s => `<span class="pc-size-chip">${s}</span>`).join('')}</div>` : ''}
-      <div class="pc-sold">${p.sold || 0}+ vendus</div>
-      <button class="pc-atc" id="atc${p.id}" onclick="doAddToCart(${p.id})">🛒 Ajouter</button>
+      <div class="pc-sold">${p.sold || 0}+ ${t('sold')}</div>
+      <button class="pc-atc" id="atc${p.id}" onclick="doAddToCart(${p.id})">🛒 ${t('add_cart_short')}</button>
     </div>
   </div>`;
 }
@@ -587,9 +595,9 @@ function doAddToCart(id) {
   const p = allProducts.find(x => x.id === id);
   if (!p) return;
   addToCart(p);
-  toast(`🛒 "${p.title}" ajouté au panier !`);
+  toast(`🛒 "${p.title}" ${t('added')} !`);
   const btn = document.getElementById(`atc${id}`);
-  if (btn) { btn.classList.add('done'); btn.textContent = '✓ Ajouté'; setTimeout(() => { btn.classList.remove('done'); btn.textContent = '🛒 Ajouter'; }, 2000); }
+  if (btn) { btn.classList.add('done'); btn.textContent = '✓ ' + t('added'); setTimeout(() => { btn.classList.remove('done'); btn.textContent = '🛒 ' + t('add_cart_short'); }, 2000); }
 }
 
 function syncCartUI() {
@@ -603,7 +611,7 @@ function syncCartUI() {
   cbtn.style.opacity = cart.length ? '1' : '.4';
 
   const el = document.getElementById('cdItems');
-  if (!cart.length) { el.innerHTML = `<div class="cd-empty"><div class="cd-empty-ico">🛒</div><p>Votre panier est vide</p></div>`; return; }
+  if (!cart.length) { el.innerHTML = `<div class="cd-empty"><div class="cd-empty-ico">🛒</div><p>${t('cart_empty')}</p></div>`; return; }
   el.innerHTML = cart.map(it => `
   <div class="cd-item">
     <div class="cd-item-img">${it.img_url ? `<img src="${it.img_url}" alt="${it.title}" onerror="this.style.display='none'">` : (CAT_ICON[it.category] || '👜')}</div>
@@ -694,10 +702,20 @@ window.openMenu = openMenu;
 window.closeMenu = closeMenu;
 
 window.menuSetLang = function(lang) {
-  localStorage.setItem('odette_lang', lang);
+  setLang(lang);
   document.getElementById('mlFR').classList.toggle('on', lang === 'fr');
   document.getElementById('mlEN').classList.toggle('on', lang === 'en');
-  location.reload();
+  // sync header switcher if exists
+  const langFlag = document.getElementById('langFlag');
+  if (langFlag) langFlag.textContent = lang.toUpperCase();
+  const optFR = document.getElementById('optFR');
+  if (optFR) optFR.style.background = lang === 'fr' ? '#fdf0f3' : 'none';
+  const optEN = document.getElementById('optEN');
+  if (optEN) optEN.style.background = lang === 'en' ? '#fdf0f3' : 'none';
+  applyLang();
+  renderFlash();
+  renderMain();
+  closeMenu();
 };
 
 window.toggleBagsMenu = function(btn) {
@@ -801,6 +819,61 @@ window.openCart = openCart;
 window.closeCart = closeCart;
 window.doRmItem = doRmItem;
 window.doChQty = doChQty;
+
+/* ── APPLY LANGUAGE ── */
+function applyLang() {
+  document.documentElement.lang = currentLang;
+  // search placeholder
+  const sInp = document.getElementById('sInp');
+  if (sInp) sInp.placeholder = t('search_placeholder');
+  // main nav buttons
+  const navBtns = document.querySelectorAll('.main-nav-btn');
+  const navKeys = ['nav_all', 'nav_bags'];
+  navBtns.forEach((b, i) => { if (navKeys[i]) b.textContent = i === 2 ? 'Vêtements' : t(navKeys[i]); });
+  // sidebar
+  const filterH4 = document.querySelector('.sidebar h4');
+  if (filterH4) filterH4.innerHTML = '🔍 ' + t('filter_title');
+  const fgH5s = document.querySelectorAll('.filter-group h5');
+  if (fgH5s[0]) fgH5s[0].textContent = t('filter_price');
+  if (fgH5s[1]) fgH5s[1].textContent = t('filter_promo');
+  if (fgH5s[2]) fgH5s[2].textContent = t('filter_stock');
+  const fcLabels = document.querySelectorAll('.filter-check');
+  if (fcLabels[0]) { const lbl = fcLabels[0].querySelector('input'); if (lbl && lbl.nextSibling) lbl.nextSibling.textContent = ' ' + t('filter_promo_lbl'); }
+  if (fcLabels[1]) { const lbl = fcLabels[1].querySelector('input'); if (lbl && lbl.nextSibling) lbl.nextSibling.textContent = ' ' + t('filter_stock_lbl'); }
+  // sort select
+  const sortSel = document.getElementById('sortSel');
+  if (sortSel && sortSel.options.length >= 4) {
+    sortSel.options[0].text = t('sort_default');
+    sortSel.options[1].text = t('sort_price_asc');
+    sortSel.options[2].text = t('sort_price_desc');
+    sortSel.options[3].text = t('sort_discount');
+  }
+  // best sellers section
+  const flashTitle = document.querySelector('.flash-title');
+  if (flashTitle) flashTitle.textContent = t('best_sellers');
+  const seeAll = document.querySelector('.see-all');
+  if (seeAll) seeAll.textContent = t('see_all');
+  // cart drawer
+  const cdHead = document.querySelector('.cd-head h2');
+  if (cdHead) cdHead.innerHTML = '🛒 ' + t('cart_title');
+  const cdTotalLbl = document.querySelector('.cd-subtotal span');
+  if (cdTotalLbl) cdTotalLbl.textContent = t('cart_total');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  if (checkoutBtn && !checkoutBtn.disabled) checkoutBtn.textContent = t('checkout_btn');
+  // menu drawer items
+  const menuItemAll = document.getElementById('menuItemAll');
+  if (menuItemAll) menuItemAll.textContent = t('nav_all');
+  const menuItemBags = document.getElementById('menuItemBags');
+  if (menuItemBags) menuItemBags.textContent = t('nav_bags');
+  const menuLoginTxt = document.getElementById('menuLoginTxt');
+  if (menuLoginTxt) menuLoginTxt.textContent = t('login');
+  // sync menu lang buttons
+  const mlFR = document.getElementById('mlFR');
+  const mlEN = document.getElementById('mlEN');
+  if (mlFR) mlFR.classList.toggle('on', currentLang === 'fr');
+  if (mlEN) mlEN.classList.toggle('on', currentLang === 'en');
+  syncCartUI();
+}
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
 
