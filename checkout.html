@@ -214,7 +214,7 @@ window.placeOrder = async function() {
     fd.append('Adresse', addr);
     fd.append('Commande', itemsText);
     fd.append('Total', finalTotal.toFixed(2) + ' DT');
-    fd.append('${t('shipping')}', shipping === 0 ? 'Gratuite' : shipping.toFixed(2) + ' DT');
+    fd.append(t('shipping'), shipping === 0 ? 'Gratuite' : shipping.toFixed(2) + ' DT');
     fd.append('Paiement', selectedPay);
     fd.append('Notes', document.getElementById('cNotes').value || '—');
     await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });

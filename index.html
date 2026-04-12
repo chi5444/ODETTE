@@ -690,6 +690,8 @@ function closeMenu() {
   document.body.style.overflow = '';
 }
 window.toggleMenu = openMenu;
+window.openMenu = openMenu;
+window.closeMenu = closeMenu;
 
 window.menuSetLang = function(lang) {
   localStorage.setItem('odette_lang', lang);

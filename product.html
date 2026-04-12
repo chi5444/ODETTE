@@ -255,7 +255,7 @@ import { WA_NUMBER, FORMSUBMIT } from '/js/supabase.js';
 import { t, currentLang, setLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
 
 
-const CAT_ICON = { classique:'', luxe:'', casual:'', mini:'', tote:'' };
+const CAT_ICON = { classique:'👜', luxe:'💎', casual:'🎒', mini:'👛', tote:'👝' };
 const BADGE_COLORS = { sale:'b-sale', new:'b-new', hot:'b-hot', vip:'b-vip' };
 let currentProduct = null;
 
@@ -285,7 +285,7 @@ async function init() {
 
 function renderProduct(p) {
  const pct = p.old_price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
- const stars = ''.repeat(Math.floor(p.stars || 4)) + ((p.stars || 4) % 1 >= .5 ? '' : '');
+ const stars = '★'.repeat(Math.floor(p.stars || 4)) + ((p.stars || 4) % 1 >= .5 ? '☆' : '');
  const badgeCls = BADGE_COLORS[p.badge] || '';
  const badgeTxt = p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? t('badge_new') : p.badge === 'hot' ? t('badge_hot') : p.badge === 'vip' ? 'VIP' : '';
 
@@ -339,7 +339,7 @@ function renderProduct(p) {
  </div>` : ''}
 
  <div class="prod-actions">
- <button class="btn-quick" onclick="openQO()">`${t('quick_order')}`</button>
+	 <button class="btn-quick" onclick="openQO()">🚀 Commande Rapide</button>
  <button class="btn-atc" id="btnAtc" onclick="doATC()">Ajouter au panier</button>
  </div>
 
