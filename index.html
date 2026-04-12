@@ -317,7 +317,6 @@ footer strong { color: var(--rose); }
     <div class="main-nav-inner">
       <button class="main-nav-btn on" onclick="setSection('all',this)">Tout voir</button>
       <button class="main-nav-btn" onclick="setSection('bags',this)">Sacs</button>
-      <button class="main-nav-btn" onclick="setSection('clothing',this)">Vêtements</button>
     </div>
   </nav>
   <!-- SUB NAV -->
@@ -483,7 +482,7 @@ import { t, currentLang, setLang, getLangSwitcherHTML, initLangSwitcher } from '
 let allProducts = [], activeFilter = 'all', searchQ = '';
 
 const BADGE_COLORS = { sale:'b-sale', new:'b-new', hot:'b-hot', vip:'b-vip' };
-const CAT_ICON = { classique:'', luxe:'', casual:'', mini:'', tote:'', tshirt:'', pants:'' };
+const CAT_ICON = { classique:'', luxe:'', casual:'', mini:'', tote:'' };
 
 /*  INIT  */
 async function init() {
@@ -525,10 +524,8 @@ function renderMain() {
 
   let list = allProducts.filter(p => {
     let mCat;
-    if (activeFilter === 'all')          mCat = true;
-    else if (activeFilter === 'all_bags')     mCat = !['tshirt','pants'].includes(p.category);
-    else if (activeFilter === 'all_clothing') mCat = ['tshirt','pants'].includes(p.category);
-    else                                      mCat = p.category === activeFilter;
+    if (activeFilter === 'all' || activeFilter === 'all_bags') mCat = true;
+    else mCat = p.category === activeFilter;
     const mSearch = !searchQ || p.title.toLowerCase().includes(searchQ);
     const mPrice  = p.price >= min && p.price <= max;
     const mSale   = !onSale || p.old_price;
@@ -634,18 +631,13 @@ const SUB_CATS = {
     { key:'mini',      ico:'', label:'Mini Bags' },
     { key:'tote',      ico:'', label:'Tote Bags' },
   ],
-  clothing: [
-    { key:'all_clothing', ico:'', label:'Tous les vêtements' },
-    { key:'tshirt',       ico:'', label:'T-Shirts' },
-    { key:'pants',        ico:'', label:'Pantalons' },
-  ],
 };
 
-let activeSection = 'all'; // 'all' | 'bags' | 'clothing'
+let activeSection = 'all'; // 'all' | 'bags'
 
 window.setSection = function(section, btn) {
   activeSection = section;
-  activeFilter  = section === 'all' ? 'all' : (section === 'bags' ? 'all_bags' : 'all_clothing');
+  activeFilter  = section === 'all' ? 'all' : 'all_bags';
   document.querySelectorAll('.main-nav-btn').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
 
@@ -814,7 +806,7 @@ function applyLang() {
   // main nav buttons
   const navBtns = document.querySelectorAll('.main-nav-btn');
   const navKeys = ['nav_all', 'nav_bags'];
-  navBtns.forEach((b, i) => { if (navKeys[i]) b.textContent = i === 2 ? 'Vêtements' : t(navKeys[i]); });
+  navBtns.forEach((b, i) => { if (navKeys[i]) b.textContent = t(navKeys[i]); });
   // sidebar
   const filterH4 = document.querySelector('.sidebar h4');
   if (filterH4) filterH4.innerHTML = ' ' + t('filter_title');
