@@ -588,12 +588,10 @@ window.openProdModal = function(prod = null) {
   document.getElementById('pOldPrice').value   = prod?.old_price || '';
   document.getElementById('pCat').value        = prod?.category || 'classique';
   document.getElementById('pBadge').value      = prod?.badge || '';
-  document.getElementById('pImg').value        = prod?.img_url || '';
   document.getElementById('pDesc').value       = prod?.description || '';
   document.getElementById('pSold').value       = prod?.sold || 0;
   document.getElementById('pStars').value      = prod?.stars || 4.5;
   document.getElementById('pStock').checked    = prod ? prod.in_stock : true;
-  document.getElementById('pImgFile').value    = '';
   document.getElementById('uploadProgress').style.display = 'none';
 
   // Build color state: available + unavailable
