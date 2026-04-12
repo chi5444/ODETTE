@@ -19,9 +19,11 @@ header{background:var(--white);border-bottom:2px solid var(--rose-md);padding:12
 .sec-body{padding:20px}
 .fg{margin-bottom:14px}
 .fl{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.fi,.fta{width:100%;background:#fdf5f7;border:1.5px solid var(--border);color:var(--ink);font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;padding:11px 14px;border-radius:8px;outline:none;transition:border-color .2s}
-.fi:focus,.fta:focus{border-color:var(--rose)}
+.fi,.fta,select.fi{width:100%;background:#fdf5f7;border:1.5px solid var(--border);color:var(--ink);font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;padding:11px 14px;border-radius:8px;outline:none;transition:border-color .2s}
+.fi:focus,.fta:focus,select.fi:focus{border-color:var(--rose)}
 .fi::placeholder,.fta::placeholder{color:#d4b0bb;font-weight:400}
+select.fi{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a7d84' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.fi.err-field{border-color:var(--red)!important;background:#fff8f8}
 .fta{resize:vertical;min-height:70px}
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 /* PAYMENT METHODS */
@@ -59,7 +61,7 @@ footer strong{color:var(--rose)}
 </style>
 </head>
 <body>
-<div class="topbar"> Commande sécurisée — Odette</div>
+<div class="topbar">Commande sécurisée — Odette</div>
 <header>
   <a class="logo" href="/">Od<span>e</span>tte</a>
   <div style="display:flex;align-items:center;gap:12px">
@@ -79,7 +81,20 @@ footer strong{color:var(--rose)}
           <div class="fg"><label class="fl">Téléphone *</label><input class="fi" type="tel" id="cPhone" required placeholder="+216 XX XXX XXX"></div>
         </div>
         <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="cEmail" placeholder="vous@exemple.com"></div>
-        <div class="fg"><label class="fl">Adresse de livraison *</label><input class="fi" type="text" id="cAddr" required placeholder="Rue, Quartier, Ville, Gouvernorat"></div>
+        <div class="fg"><label class="fl" id="lAddr">Adresse (rue, quartier) *</label><input class="fi" type="text" id="cAddr" required placeholder="Ex: Rue Ibn Khaldoun, Cité Olympique"></div>
+        <div class="fg"><label class="fl" id="lGov">Gouvernorat *</label>
+          <select class="fi" id="cGov" required>
+            <option value="">-- Choisir un gouvernorat --</option>
+            <option>Ariana</option><option>Béja</option><option>Ben Arous</option>
+            <option>Bizerte</option><option>Gabès</option><option>Gafsa</option>
+            <option>Jendouba</option><option>Kairouan</option><option>Kasserine</option>
+            <option>Kébili</option><option>Le Kef</option><option>Mahdia</option>
+            <option>La Manouba</option><option>Médenine</option><option>Monastir</option>
+            <option>Nabeul</option><option>Sfax</option><option>Sidi Bouzid</option>
+            <option>Siliana</option><option>Sousse</option><option>Tataouine</option>
+            <option>Tozeur</option><option>Tunis</option><option>Zaghouan</option>
+          </select>
+        </div>
         <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="cNotes" placeholder="Instructions spéciales, couleur souhaitée…"></textarea></div>
       </div>
     </div>
@@ -144,8 +159,12 @@ function applyLang() {
   // placeholders
   const cName = document.getElementById('cName');
   if (cName) cName.placeholder = t('full_name');
-  const cAddr = document.getElementById('cAddr');
-  if (cAddr) cAddr.placeholder = t('address');
+  const lAddr = document.getElementById('lAddr');
+  if (lAddr) lAddr.textContent = (currentLang === 'en' ? 'Address (street, district)' : 'Adresse (rue, quartier)') + ' *';
+  const lGov = document.getElementById('lGov');
+  if (lGov) lGov.textContent = (currentLang === 'en' ? 'Governorate' : 'Gouvernorat') + ' *';
+  const cGov = document.getElementById('cGov');
+  if (cGov && cGov.options[0]) cGov.options[0].text = currentLang === 'en' ? '-- Choose a governorate --' : '-- Choisir un gouvernorat --';
   const cNotes = document.getElementById('cNotes');
   if (cNotes) cNotes.placeholder = t('notes_ph');
 }
@@ -165,7 +184,7 @@ async function init() {
 
 function renderSummary(cart) {
   const total = getTotal();
-  const shipping = total >= 200 ? 0 : 8;
+  const shipping = 8;
   const finalTotal = total + shipping;
 
   document.getElementById('summaryBox').innerHTML = `
@@ -180,7 +199,7 @@ function renderSummary(cart) {
     </div>`).join('')}
     <div class="divider"></div>
     <div class="total-row"><span>${t('subtotal')}</span><span>${total.toFixed(2)} DT</span></div>
-    <div class="total-row"><span>${t('shipping')}</span><span>${shipping === 0 ? `<span style="color:var(--green)">${t('shipping_free')}</span>` : shipping.toFixed(2) + ' DT'}</span></div>
+    <div class="total-row"><span>${t('shipping')}</span><span>${shipping.toFixed(2)} DT</span></div>
     <div class="total-final"><span>${t('total')}</span><span>${finalTotal.toFixed(2)} DT</span></div>
     <button class="btn-order" id="orderBtn" onclick="placeOrder()">${t('confirm_order')}</button>
   `;
@@ -191,11 +210,29 @@ window.placeOrder = async function() {
   const name  = document.getElementById('cName').value.trim();
   const phone = document.getElementById('cPhone').value.trim();
   const addr  = document.getElementById('cAddr').value.trim();
-  if (!name || !phone || !addr) { alert(t('required_fields')); return; }
+  const gov   = document.getElementById('cGov').value.trim();
+
+  // Validate with inline error highlighting
+  let hasErr = false;
+  [['cName', name], ['cPhone', phone], ['cAddr', addr], ['cGov', gov]].forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (!val) { el.classList.add('err-field'); hasErr = true; }
+    else el.classList.remove('err-field');
+  });
+
+  // Phone must contain digits
+  if (phone && !/\d{6,}/.test(phone.replace(/\s/g,''))) {
+    document.getElementById('cPhone').classList.add('err-field');
+    hasErr = true;
+  }
+
+  if (hasErr) { alert(t('required_fields')); return; }
+
+  const fullAddress = `${addr} - ${gov}`;
 
   const cart = getCart();
   const total = getTotal();
-  const shipping = total >= 200 ? 0 : 8;
+  const shipping = 8;
   const finalTotal = total + shipping;
 
   const btn = document.getElementById('orderBtn');
@@ -212,9 +249,10 @@ window.placeOrder = async function() {
     fd.append('Téléphone', phone);
     fd.append('Email', document.getElementById('cEmail').value || '—');
     fd.append('Adresse', addr);
+    fd.append('Gouvernorat', gov);
     fd.append('Commande', itemsText);
     fd.append('Total', finalTotal.toFixed(2) + ' DT');
-    fd.append(t('shipping'), shipping === 0 ? 'Gratuite' : shipping.toFixed(2) + ' DT');
+    fd.append(t('shipping'), shipping.toFixed(2) + ' DT');
     fd.append('Paiement', selectedPay);
     fd.append('Notes', document.getElementById('cNotes').value || '—');
     await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
@@ -228,7 +266,7 @@ window.placeOrder = async function() {
         total: finalTotal,
         customer_name: name,
         phone, email: document.getElementById('cEmail').value || null,
-        address: addr,
+        address: fullAddress,
         notes: document.getElementById('cNotes').value || null,
         payment: selectedPay,
         status: 'pending'
