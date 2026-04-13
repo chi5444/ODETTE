@@ -152,7 +152,8 @@ header{background:var(--white);border-bottom:2px solid var(--rose-md);position:s
 .q-b{width:26px;height:26px;border-radius:5px;background:var(--rose-lt);border:1.5px solid var(--rose-md);color:var(--ink);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .q-b:hover{background:var(--rose);border-color:var(--rose);color:white}
 .q-n{font-size:14px;font-weight:800;min-width:22px;text-align:center}
-.cd-rm{background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;margin-left:auto;opacity:.6;transition:opacity .2s}
+.cd-rm{background:#fff0f0;border:1.5px solid #ffd0d0;color:var(--red);cursor:pointer;width:30px;height:30px;border-radius:7px;margin-left:auto;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.cd-rm:hover{background:var(--red);border-color:var(--red);color:white;transform:scale(1.1)}
 .cd-foot{padding:16px;border-top:2px solid var(--rose-md);background:var(--rose-lt)}
 .cd-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .cd-subtotal span{font-size:14px;color:var(--muted);font-weight:700}
@@ -223,7 +224,7 @@ footer strong{color:var(--rose)}
 </div>
 
 <!-- FOOTER -->
-<footer><strong>Odette </strong> &nbsp;|&nbsp;  2026 — Tous droits réservés &nbsp;|&nbsp; WhatsApp: +216 96 672 771</footer>
+<footer><strong>Odette </strong> &nbsp;|&nbsp;  2026 — Tous droits réservés &nbsp;|&nbsp; WhatsApp: +216 23 581 300</footer>
 
 <!-- CART DRAWER -->
 <div class="cart-bg" id="cartBg" onclick="closeCart()"></div>
@@ -490,7 +491,7 @@ function syncCartUI() {
  <button class="q-b" onclick="doChQty(${it.id},-1)">−</button>
  <span class="q-n">${it.qty}</span>
  <button class="q-b" onclick="doChQty(${it.id},1)">+</button>
- <button class="cd-rm" onclick="doRmItem(${it.id})"></button>
+ <button class="cd-rm" onclick="doRmItem(${it.id})" title="Supprimer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
  </div>
  </div>
  </div>`).join('');
