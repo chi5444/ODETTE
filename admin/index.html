@@ -172,7 +172,8 @@ tr:hover td{background:var(--rose-lt)}
 .upload-progress{display:none;text-align:center;padding:10px;font-size:13px;color:var(--muted);font-weight:700}
 
 /* Hero section */
-.hero-preview{margin-bottom:14px;border-radius:10px;overflow:hidden;max-height:200px;background:var(--rose-lt);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);font-weight:700;min-height:100px}
+.hero-preview{margin-bottom:14px;border-radius:10px;overflow:hidden;background:var(--rose-lt);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);font-weight:700;min-height:120px;max-height:340px}
+.hero-preview img{width:100%;height:100%;object-fit:contain;max-height:340px;display:block}
 
 /* Order detail */
 .order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
@@ -251,19 +252,19 @@ tr:hover td{background:var(--rose-lt)}
     <div class="nav-lbl">Menu</div>
     <button class="nav-item on" onclick="showSection('dashboard',this)">
       <svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      Tableau de bord
+      <span id="navDashboard">Tableau de bord</span>
     </button>
     <button class="nav-item" onclick="showSection('products',this)">
       <svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      Produits
+      <span id="navProducts">Produits</span>
     </button>
     <button class="nav-item" onclick="showSection('orders',this)">
       <svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      Commandes
+      <span id="navOrders">Commandes</span>
     </button>
     <button class="nav-item" onclick="showSection('hero',this)">
       <svg class="nav-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      Hero Image
+      <span id="navHero">Hero Image</span>
     </button>
     <div class="nav-lbl">Actions</div>
     <a class="nav-item" href="/" target="_blank">
@@ -273,7 +274,12 @@ tr:hover td{background:var(--rose-lt)}
   </nav>
   <div class="sb-foot">
     <div class="sb-user">Connecté en tant que<strong id="adminEmail">admin</strong></div>
-    <button class="btn-logout" onclick="doLogout()">Déconnexion</button>
+    <!-- Lang toggle -->
+    <div style="display:flex;gap:6px;margin-bottom:10px;background:rgba(255,255,255,.07);border-radius:8px;padding:4px">
+      <button id="langBtnFR" onclick="adminSetLang('fr')" style="flex:1;padding:6px;border:none;border-radius:6px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;background:var(--rose-dk);color:white;transition:all .2s"> FR</button>
+      <button id="langBtnEN" onclick="adminSetLang('en')" style="flex:1;padding:6px;border:none;border-radius:6px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;background:none;color:rgba(255,255,255,.45);transition:all .2s"> EN</button>
+    </div>
+    <button class="btn-logout" onclick="doLogout()" id="btnLogout">Déconnexion</button>
   </div>
 </div>
 
@@ -346,27 +352,33 @@ tr:hover td{background:var(--rose-lt)}
   <!-- HERO -->
   <div class="page-section" id="sec-hero">
     <div class="page-head">
-      <div><div class="page-title">Hero Image</div><div class="page-sub">Image principale</div></div>
+      <div><div class="page-title" id="heroPageTitle">Hero Image</div><div class="page-sub" id="heroPageSub">Image principale</div></div>
     </div>
     <div class="card">
-      <div class="card-head"><h3>Modifier le Hero</h3></div>
+      <div class="card-head" style="justify-content:space-between">
+        <h3 id="heroCardTitle">Modifier le Hero</h3>
+        <button onclick="deleteHero()" style="background:rgba(231,76,60,.25);border:1px solid rgba(231,76,60,.4);color:#ffaaaa;padding:6px 14px;border-radius:100px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s" id="btnDeleteHero" onmouseover="this.style.background='rgba(231,76,60,.45)'" onmouseout="this.style.background='rgba(231,76,60,.25)'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          <span id="btnDeleteHeroTxt">Supprimer le Hero</span>
+        </button>
+      </div>
       <div class="modal-body" style="padding:20px">
-        <div class="hero-preview" id="heroPreviewAdmin">Aucune image</div>
+        <div class="hero-preview" id="heroPreviewAdmin"><span id="heroNoImg">Aucune image</span></div>
         <div class="fg">
-          <label class="fl">Image</label>
+          <label class="fl" id="heroImgLbl">Image</label>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <label style="flex-shrink:0;background:var(--rose-lt);border:1.5px solid var(--rose);color:var(--rose-dk);font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;padding:9px 14px;border-radius:8px;cursor:pointer">
-              Choisir une image
+            <label style="flex-shrink:0;background:var(--rose-lt);border:1.5px solid var(--rose);color:var(--rose-dk);font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;padding:9px 14px;border-radius:8px;cursor:pointer" id="heroChooseBtn">
+              <span id="heroChooseTxt">Choisir une image</span>
               <input type="file" id="heroFile" accept="image/*" style="display:none" onchange="previewHero(this)">
             </label>
-            <input class="fi" id="heroUrl" placeholder="Ou coller une URL..." style="flex:1;min-width:160px" oninput="previewHeroUrl(this.value)">
+            <input class="fi" id="heroUrl" placeholder="Ou coller une URL..." style="flex:1;min-width:160px" oninput="previewHeroUrl(this.value)" id="heroUrlInput">
           </div>
         </div>
         <div class="fg2">
-          <div class="fg"><label class="fl">Titre</label><input class="fi" id="heroTitle" placeholder="Nouvelle Collection"></div>
-          <div class="fg"><label class="fl">Sous-titre</label><input class="fi" id="heroSubtitle" placeholder="Printemps 2026"></div>
+          <div class="fg"><label class="fl" id="heroTitleLbl">Titre</label><input class="fi" id="heroTitle" placeholder="Nouvelle Collection"></div>
+          <div class="fg"><label class="fl" id="heroSubLbl">Sous-titre</label><input class="fi" id="heroSubtitle" placeholder="Printemps 2026"></div>
         </div>
-        <button class="btn-save" onclick="saveHero()">Enregistrer le Hero</button>
+        <button class="btn-save" onclick="saveHero()" id="btnSaveHero">Enregistrer le Hero</button>
       </div>
     </div>
   </div>
@@ -498,6 +510,7 @@ async function init() {
   const user = await requireAdmin();
   if (!user) return;
   document.getElementById('adminEmail').textContent = user.email;
+  applyAdminLang();
   await Promise.all([loadProducts(), loadOrders()]);
   updateStats();
 }
@@ -898,15 +911,133 @@ function updateStats() {
   document.getElementById('statRevenue').textContent  = rev.toFixed(0) + ' DT';
 }
 
+/* ── LANGUAGE ── */
+const ADMIN_TRANSLATIONS = {
+  fr: {
+    connectedAs: 'Connecté en tant que',
+    logout: 'Déconnexion',
+    dashboard: 'Tableau de bord',
+    overview: 'Vue d\'ensemble',
+    products: 'Produits',
+    orders: 'Commandes',
+    heroNav: 'Hero Image',
+    viewStore: 'Voir la boutique',
+    navMenuLbl: 'Menu',
+    navActionsLbl: 'Actions',
+    lastOrders: 'Dernières commandes',
+    activeProds: 'Produits actifs',
+    ordersLbl: 'Commandes',
+    pending: 'En attente',
+    revenue: 'Chiffre d\'aff.',
+    heroPageTitle: 'Hero Image',
+    heroPageSub: 'Image principale',
+    heroCardTitle: 'Modifier le Hero',
+    heroDeleteBtn: 'Supprimer le Hero',
+    heroNoImg: 'Aucune image',
+    heroImgLbl: 'Image',
+    heroChooseTxt: 'Choisir une image',
+    heroTitleLbl: 'Titre',
+    heroSubLbl: 'Sous-titre',
+    heroSaveBtn: 'Enregistrer le Hero',
+    heroSaved: 'Hero mis a jour !',
+    heroDeleted: 'Hero supprimé !',
+    heroDeleteConfirm: 'Supprimer le Hero du site et de Supabase ?',
+    loading: 'Chargement...',
+    noOrders: 'Aucune commande',
+    addProduct: 'Ajouter',
+    productsList: 'Liste des produits',
+    allOrders: 'Toutes les commandes',
+  },
+  en: {
+    connectedAs: 'Logged in as',
+    logout: 'Logout',
+    dashboard: 'Dashboard',
+    overview: 'Overview',
+    products: 'Products',
+    orders: 'Orders',
+    heroNav: 'Hero Image',
+    viewStore: 'View store',
+    navMenuLbl: 'Menu',
+    navActionsLbl: 'Actions',
+    lastOrders: 'Latest orders',
+    activeProds: 'Active products',
+    ordersLbl: 'Orders',
+    pending: 'Pending',
+    revenue: 'Revenue',
+    heroPageTitle: 'Hero Image',
+    heroPageSub: 'Main image',
+    heroCardTitle: 'Edit Hero',
+    heroDeleteBtn: 'Delete Hero',
+    heroNoImg: 'No image',
+    heroImgLbl: 'Image',
+    heroChooseTxt: 'Choose an image',
+    heroTitleLbl: 'Title',
+    heroSubLbl: 'Subtitle',
+    heroSaveBtn: 'Save Hero',
+    heroSaved: 'Hero updated!',
+    heroDeleted: 'Hero deleted!',
+    heroDeleteConfirm: 'Delete the Hero from the site and Supabase?',
+    loading: 'Loading...',
+    noOrders: 'No orders',
+    addProduct: 'Add',
+    productsList: 'Products list',
+    allOrders: 'All orders',
+  }
+};
+let adminLang = localStorage.getItem('odette_admin_lang') || 'fr';
+function aT(key) { return ADMIN_TRANSLATIONS[adminLang][key] ?? ADMIN_TRANSLATIONS.fr[key] ?? key; }
+
+function applyAdminLang() {
+  // Sidebar
+  const connectedEl = document.querySelector('.sb-user');
+  if (connectedEl) connectedEl.childNodes[0].textContent = aT('connectedAs');
+  setText('btnLogout', aT('logout'));
+  setText('navDashboard', aT('dashboard'));
+  setText('navProducts', aT('products'));
+  setText('navOrders', aT('orders'));
+  setText('navHero', aT('heroNav'));
+  // Lang buttons
+  const btnFR = document.getElementById('langBtnFR');
+  const btnEN = document.getElementById('langBtnEN');
+  if (btnFR) { btnFR.style.background = adminLang === 'fr' ? 'var(--rose-dk)' : 'none'; btnFR.style.color = adminLang === 'fr' ? 'white' : 'rgba(255,255,255,.45)'; }
+  if (btnEN) { btnEN.style.background = adminLang === 'en' ? 'var(--rose-dk)' : 'none'; btnEN.style.color = adminLang === 'en' ? 'white' : 'rgba(255,255,255,.45)'; }
+  // Hero section
+  setText('heroPageTitle', aT('heroPageTitle'));
+  setText('heroPageSub', aT('heroPageSub'));
+  setText('heroCardTitle', aT('heroCardTitle'));
+  setText('btnDeleteHeroTxt', aT('heroDeleteBtn'));
+  setText('heroImgLbl', aT('heroImgLbl'));
+  setText('heroChooseTxt', aT('heroChooseTxt'));
+  setText('heroTitleLbl', aT('heroTitleLbl'));
+  setText('heroSubLbl', aT('heroSubLbl'));
+  setText('btnSaveHero', aT('heroSaveBtn'));
+  // Dashboard labels
+  const statLbls = document.querySelectorAll('.stat-lbl');
+  const lblKeys = ['activeProds','ordersLbl','pending','revenue'];
+  statLbls.forEach((el, i) => { if (lblKeys[i]) el.textContent = aT(lblKeys[i]); });
+  // Check if hero has image and update placeholder text
+  const heroPreview = document.getElementById('heroPreviewAdmin');
+  if (heroPreview && !heroPreview.querySelector('img')) setText('heroNoImg', aT('heroNoImg'));
+}
+
+function setText(id, txt) { const el = document.getElementById(id); if (el) el.textContent = txt; }
+
+window.adminSetLang = function(lang) {
+  adminLang = lang;
+  localStorage.setItem('odette_admin_lang', lang);
+  applyAdminLang();
+};
+
 /* ── HERO ── */
 window.previewHero = function(input) {
   const file = input.files[0];
   if (!file) return;
-  document.getElementById('heroPreviewAdmin').innerHTML = `<img src="${URL.createObjectURL(file)}" style="width:100%;max-height:200px;object-fit:cover">`;
+  const wrap = document.getElementById('heroPreviewAdmin');
+  wrap.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="hero preview">`;
   document.getElementById('heroUrl').value = '';
 };
 window.previewHeroUrl = function(url) {
-  if (url) document.getElementById('heroPreviewAdmin').innerHTML = `<img src="${url}" style="width:100%;max-height:200px;object-fit:cover">`;
+  if (url) document.getElementById('heroPreviewAdmin').innerHTML = `<img src="${url}" alt="hero preview">`;
 };
 window.saveHero = async function() {
   let img_url = document.getElementById('heroUrl').value.trim();
@@ -926,14 +1057,41 @@ window.saveHero = async function() {
   });
   const { error } = await supabase.from('settings').upsert({ key: 'hero', value }, { onConflict: 'key' });
   if (error) { toast(error.message); return; }
-  toast('Hero mis a jour !');
+  toast(aT('heroSaved'));
 };
+
+window.deleteHero = async function() {
+  if (!confirm(aT('heroDeleteConfirm'))) return;
+  // Try to delete storage file if it was uploaded (extract path from URL)
+  try {
+    const { data } = await supabase.from('settings').select('*').eq('key', 'hero').single();
+    if (data?.value) {
+      const h = JSON.parse(data.value);
+      if (h.img_url && h.img_url.includes('/storage/v1/object/public/products/')) {
+        const storagePath = h.img_url.split('/storage/v1/object/public/products/')[1];
+        await supabase.storage.from('products').remove([storagePath]);
+      }
+    }
+  } catch (_) {}
+  // Delete from settings table
+  const { error } = await supabase.from('settings').delete().eq('key', 'hero');
+  if (error) { toast(error.message); return; }
+  // Reset UI
+  const wrap = document.getElementById('heroPreviewAdmin');
+  wrap.innerHTML = `<span id="heroNoImg">${aT('heroNoImg')}</span>`;
+  document.getElementById('heroUrl').value = '';
+  document.getElementById('heroTitle').value = '';
+  document.getElementById('heroSubtitle').value = '';
+  document.getElementById('heroFile').value = '';
+  toast(aT('heroDeleted'));
+};
+
 async function loadHeroAdmin() {
   try {
     const { data } = await supabase.from('settings').select('*').eq('key', 'hero').single();
     if (data?.value) {
       const h = JSON.parse(data.value);
-      if (h.img_url) document.getElementById('heroPreviewAdmin').innerHTML = `<img src="${h.img_url}" style="width:100%;max-height:200px;object-fit:cover">`;
+      if (h.img_url) document.getElementById('heroPreviewAdmin').innerHTML = `<img src="${h.img_url}" alt="hero">`;
       if (h.title)    document.getElementById('heroTitle').value    = h.title;
       if (h.subtitle) document.getElementById('heroSubtitle').value = h.subtitle;
     }
