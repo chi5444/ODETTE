@@ -283,14 +283,14 @@ footer strong { color: var(--rose); }
       <button class="hamburger" onclick="openMenu()" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
+      <button class="h-ico" onclick="toggleSearch()" title="Rechercher">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
     </div>
     <div class="header-center">
       <a class="logo" href="/">Odette</a>
     </div>
     <div class="header-right">
-      <button class="h-ico" onclick="toggleSearch()" title="Rechercher">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      </button>
       <button class="h-ico" onclick="openCart()" title="Panier">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <span class="badge on" id="cartBadge">0</span>
@@ -305,7 +305,6 @@ footer strong { color: var(--rose); }
       <a class="h-ico" id="navAdmin" href="/admin/" style="display:none" title="Admin">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
       </a>
-      <div id="langSwitcherMount"></div>
     </div>
   </div>
   <!-- SEARCH BAR -->
@@ -481,7 +480,7 @@ footer strong { color: var(--rose); }
 import { supabase } from '/js/supabase.js';
 import { getUser, isAdmin, logout, updateNav } from '/js/auth.js';
 import { addToCart, removeFromCart, updateQty, getCart, getTotal, getCount } from '/js/cart.js';
-import { t, currentLang, setLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
+import { t, currentLang, setLang } from '/js/i18n.js';
 
 /*  STATE  */
 let allProducts = [], activeFilter = 'all', searchQ = '';
@@ -494,10 +493,6 @@ async function init() {
   await updateNav();
   syncCartUI();
   window.addEventListener('cartUpdated', syncCartUI);
-  // Lang switcher
-  const lsm = document.getElementById('langSwitcherMount');
-  if (lsm) lsm.innerHTML = getLangSwitcherHTML();
-  initLangSwitcher(() => { applyLang(); renderFlash(); renderMain(); });
   applyLang();
   await loadProducts();
   loadHero();
