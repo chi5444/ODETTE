@@ -115,6 +115,13 @@ export const TRANSLATIONS = {
     account_created: 'Compte créé ! Vous pouvez maintenant vous connecter.',
     signing_in: 'Connexion…',
     creating: 'Création…',
+
+    // SUB CATEGORIES
+    sub_all_bags: 'Tous les sacs',
+    sub_classique: 'Classiques',
+    sub_luxe: 'Luxe',
+    sub_mini: 'Mini Bags',
+    sub_tote: 'Tote Bags',
   },
 
   en: {
@@ -230,6 +237,13 @@ export const TRANSLATIONS = {
     account_created: 'Account created! You can now sign in.',
     signing_in: 'Signing in…',
     creating: 'Creating…',
+
+    // SUB CATEGORIES
+    sub_all_bags: 'All bags',
+    sub_classique: 'Classic',
+    sub_luxe: 'Luxury',
+    sub_mini: 'Mini Bags',
+    sub_tote: 'Tote Bags',
   }
 };
 

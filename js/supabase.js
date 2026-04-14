@@ -5,5 +5,5 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 export const ADMIN_EMAIL = 'admin@odette.com';
-export const WA_NUMBER  = '21696672771'; // WhatsApp pour commandes rapides
+export const WA_NUMBER  = '21623581300'; // WhatsApp pour commandes rapides
 export const FORMSUBMIT = 'odetteshoppers@gmail.com';

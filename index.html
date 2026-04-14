@@ -624,14 +624,15 @@ function syncCartUI() {
 
 /*  NAV  */
 const SUB_CATS = {
-  bags:     [
-    { key:'all_bags',  ico:'', label:'Tous les sacs' },
-    { key:'classique', ico:'', label:'Classiques' },
-    { key:'luxe',      ico:'', label:'Luxe' },
-    { key:'mini',      ico:'', label:'Mini Bags' },
-    { key:'tote',      ico:'', label:'Tote Bags' },
+  bags: [
+    { key:'all_bags',  ico:'', labelKey:'sub_all_bags' },
+    { key:'classique', ico:'', labelKey:'sub_classique' },
+    { key:'luxe',      ico:'', labelKey:'sub_luxe' },
+    { key:'mini',      ico:'', labelKey:'sub_mini' },
+    { key:'tote',      ico:'', labelKey:'sub_tote' },
   ],
 };
+function subLabel(s) { return t(s.labelKey) || s.labelKey; }
 
 let activeSection = 'all'; // 'all' | 'bags'
 
@@ -648,7 +649,7 @@ window.setSection = function(section, btn) {
     subNav.style.display = 'block';
     const subs = SUB_CATS[section];
     document.getElementById('subNavInner').innerHTML = subs.map((s, i) =>
-      `<button class="sub-btn${i === 0 ? ' on' : ''}" onclick="setSubCat('${s.key}',this)">${s.ico} ${s.label}</button>`
+      `<button class="sub-btn${i === 0 ? ' on' : ''}" onclick="setSubCat('${s.key}',this)">${s.ico} ${subLabel(s)}</button>`
     ).join('');
   }
   renderMain();
@@ -725,7 +726,7 @@ window.menuSetCat = function(cat) {
   const subNav = document.getElementById('subNav');
   subNav.style.display = 'block';
   document.getElementById('subNavInner').innerHTML = SUB_CATS.bags.map((s,i) =>
-    `<button class="sub-btn${s.key===cat?' on':''}" onclick="setSubCat('${s.key}',this)">${s.label}</button>`
+    `<button class="sub-btn${s.key===cat?' on':''}" onclick="setSubCat('${s.key}',this)">${subLabel(s)}</button>`
   ).join('');
   renderMain();
   document.getElementById('mainShop').scrollIntoView({ behavior: 'smooth' });
@@ -849,6 +850,14 @@ function applyLang() {
   const mlEN = document.getElementById('mlEN');
   if (mlFR) mlFR.classList.toggle('on', currentLang === 'fr');
   if (mlEN) mlEN.classList.toggle('on', currentLang === 'en');
+  // re-render sub-nav if open (to update translated labels)
+  const subNav = document.getElementById('subNav');
+  if (subNav && subNav.style.display !== 'none') {
+    const subs = SUB_CATS[activeSection] || [];
+    document.getElementById('subNavInner').innerHTML = subs.map(s =>
+      `<button class="sub-btn${s.key === activeFilter ? ' on' : ''}" onclick="setSubCat('${s.key}',this)">${s.ico} ${subLabel(s)}</button>`
+    ).join('');
+  }
   syncCartUI();
 }
 
