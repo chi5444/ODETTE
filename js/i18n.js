@@ -117,11 +117,11 @@ export const TRANSLATIONS = {
     creating: 'Création…',
 
     // SUB CATEGORIES
-    sub_all_bags: 'Tous les sacs',
+    sub_all_bags: 'Tous',
     sub_classique: 'Classiques',
     sub_luxe: 'Luxe',
-    sub_mini: 'Mini Sacs',
-    sub_tote: 'Tote Sacs',
+    sub_mini: 'Mini',
+    sub_tote: 'Tote',
   },
 
   en: {
@@ -239,11 +239,11 @@ export const TRANSLATIONS = {
     creating: 'Creating…',
 
     // SUB CATEGORIES
-    sub_all_bags: 'All bags',
+    sub_all_bags: 'All',
     sub_classique: 'Classic',
     sub_luxe: 'Luxury',
-    sub_mini: 'Mini Bags',
-    sub_tote: 'Tote Bags',
+    sub_mini: 'Mini',
+    sub_tote: 'Tote',
   }
 };
 
