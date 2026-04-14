@@ -377,7 +377,7 @@ function renderProduct(p) {
  </div>
 
  <div class="prod-perks">
- <div class="perk"><span class="perk-ico"></span>${t('fast delivery 48h')}</div>
+ <div class="perk"><span class="perk-ico"></span>${t('fast_delivery')}</div>
  </div>
  </div>
  `;
@@ -571,7 +571,7 @@ function applyLang() {
   if (btnQuick) btnQuick.textContent = t('quick_order');
   // perks
   const perks = document.querySelectorAll('.perk');
-  if (perks[0]) perks[0].lastChild.textContent = t('Livraison rapide 48h');
+  if (perks[0]) perks[0].lastChild.textContent = t('fast_delivery');
   syncCartUI();
 }
 
