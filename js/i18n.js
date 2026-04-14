@@ -122,13 +122,6 @@ export const TRANSLATIONS = {
     sub_luxe: 'Luxe',
     sub_mini: 'Mini Bags',
     sub_tote: 'Tote Bags',
-
-    // PRODUCT DETAIL
-    color_label: 'Couleur',
-    size_label: 'Taille',
-    size_selected: (s) => `Taille sélectionnée: ${s}`,
-    please_choose_size: 'Veuillez choisir une taille',
-    delivery_lbl: 'Livraison',
   },
 
   en: {
@@ -251,13 +244,6 @@ export const TRANSLATIONS = {
     sub_luxe: 'Luxury',
     sub_mini: 'Mini Bags',
     sub_tote: 'Tote Bags',
-
-    // PRODUCT DETAIL
-    color_label: 'Color',
-    size_label: 'Size',
-    size_selected: (s) => `Selected size: ${s}`,
-    please_choose_size: 'Please select a size',
-    delivery_lbl: 'Delivery',
   }
 };
 
