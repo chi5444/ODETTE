@@ -120,8 +120,8 @@ export const TRANSLATIONS = {
     sub_all_bags: 'Tous les sacs',
     sub_classique: 'Classiques',
     sub_luxe: 'Luxe',
-    sub_mini: 'Mini Bags',
-    sub_tote: 'Tote Bags',
+    sub_mini: 'Mini Sacs',
+    sub_tote: 'Tote Sacs',
   },
 
   en: {
