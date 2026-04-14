@@ -565,7 +565,7 @@ function cardHTML(p) {
       ${imgEl}
       <div class="pc-img-ph" style="${p.img_url ? 'display:none' : ''}">${CAT_ICON[p.category] || ''}</div>
       <div class="pc-badges">
-        ${p.badge ? `<span class="b-tag ${badgeCls}">${p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? t('badge_new') : p.badge === 'hot' ? t('badge_hot') : 'VIP'}</span>` : ''}
+        ${p.badge ? `<span class="b-tag ${badgeCls}">${p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? 'Nouveau' : p.badge === 'hot' ? ' Tendance' : 'VIP'}</span>` : ''}
       </div>
       <button class="pc-quick" onclick="event.stopPropagation();doAddToCart(${p.id})">${t('add_cart_quick')}</button>
     </div>
