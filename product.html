@@ -347,37 +347,37 @@ function renderProduct(p) {
  <span class="price-now">${Number(p.price).toFixed(2)} DT</span>
  ${p.old_price ? `<span class="price-old">${p.old_price} DT</span><span class="price-pct">−${pct}%</span>` : ''}
  </div>
- <div class="prod-sold"> ${p.sold || 0}+ ${t('satisfied')}</div>
+ <div class="prod-sold"> ${p.sold || 0}+ clientes satisfaites</div>
 
  ${p.description ? `<div class="prod-desc">${p.description}</div>` : ''}
 
  ${p.colors?.length ? `
  <div style="margin-bottom:18px">
- <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">${t('color_label')}</div>
+ <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Couleur</div>
  <div style="display:flex;gap:8px;flex-wrap:wrap" id="colorSelector">
  ${p.colors.map((c,i) => `
  <button onclick="selectColor(this,'${c}')" title="${c}" style="width:30px;height:30px;border-radius:50%;background:${c};border:3px solid ${i===0?'var(--rose-dk)':'transparent'};cursor:pointer;transition:border-color .2s;outline:2px solid rgba(0,0,0,.08)"></button>`).join('')}
  </div>
- <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedColorTxt">${typeof t('color_selected') === 'function' ? t('color_selected')(p.colors[0]) : p.colors[0]}</div>
+ <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedColorTxt">Couleur sélectionnée: ${p.colors[0]}</div>
  </div>` : ''}
 
  ${p.sizes?.length ? `
  <div style="margin-bottom:18px">
- <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">${t('size_label')}</div>
+ <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Taille</div>
  <div style="display:flex;gap:8px;flex-wrap:wrap" id="sizeSelector">
  ${p.sizes.map((s,i) => `
  <button onclick="selectSize(this,'${s}')" style="min-width:44px;padding:8px 12px;border-radius:8px;border:2px solid ${i===0?'var(--rose-dk)':'var(--border)'};background:${i===0?'var(--rose-lt)':'white'};font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:${i===0?'var(--rose-dk)':'var(--muted)'};cursor:pointer;transition:all .2s">${s}</button>`).join('')}
  </div>
- <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedSizeTxt">${typeof t('size_selected') === 'function' ? t('size_selected')(p.sizes[0]) : p.sizes[0]}</div>
+ <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedSizeTxt">Taille sélectionnée: ${p.sizes[0]}</div>
  </div>` : ''}
 
  <div class="prod-actions">
-	 <button class="btn-quick" onclick="openQO()"> ${t('quick_order')}</button>
- <button class="btn-atc" id="btnAtc" onclick="doATC()">${t('add_cart')}</button>
+	 <button class="btn-quick" onclick="openQO()"> Commande Rapide</button>
+ <button class="btn-atc" id="btnAtc" onclick="doATC()">Ajouter au panier</button>
  </div>
 
  <div class="prod-perks">
- <div class="perk"><span class="perk-ico"></span>${t('fast_delivery')}</div>
+ <div class="perk"><span class="perk-ico"></span>${t('fast delivery 48h')}</div>
  </div>
  </div>
  `;
@@ -406,7 +406,7 @@ window.selectSize = function(btn, size) {
  btn.style.background = 'var(--rose-lt)';
  btn.style.color = 'var(--rose-dk)';
  const txt = document.getElementById('selectedSizeTxt');
- if (txt) txt.textContent = typeof t('size_selected') === 'function' ? t('size_selected')(size) : size;
+ if (txt) txt.textContent = `Taille sélectionnée: ${size}`;
 };
 
 function getVariantNote() {
@@ -420,7 +420,7 @@ function doATC() {
  if (!currentProduct) return;
  const p = currentProduct;
  // Vérification taille obligatoire pour vêtements
- if (p.sizes?.length && !selectedSize) { toast(' ' + t('please_choose_size')); return; }
+ if (p.sizes?.length && !selectedSize) { toast(' Veuillez choisir une taille'); return; }
  const item = { ...p, selectedColor, selectedSize, variantNote: getVariantNote() };
  addToCart(item);
  toast(`"${p.title}" ${t('added')} !`);
@@ -434,11 +434,11 @@ function openQO() {
  const livraison = 8;
  const total = Number(p.price) + livraison;
  document.getElementById('qoSumm').innerHTML = `
- <div class="summ-lbl">${t('order_summary_lbl')}</div>
+ <div class="summ-lbl">Récapitulatif</div>
  <div class="summ-row"><span>${p.title}</span><span>${Number(p.price).toFixed(2)} DT</span></div>
  ${variant ? `<div class="summ-row"><span style="color:var(--rose-dk)">${variant}</span></div>` : ''}
- <div class="summ-row"><span> ${t('delivery_lbl')}</span><span>${livraison.toFixed(2)} DT</span></div>
- <div class="summ-total"><span>${t('total')}</span><span>${total.toFixed(2)} DT</span></div>`;
+ <div class="summ-row"><span> Livraison</span><span>${livraison.toFixed(2)} DT</span></div>
+ <div class="summ-total"><span>Total</span><span>${total.toFixed(2)} DT</span></div>`;
  document.getElementById('qoSucc').classList.remove('on');
  document.getElementById('qoFormW').style.display = 'block';
  document.getElementById('qoBg').classList.add('on');
@@ -449,10 +449,10 @@ function closeQO() { document.getElementById('qoBg').classList.remove('on'); doc
 async function submitQuick(e) {
  e.preventDefault();
  const p = currentProduct;
- if (p.sizes?.length && !selectedSize) { toast(' ' + t('please_choose_size')); return; }
+ if (p.sizes?.length && !selectedSize) { toast(' Veuillez choisir une taille'); return; }
  const btn = document.getElementById('qSubBtn');
  btn.disabled = true;
- document.getElementById('qSubBtnT').textContent = t('sending_short');
+ document.getElementById('qSubBtnT').textContent = 'Envoi…';
  try {
  const fd = new FormData();
  fd.append('_subject', ` Commande Rapide Odette — ${document.getElementById('qiName').value}`);
@@ -472,7 +472,7 @@ async function submitQuick(e) {
  document.getElementById('qoSucc').classList.add('on');
  document.getElementById('qoForm').reset();
  btn.disabled = false;
- document.getElementById('qSubBtnT').textContent = t('send_order');
+ document.getElementById('qSubBtnT').textContent = 'Envoyer la commande';
 }
 
 function syncCartUI() {
@@ -571,7 +571,7 @@ function applyLang() {
   if (btnQuick) btnQuick.textContent = t('quick_order');
   // perks
   const perks = document.querySelectorAll('.perk');
-  if (perks[0]) perks[0].lastChild.textContent = t('fast_delivery');
+  if (perks[0]) perks[0].lastChild.textContent = t('Livraison rapide 48h');
   syncCartUI();
 }
 
