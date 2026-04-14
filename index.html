@@ -33,7 +33,7 @@ body { font-family: 'Nunito', sans-serif; background: #f9f1f3; color: var(--ink)
 
 
 /*  HEADER  */
-header { background: #ca99ab; border-bottom: 1px solid #b8899a; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(180,120,145,.25); }
+header { background: #f3c8dd; border-bottom: 1px solid #dba8c5; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(180,120,145,.25); }
 .header-main { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 14px 20px; max-width: 1280px; margin: 0 auto; }
 .header-left { display: flex; align-items: center; gap: 8px; }
 .header-center { text-align: center; }
@@ -56,7 +56,7 @@ header { background: #ca99ab; border-bottom: 1px solid #b8899a; position: sticky
 .search-bar button { background: none; border: none; cursor: pointer; padding: 0 14px; color: var(--muted); font-size: 16px; }
 
 /*  MAIN NAV  */
-.main-nav { background: #ca99ab; border-bottom: 1px solid #b8899a; }
+.main-nav { background: #f3c8dd; border-bottom: 1px solid #dba8c5; }
 .main-nav-inner { display: flex; align-items: center; justify-content: center; padding: 0 16px; max-width: 1280px; margin: 0 auto; gap: 8px; }
 .main-nav-btn { background: none; border: none; padding: 12px 20px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; color: rgba(255,255,255,.75); cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; white-space: nowrap; letter-spacing: 1px; text-transform: uppercase; }
 .main-nav-btn:hover, .main-nav-btn.on { color: white; border-bottom-color: white; }
@@ -204,7 +204,7 @@ footer strong { color: var(--rose); }
 .menu-bg.on { opacity: 1; pointer-events: all; }
 .menu-drawer { position: fixed; top: 0; left: -320px; width: 300px; height: 100vh; background: var(--white); z-index: 501; display: flex; flex-direction: column; transition: left .35s cubic-bezier(.4,0,.2,1); box-shadow: 8px 0 40px rgba(0,0,0,.12); overflow-y: auto; }
 .menu-drawer.on { left: 0; }
-.menu-top { background: #ca99ab; padding: 28px 20px 20px; display: flex; align-items: center; justify-content: space-between; }
+.menu-top { background: #f3c8dd; padding: 28px 20px 20px; display: flex; align-items: center; justify-content: space-between; }
 .menu-logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; font-style: italic; color: white; text-decoration: none; letter-spacing: 1px; }
 .menu-close { background: rgba(255,255,255,.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background .2s; }
 .menu-close:hover { background: rgba(255,255,255,.35); }
@@ -443,11 +443,10 @@ footer strong { color: var(--rose); }
       <svg id="bagsChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:auto;transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
     <div class="bags-submenu" id="bagsSubmenu">
-      <button class="bags-sub-item" onclick="menuSetCat('all_bags')"><span></span> <span data-cat="all_bags">Tous les sacs</span></button>
-      <button class="bags-sub-item" onclick="menuSetCat('classique')"><span></span> <span data-cat="classique">Classiques</span></button>
-      <button class="bags-sub-item" onclick="menuSetCat('luxe')"><span></span> <span data-cat="luxe">Luxe</span></button>
-      <button class="bags-sub-item" onclick="menuSetCat('mini')"><span></span> <span data-cat="mini">Mini Bags</span></button>
-      <button class="bags-sub-item" onclick="menuSetCat('tote')"><span></span> <span data-cat="tote">Tote Bags</span></button>
+      <button class="bags-sub-item" onclick="menuSetCat('classique')"><span></span> <span data-i18n="sub_classique">Classiques</span></button>
+      <button class="bags-sub-item" onclick="menuSetCat('luxe')"><span></span> <span data-i18n="sub_luxe">Luxe</span></button>
+      <button class="bags-sub-item" onclick="menuSetCat('mini')"><span></span> <span data-i18n="sub_mini">Mini Bags</span></button>
+      <button class="bags-sub-item" onclick="menuSetCat('tote')"><span></span> <span data-i18n="sub_tote">Tote Bags</span></button>
     </div>
 
     <!-- LOGIN -->
@@ -524,7 +523,7 @@ function renderMain() {
 
   let list = allProducts.filter(p => {
     let mCat;
-    if (activeFilter === 'all' || activeFilter === 'all_bags') mCat = true;
+    if (activeFilter === 'all') mCat = true;
     else mCat = p.category === activeFilter;
     const mSearch = !searchQ || p.title.toLowerCase().includes(searchQ);
     const mPrice  = p.price >= min && p.price <= max;
@@ -565,7 +564,6 @@ function cardHTML(p) {
       ${imgEl}
       <div class="pc-img-ph" style="${p.img_url ? 'display:none' : ''}">${CAT_ICON[p.category] || ''}</div>
       <div class="pc-badges">
-        ${p.badge ? `<span class="b-tag ${badgeCls}">${p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? t('badge_new') : p.badge === 'hot' ? t('badge_hot') : 'VIP'}</span>` : ''}
         ${p.badge ? `<span class="b-tag ${badgeCls}">${p.badge === 'sale' ? `−${pct}%` : p.badge === 'new' ? 'Nouveau' : p.badge === 'hot' ? ' Tendance' : 'VIP'}</span>` : ''}
       </div>
       <button class="pc-quick" onclick="event.stopPropagation();doAddToCart(${p.id})">${t('add_cart_quick')}</button>
@@ -626,11 +624,10 @@ function syncCartUI() {
 /*  NAV  */
 const SUB_CATS = {
   bags: [
-    { key:'all_bags',  ico:'', labelKey:'all_bags' },
-    { key:'classique', ico:'', labelKey:'classique' },
-    { key:'luxe',      ico:'', labelKey:'luxe' },
-    { key:'mini',      ico:'', labelKey:'mini' },
-    { key:'tote',      ico:'', labelKey:'tote' },
+    { key:'classique', ico:'', labelKey:'sub_classique' },
+    { key:'luxe',      ico:'', labelKey:'sub_luxe' },
+    { key:'mini',      ico:'', labelKey:'sub_mini' },
+    { key:'tote',      ico:'', labelKey:'sub_tote' },
   ],
 };
 function subLabel(s) { return t(s.labelKey) || s.labelKey; }
@@ -639,7 +636,7 @@ let activeSection = 'all'; // 'all' | 'bags'
 
 window.setSection = function(section, btn) {
   activeSection = section;
-  activeFilter  = section === 'all' ? 'all' : 'all_bags';
+  activeFilter  = section === 'all' ? 'all' : 'all';
   document.querySelectorAll('.main-nav-btn').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
 
@@ -851,9 +848,13 @@ function applyLang() {
   const mlEN = document.getElementById('mlEN');
   if (mlFR) mlFR.classList.toggle('on', currentLang === 'fr');
   if (mlEN) mlEN.classList.toggle('on', currentLang === 'en');
-  // re-render sub-nav if open (to update translated labels)
-  const subNav = document.getElementById('subNav');
-  if (subNav && subNav.style.display !== 'none') {
+  // update all data-i18n elements (hamburger submenu labels)
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  // refresh sub-nav labels if open
+  const subNavEl = document.getElementById('subNav');
+  if (subNavEl && subNavEl.style.display !== 'none' && activeSection !== 'all') {
     const subs = SUB_CATS[activeSection] || [];
     document.getElementById('subNavInner').innerHTML = subs.map(s =>
       `<button class="sub-btn${s.key === activeFilter ? ' on' : ''}" onclick="setSubCat('${s.key}',this)">${s.ico} ${subLabel(s)}</button>`
