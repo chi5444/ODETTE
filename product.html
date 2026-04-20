@@ -292,8 +292,83 @@ import { WA_NUMBER, FORMSUBMIT } from '/js/supabase.js';
 import { t, currentLang, setLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
 
 
-const CAT_ICON = { classique:'', luxe:'', casual:'', mini:'', tote:'' };
+const CAT_ICON = { classique:'', mini:'', tote:'', large:'', summer:'' };
 const BADGE_COLORS = { sale:'b-sale', new:'b-new', hot:'b-hot', vip:'b-vip' };
+
+// ── COLOR NAME RESOLVER ──
+const COLOR_NAMES_FR = {
+  '#ffffff':'Blanc','#f5f5f5':'Blanc cassé','#fafafa':'Blanc pur',
+  '#000000':'Noir','#1a1a1a':'Noir','#222222':'Noir charbon','#333333':'Anthracite','#444444':'Gris foncé',
+  '#555555':'Gris','#666666':'Gris','#777777':'Gris moyen','#888888':'Gris','#999999':'Gris clair',
+  '#aaaaaa':'Gris clair','#bbbbbb':'Gris perle','#cccccc':'Gris perle','#dddddd':'Gris très clair',
+  '#808080':'Gris','#a0a0a0':'Gris clair','#d3d3d3':'Gris clair','#c0c0c0':'Argent',
+  '#f5f0e8':'Crème','#f0e6d3':'Beige','#e8d5b7':'Beige doré','#d4b896':'Camel',
+  '#c4a882':'Camel','#b8956a':'Camel foncé','#a0785a':'Marron clair','#f3e5d0':'Nude',
+  '#ead5c0':'Nude rosé','#e8cbb0':'Nude','#deb887':'Blé','#d2b48c':'Tan','#c2956c':'Biscuit',
+  '#f5deb3':'Blé','#faebd7':'Blanc antique','#fdf5e6':'Lin',
+  '#ffb6c1':'Rose pâle','#ffc0cb':'Rose','#ff69b4':'Rose vif','#ff1493':'Rose fuchsia',
+  '#db7093':'Rose indien','#c71585':'Rose foncé','#d4879a':'Rose Odette',
+  '#f2d0d9':'Rose clair','#fdf0f3':'Rose très clair','#b5607a':'Rose foncé',
+  '#e75480':'Rose cerise','#f08080':'Rose saumon','#ff9999':'Rose corail',
+  '#ff0000':'Rouge','#dc143c':'Cramoisi','#b22222':'Rouge brique','#8b0000':'Bordeaux foncé',
+  '#800000':'Bordeaux','#a52a2a':'Brun rouge','#cd5c5c':'Rouge indien','#e74c3c':'Rouge vif',
+  '#c0392b':'Rouge foncé','#922b21':'Bordeaux','#722f37':'Bordeaux foncé',
+  '#ff4500':'Rouge orangé','#ff6347':'Tomate','#ff7f50':'Corail','#ff8c00':'Orange foncé',
+  '#ffa500':'Orange','#ffb347':'Pêche','#ffd700':'Or',
+  '#ffff00':'Jaune','#f0e68c':'Kaki clair','#bdb76b':'Kaki foncé',
+  '#008000':'Vert','#90ee90':'Vert clair','#228b22':'Vert forêt','#2e8b57':'Vert mer',
+  '#006400':'Vert foncé','#3cb371':'Vert moyen','#20b2aa':'Vert eau','#808000':'Olive',
+  '#556b2f':'Vert olive foncé','#6b8e23':'Vert olive',
+  '#0000ff':'Bleu','#0000cd':'Bleu moyen','#00008b':'Bleu foncé','#000080':'Marine',
+  '#191970':'Bleu nuit','#4169e1':'Bleu royal','#1e90ff':'Bleu','#00bfff':'Bleu ciel',
+  '#87ceeb':'Bleu ciel clair','#add8e6':'Bleu clair','#4682b4':'Bleu acier',
+  '#ee82ee':'Violet clair','#da70d6':'Orchidée','#dda0dd':'Prune clair',
+  '#9932cc':'Violet foncé','#8b008b':'Violet très foncé','#800080':'Violet',
+  '#9b59b6':'Violet','#8e44ad':'Violet foncé','#6c3483':'Prune foncé',
+  '#7d3c98':'Prune','#c39bd3':'Lilas','#a569bd':'Mauve',
+  '#8b4513':'Brun','#a0522d':'Sienna','#6b4226':'Chocolat','#5c3317':'Marron foncé',
+  '#964b00':'Marron','#7b3f00':'Chocolat foncé','#c68642':'Brun doré','#cd853f':'Pérou',
+  '#bc8a5f':'Caramel','#d2691e':'Chocolat',
+  '#c0c0c0':'Argent','#b8860b':'Or foncé','#daa520':'Or doré','#cd7f32':'Bronze','#b87333':'Cuivre',
+};
+
+function getColorName(hex) {
+  if (!hex) return hex;
+  const h = hex.trim().toLowerCase();
+  if (COLOR_NAMES_FR[h]) return COLOR_NAMES_FR[h];
+  // Normalisation 3->6 chars
+  if (/^#[0-9a-f]{3}$/.test(h)) {
+    const full = '#' + h[1]+h[1]+h[2]+h[2]+h[3]+h[3];
+    if (COLOR_NAMES_FR[full]) return COLOR_NAMES_FR[full];
+  }
+  // Proximité HSL
+  try {
+    const r = parseInt(h.slice(1,3),16)/255, g = parseInt(h.slice(3,5),16)/255, b = parseInt(h.slice(5,7),16)/255;
+    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    const l = (max+min)/2;
+    if (l > 0.92) return 'Blanc';
+    if (l < 0.12) return 'Noir';
+    if (max === min) return l < 0.4 ? 'Gris foncé' : l < 0.65 ? 'Gris' : 'Gris clair';
+    const d = max - min;
+    const s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+    let hue = 0;
+    if (max === r) hue = ((g-b)/d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) hue = ((b-r)/d + 2) / 6;
+    else hue = ((r-g)/d + 4) / 6;
+    const hDeg = hue * 360;
+    if (s < 0.15) return l < 0.35 ? 'Gris foncé' : l < 0.6 ? 'Gris' : 'Gris perle';
+    if (hDeg < 15)  return l < 0.4 ? 'Bordeaux' : s > 0.6 ? 'Rouge' : 'Rose saumon';
+    if (hDeg < 35)  return l < 0.4 ? 'Brun' : s > 0.5 ? 'Orange' : 'Pêche';
+    if (hDeg < 55)  return l < 0.5 ? 'Moutarde' : 'Jaune';
+    if (hDeg < 80)  return l < 0.4 ? 'Olive' : 'Vert jaune';
+    if (hDeg < 160) return l < 0.3 ? 'Vert foncé' : l < 0.55 ? 'Vert' : 'Vert clair';
+    if (hDeg < 190) return 'Turquoise';
+    if (hDeg < 250) return l < 0.3 ? 'Marine' : l < 0.5 ? 'Bleu foncé' : s > 0.5 ? 'Bleu' : 'Bleu clair';
+    if (hDeg < 290) return l < 0.35 ? 'Violet foncé' : s > 0.4 ? 'Violet' : 'Mauve';
+    if (hDeg < 330) return l < 0.35 ? 'Prune' : s > 0.5 ? 'Rose fuchsia' : 'Rose';
+    return l < 0.4 ? 'Bordeaux' : 'Rose';
+  } catch(_) { return hex; }
+}
 let currentProduct = null;
 
 async function init() {
@@ -355,10 +430,12 @@ function renderProduct(p) {
  <div style="margin-bottom:18px">
  <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Couleur</div>
  <div style="display:flex;gap:8px;flex-wrap:wrap" id="colorSelector">
- ${p.colors.map((c,i) => `
- <button onclick="selectColor(this,'${c}')" title="${c}" style="width:30px;height:30px;border-radius:50%;background:${c};border:3px solid ${i===0?'var(--rose-dk)':'transparent'};cursor:pointer;transition:border-color .2s;outline:2px solid rgba(0,0,0,.08)"></button>`).join('')}
+ ${p.colors.map((c,i) => {
+   const name = getColorName(c);
+   const active = i === 0;
+   return `<button onclick="selectColor(this,'${c}')" title="${name}" style="display:flex;align-items:center;gap:7px;padding:7px 14px 7px 9px;border-radius:50px;border:2px solid ${active?'var(--rose-dk)':'var(--border)'};background:${active?'var(--rose-lt)':'white'};cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:${active?'var(--rose-dk)':'var(--muted)'}"><span style="width:18px;height:18px;border-radius:50%;background:${c};border:1.5px solid rgba(0,0,0,.12);flex-shrink:0;display:inline-block"></span>${name}</button>`;
+ }).join('')}
  </div>
- <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px" id="selectedColorTxt">Couleur sélectionnée: ${p.colors[0]}</div>
  </div>` : ''}
 
  ${p.sizes?.length ? `
@@ -389,10 +466,14 @@ let selectedSize = null;
 
 window.selectColor = function(btn, color) {
  selectedColor = color;
- document.querySelectorAll('#colorSelector button').forEach(b => b.style.borderColor = 'transparent');
+ document.querySelectorAll('#colorSelector button').forEach(b => {
+   b.style.borderColor = 'var(--border)';
+   b.style.background = 'white';
+   b.style.color = 'var(--muted)';
+ });
  btn.style.borderColor = 'var(--rose-dk)';
- const txt = document.getElementById('selectedColorTxt');
- if (txt) txt.textContent = t('color_selected')(color);
+ btn.style.background = 'var(--rose-lt)';
+ btn.style.color = 'var(--rose-dk)';
 };
 
 window.selectSize = function(btn, size) {
@@ -411,7 +492,7 @@ window.selectSize = function(btn, size) {
 
 function getVariantNote() {
  const parts = [];
- if (selectedColor) parts.push(`Couleur: ${selectedColor}`);
+ if (selectedColor) parts.push(`Couleur: ${getColorName(selectedColor)}`);
  if (selectedSize) parts.push(`Taille: ${selectedSize}`);
  return parts.join(' | ');
 }
