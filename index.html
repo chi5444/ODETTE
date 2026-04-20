@@ -443,10 +443,11 @@ footer strong { color: var(--rose); }
       <svg id="bagsChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:auto;transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
     <div class="bags-submenu" id="bagsSubmenu">
-      <button class="bags-sub-item" onclick="menuSetCat('classique')"><span></span> <span data-i18n="sub_classique">Classiques</span></button>
-      <button class="bags-sub-item" onclick="menuSetCat('luxe')"><span></span> <span data-i18n="sub_luxe">Luxe</span></button>
-      <button class="bags-sub-item" onclick="menuSetCat('mini')"><span></span> <span data-i18n="sub_mini">Mini</span></button>
-      <button class="bags-sub-item" onclick="menuSetCat('tote')"><span></span> <span data-i18n="sub_tote">Tote</span></button>
+      <button class="bags-sub-item" onclick="menuSetCat('classique')"><span>👜</span> <span data-i18n="sub_classique">Classique</span></button>
+      <button class="bags-sub-item" onclick="menuSetCat('mini')"><span>🎀</span> <span data-i18n="sub_mini">Mini</span></button>
+      <button class="bags-sub-item" onclick="menuSetCat('tote')"><span>🛍️</span> <span data-i18n="sub_tote">Tote</span></button>
+      <button class="bags-sub-item" onclick="menuSetCat('large')"><span>💼</span> <span data-i18n="sub_large">Large</span></button>
+      <button class="bags-sub-item" onclick="menuSetCat('summer')"><span>☀️</span> <span data-i18n="sub_summer">Summer</span></button>
     </div>
 
     <!-- LOGIN -->
@@ -485,7 +486,7 @@ import { t, currentLang, setLang } from '/js/i18n.js';
 let allProducts = [], activeFilter = 'all', searchQ = '';
 
 const BADGE_COLORS = { sale:'b-sale', new:'b-new', hot:'b-hot', vip:'b-vip' };
-const CAT_ICON = { classique:'', luxe:'', casual:'', mini:'', tote:'' };
+const CAT_ICON = { classique:'👜', mini:'🎀', tote:'🛍️', large:'💼', summer:'☀️' };
 
 /*  INIT  */
 async function init() {
@@ -624,10 +625,11 @@ function syncCartUI() {
 /*  NAV  */
 const SUB_CATS = {
   bags: [
-    { key:'classique', ico:'', labelKey:'sub_classique' },
-    { key:'luxe',      ico:'', labelKey:'sub_luxe' },
-    { key:'mini',      ico:'', labelKey:'sub_mini' },
-    { key:'tote',      ico:'', labelKey:'sub_tote' },
+    { key:'classique', ico:'👜', labelKey:'sub_classique' },
+    { key:'mini',      ico:'🎀', labelKey:'sub_mini' },
+    { key:'tote',      ico:'🛍️', labelKey:'sub_tote' },
+    { key:'large',     ico:'💼', labelKey:'sub_large' },
+    { key:'summer',    ico:'☀️', labelKey:'sub_summer' },
   ],
 };
 function subLabel(s) { return t(s.labelKey) || s.labelKey; }
