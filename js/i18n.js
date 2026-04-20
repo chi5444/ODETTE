@@ -118,10 +118,11 @@ export const TRANSLATIONS = {
 
     // SUB CATEGORIES
     sub_all_bags: 'Tous',
-    sub_classique: 'Classiques',
-    sub_luxe: 'Luxe',
+    sub_classique: 'Classique',
     sub_mini: 'Mini',
     sub_tote: 'Tote',
+    sub_large: 'Large',
+    sub_summer: 'Summer',
   },
 
   en: {
@@ -241,9 +242,10 @@ export const TRANSLATIONS = {
     // SUB CATEGORIES
     sub_all_bags: 'All',
     sub_classique: 'Classic',
-    sub_luxe: 'Luxury',
     sub_mini: 'Mini',
     sub_tote: 'Tote',
+    sub_large: 'Large',
+    sub_summer: 'Summer',
   }
 };
 
