@@ -391,7 +391,7 @@ async function init() {
  currentProduct = p;
  renderProduct(p);
  // تحديد أول لون ومقاس افتراضياً
- if (p.colors?.length) selectedColor = p.colors[0];
+ if (p.colors?.length) { const c0 = p.colors[0]; selectedColor = typeof c0 === 'object' ? c0.hex : c0; selectedColorName = typeof c0 === 'object' ? (c0.name || c0.hex) : c0; }
  if (p.sizes?.length) selectedSize = p.sizes[0];
 }
 
@@ -431,9 +431,10 @@ function renderProduct(p) {
  <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Couleur</div>
  <div style="display:flex;gap:8px;flex-wrap:wrap" id="colorSelector">
  ${p.colors.map((c,i) => {
-   const name = getColorName(c);
+   const hex  = typeof c === 'object' ? c.hex  : c;
+   const name = typeof c === 'object' ? (c.name || c.hex) : c;
    const active = i === 0;
-   return `<button onclick="selectColor(this,'${c}')" title="${name}" style="display:flex;align-items:center;gap:7px;padding:7px 14px 7px 9px;border-radius:50px;border:2px solid ${active?'var(--rose-dk)':'var(--border)'};background:${active?'var(--rose-lt)':'white'};cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:${active?'var(--rose-dk)':'var(--muted)'}"><span style="width:18px;height:18px;border-radius:50%;background:${c};border:1.5px solid rgba(0,0,0,.12);flex-shrink:0;display:inline-block"></span>${name}</button>`;
+   return `<button onclick="selectColor(this,'${hex}','${name.replace(/'/g,"\'")}')" title="${name}" style="display:flex;align-items:center;gap:7px;padding:7px 14px 7px 9px;border-radius:50px;border:2px solid ${active?'var(--rose-dk)':'var(--border)'};background:${active?'var(--rose-lt)':'white'};cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:${active?'var(--rose-dk)':'var(--muted)'}"><span style="width:18px;height:18px;border-radius:50%;background:${hex};border:1.5px solid rgba(0,0,0,.12);flex-shrink:0;display:inline-block"></span>${name}</button>`;
  }).join('')}
  </div>
  </div>` : ''}
@@ -462,10 +463,12 @@ function renderProduct(p) {
 
 /*  COLOR / SIZE SELECTION  */
 let selectedColor = null;
+let selectedColorName = null;
 let selectedSize = null;
 
-window.selectColor = function(btn, color) {
+window.selectColor = function(btn, color, name) {
  selectedColor = color;
+ selectedColorName = name || color;
  document.querySelectorAll('#colorSelector button').forEach(b => {
    b.style.borderColor = 'var(--border)';
    b.style.background = 'white';
@@ -492,7 +495,7 @@ window.selectSize = function(btn, size) {
 
 function getVariantNote() {
  const parts = [];
- if (selectedColor) parts.push(`Couleur: ${getColorName(selectedColor)}`);
+ if (selectedColor) parts.push(`Couleur: ${selectedColorName || selectedColor}`);
  if (selectedSize) parts.push(`Taille: ${selectedSize}`);
  return parts.join(' | ');
 }
@@ -544,7 +547,7 @@ async function submitQuick(e) {
  fd.append('Email', document.getElementById('qiEmail').value || '—');
  fd.append('Adresse', document.getElementById('qiAddr').value);
  fd.append('Produit', `${p.title} — ${Number(p.price).toFixed(2)} DT`);
- if (selectedColor) fd.append('Couleur', selectedColor);
+ if (selectedColor) fd.append('Couleur', selectedColorName || selectedColor);
  if (selectedSize) fd.append('Taille', selectedSize);
  fd.append('Notes', document.getElementById('qiNotes').value || '—');
  await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
