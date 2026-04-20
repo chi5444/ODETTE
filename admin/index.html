@@ -1064,21 +1064,30 @@ window.saveHero = async function() {
 
 window.deleteHero = async function() {
   if (!confirm(aT('heroDeleteConfirm'))) return;
-  // Try to delete storage file if it was uploaded (extract path from URL)
+
+  // 1. Fetch hero record to get the image URL
   try {
     const { data } = await supabase.from('settings').select('*').eq('key', 'hero').single();
     if (data?.value) {
       const h = JSON.parse(data.value);
       if (h.img_url && h.img_url.includes('/storage/v1/object/public/products/')) {
-        const storagePath = h.img_url.split('/storage/v1/object/public/products/')[1];
-        await supabase.storage.from('products').remove([storagePath]);
+        // Strip query params (?t=...) before extracting path
+        const cleanUrl = h.img_url.split('?')[0];
+        const storagePath = cleanUrl.split('/storage/v1/object/public/products/')[1];
+        if (storagePath) {
+          const { error: storageErr } = await supabase.storage.from('products').remove([storagePath]);
+          if (storageErr) console.warn('Storage delete error:', storageErr.message);
+          else toast('Image supprimée du storage ✓');
+        }
       }
     }
-  } catch (_) {}
-  // Delete from settings table
+  } catch (e) { console.warn('Hero fetch error:', e); }
+
+  // 2. Delete from settings table
   const { error } = await supabase.from('settings').delete().eq('key', 'hero');
   if (error) { toast(error.message); return; }
-  // Reset UI
+
+  // 3. Reset UI
   const wrap = document.getElementById('heroPreviewAdmin');
   wrap.innerHTML = `<span id="heroNoImg">${aT('heroNoImg')}</span>`;
   document.getElementById('heroUrl').value = '';
