@@ -454,9 +454,9 @@ tr:hover td{background:var(--rose-lt)}
           <div class="unavail-hint">
             Couleur barree = non disponible (affichee grisee aux clients)
           </div>
-          <div class="color-add-row" style="margin-top:10px">
-            <input type="color" id="colorInput" value="#d4879a">
-            <input class="fi" id="colorHex" placeholder="#d4879a ou ex: rouge" style="font-size:13px">
+          <div class="color-add-row" style="margin-top:10px;flex-wrap:wrap;gap:6px">
+            <input type="color" id="colorInput" value="#d4879a" style="width:38px;height:38px;flex-shrink:0">
+            <input class="fi" id="colorName" placeholder="Nom (ex: Noir, Beige, Rose...)" style="font-size:13px;flex:1;min-width:120px">
             <button type="button" class="btn-color-add" onclick="addColor()">+ Ajouter</button>
           </div>
         </div>
@@ -612,11 +612,11 @@ window.openProdModal = function(prod = null) {
   const avail   = prod?.colors || [];
   const unavail = prod?.unavailable_colors || [];
   selectedColors = [
-    ...avail.map(h => ({ hex: h, available: true })),
-    ...unavail.map(h => ({ hex: h, available: false })),
+    ...avail.map(c => typeof c === 'object' ? { hex: c.hex, name: c.name || c.hex, available: true } : { hex: c, name: c, available: true }),
+    ...unavail.map(c => typeof c === 'object' ? { hex: c.hex, name: c.name || c.hex, available: false } : { hex: c, name: c, available: false }),
   ];
   renderColorPicker();
-  document.getElementById('colorHex').value = '';
+  document.getElementById('colorName').value = '';
 
   // Load existing images
   productImages = [];
@@ -668,12 +668,13 @@ window.toggleFeatured = async function(id, current) {
 
 /* ── COLOR MANAGER ── */
 window.addColor = function() {
-  const hex = document.getElementById('colorHex').value.trim() || document.getElementById('colorInput').value;
-  if (!hex) return;
-  if (selectedColors.find(c => c.hex === hex)) return;
-  selectedColors.push({ hex, available: true });
+  const hex  = document.getElementById('colorInput').value;
+  const name = document.getElementById('colorName').value.trim();
+  if (!name) { document.getElementById('colorName').focus(); document.getElementById('colorName').style.borderColor='var(--red)'; setTimeout(()=>document.getElementById('colorName').style.borderColor='',1500); return; }
+  if (selectedColors.find(c => c.hex === hex)) { alert('Cette couleur existe déjà'); return; }
+  selectedColors.push({ hex, name, available: true });
   renderColorPicker();
-  document.getElementById('colorHex').value = '';
+  document.getElementById('colorName').value = '';
 };
 
 window.toggleColorAvail = function(hex) {
@@ -690,13 +691,13 @@ window.removeColor = function(hex) {
 function renderColorPicker() {
   const el = document.getElementById('colorPicker');
   if (!selectedColors.length) {
-    el.innerHTML = '<span style="font-size:12px;color:var(--muted);font-weight:600">Aucune couleur ajoutee</span>';
+    el.innerHTML = '<span style="font-size:12px;color:var(--muted);font-weight:600">Aucune couleur ajoutée</span>';
     return;
   }
   el.innerHTML = selectedColors.map(c => `
   <div class="color-chip ${c.available ? 'available' : 'unavailable'}" title="${c.hex}">
     <span class="dot" style="background:${c.hex};${!c.available ? 'opacity:.4' : ''}"></span>
-    <span class="chip-name" style="${!c.available ? 'text-decoration:line-through' : ''}">${c.hex}</span>
+    <span class="chip-name" style="${!c.available ? 'text-decoration:line-through' : ''}">${c.name || c.hex}</span>
     ${c.available
       ? `<button type="button" class="chip-toggle unavail-btn" onclick="toggleColorAvail('${c.hex}')" title="Marquer non disponible">
            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
@@ -798,8 +799,8 @@ window.saveProd = async function() {
     sold:               parseInt(document.getElementById('pSold').value) || 0,
     stars:              parseFloat(document.getElementById('pStars').value) || 4.5,
     in_stock:           document.getElementById('pStock').checked,
-    colors:             selectedColors.filter(c => c.available).map(c => c.hex),
-    unavailable_colors: selectedColors.filter(c => !c.available).map(c => c.hex),
+    colors:             selectedColors.filter(c => c.available).map(c => ({ hex: c.hex, name: c.name || c.hex })),
+    unavailable_colors: selectedColors.filter(c => !c.available).map(c => ({ hex: c.hex, name: c.name || c.hex })),
   };
   if (!payload.title || !payload.price) { toast('Titre et prix obligatoires'); return; }
   if (editingId) payload.id = editingId;
