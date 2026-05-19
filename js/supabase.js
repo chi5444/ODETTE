@@ -6,4 +6,4 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 export const ADMIN_EMAIL = 'admin@odette.com';
 export const WA_NUMBER   = '21623581300';
-export const FORMSUBMIT  = 'kontfree99@gmail.com';
+export const FORMSUBMIT  = 'odetteshoppers@gmail.com';
