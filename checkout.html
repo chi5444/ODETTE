@@ -247,9 +247,10 @@ window.placeOrder = async function() {
   try {
     const itemsText = cart.map(i => `${i.title} ×${i.qty}${i.selectedSize ? ` | Taille: ${i.selectedSize}` : ''}${i.selectedColor ? ` | Couleur: ${i.selectedColor}` : ''} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
     const fd = new FormData();
-    fd.append('_subject', ` Nouvelle commande Odette — ${name}`);
+    fd.append('_subject', `🛍️ Nouvelle commande Odette — ${name}`);
     fd.append('_template', 'table');
     fd.append('_captcha', 'false');
+    fd.append('_replyto', document.getElementById('cEmail').value || FORMSUBMIT);
     fd.append('Nom', name);
     fd.append('Téléphone', phone);
     fd.append('Email', document.getElementById('cEmail').value || '—');
@@ -257,10 +258,11 @@ window.placeOrder = async function() {
     fd.append('Gouvernorat', gov);
     fd.append('Commande', itemsText);
     fd.append('Total', finalTotal.toFixed(2) + ' DT');
-    fd.append(t('shipping'), shipping.toFixed(2) + ' DT');
+    fd.append('Livraison', shipping.toFixed(2) + ' DT');
     fd.append('Paiement', selectedPay);
     fd.append('Notes', document.getElementById('cNotes').value || '—');
-    await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
+    const res = await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
+    if (!res.ok) console.error('FormSubmit error:', res.status);
 
     // Save to Supabase (optional, if logged in)
     try {
