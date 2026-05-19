@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Commander — Odette</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('UT3j4aW3xjm3Gqcuj');</script>
 <meta property="og:title" content="Odette">
 <meta  property="og:image" content="https://ik.imagekit.io/598oq8jpn/20CDC8EB-1D0C-4DB3-9283-5A57D9AF5C4C.jpeg">
 <meta property="og:description" content="Découvrez Odette, une boutique en ligne de sacs pour femmes élégants, modernes et accessibles. Sublimez votre style avec nos collections uniques.">
@@ -133,7 +135,6 @@ footer strong{color:var(--rose)}
 import { supabase } from '/js/supabase.js';
 import { getUser } from '/js/auth.js';
 import { getCart, getTotal, clearCart } from '/js/cart.js';
-import { FORMSUBMIT } from '/js/supabase.js';
 import { t, currentLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
 
 
@@ -260,26 +261,19 @@ window.placeOrder = async function() {
     });
   } catch (e) { console.error('Supabase order error:', e); }
 
-  // FormSubmit email
-  try {
-    const itemsText = cart.map(i => `${i.title} x${i.qty}${i.selectedSize ? ' | Taille: ' + i.selectedSize : ''}${i.selectedColor ? ' | Couleur: ' + i.selectedColor : ''} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
-    const fd = new FormData();
-    fd.append('_subject', 'Nouvelle commande Odette — ' + name);
-    fd.append('_template', 'table');
-    fd.append('_captcha', 'false');
-    fd.append('_replyto', document.getElementById('cEmail').value || FORMSUBMIT);
-    fd.append('Nom', name);
-    fd.append('Telephone', phone);
-    fd.append('Email', document.getElementById('cEmail').value || '—');
-    fd.append('Adresse', addr + ' - ' + gov);
-    fd.append('Produits', itemsText);
-    fd.append('Livraison', shipping.toFixed(2) + ' DT');
-    fd.append('Total', finalTotal.toFixed(2) + ' DT');
-    fd.append('Paiement', selectedPay);
-    fd.append('Notes', document.getElementById('cNotes').value || '—');
-    const res = await fetch('https://formsubmit.co/' + FORMSUBMIT, { method: 'POST', body: fd });
-    if (!res.ok) console.error('FormSubmit error:', res.status, await res.text());
-  } catch (e) { console.error('FormSubmit error:', e); }
+  // EmailJS — fire and forget
+  const itemsText = cart.map(i => `${i.title} x${i.qty}${i.selectedSize ? ' | Taille: ' + i.selectedSize : ''}${i.selectedColor ? ' | Couleur: ' + i.selectedColor : ''} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
+  emailjs.send('service_j1bb6fq', 'template_3i8j97c', {
+    customer_name: name,
+    phone,
+    email: document.getElementById('cEmail').value || '—',
+    address: fullAddress,
+    products: itemsText,
+    shipping: shipping.toFixed(2) + ' DT',
+    total: finalTotal.toFixed(2) + ' DT',
+    payment: selectedPay,
+    notes: document.getElementById('cNotes').value || '—',
+  }).catch(e => console.error('EmailJS error:', e));
 
   showSuccess();
 };
