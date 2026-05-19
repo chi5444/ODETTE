@@ -539,21 +539,21 @@ async function submitQuick(e) {
  document.getElementById('qSubBtnT').textContent = 'Envoi…';
  try {
  const fd = new FormData();
- fd.append('_subject', `🛍️ Commande Rapide Odette — ${document.getElementById('qiName').value}`);
+ fd.append('_subject', 'Commande Rapide Odette — ' + document.getElementById('qiName').value);
  fd.append('_template', 'table');
  fd.append('_captcha', 'false');
  fd.append('_replyto', document.getElementById('qiEmail').value || FORMSUBMIT);
  fd.append('Nom', document.getElementById('qiName').value);
- fd.append('Téléphone', document.getElementById('qiPhone').value);
+ fd.append('Telephone', document.getElementById('qiPhone').value);
  fd.append('Email', document.getElementById('qiEmail').value || '—');
  fd.append('Adresse', document.getElementById('qiAddr').value);
- fd.append('Produit', `${p.title} — ${Number(p.price).toFixed(2)} DT`);
+ fd.append('Produit', p.title + ' — ' + Number(p.price).toFixed(2) + ' DT');
  if (selectedColor) fd.append('Couleur', selectedColorName || selectedColor);
  if (selectedSize) fd.append('Taille', selectedSize);
  fd.append('Notes', document.getElementById('qiNotes').value || '—');
- const res = await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
- if (!res.ok) console.error('FormSubmit error:', res.status);
- } catch (err) { console.error('FormSubmit error:', err); }
+ const res = await fetch('https://formsubmit.co/' + FORMSUBMIT, { method: 'POST', body: fd });
+ if (!res.ok) console.error('FormSubmit error:', res.status, await res.text());
+ } catch (e) { console.error('FormSubmit error:', e); }
  document.getElementById('qoFormW').style.display = 'none';
  document.getElementById('qoSucc').classList.add('on');
  document.getElementById('qoForm').reset();

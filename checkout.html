@@ -243,43 +243,43 @@ window.placeOrder = async function() {
   const btn = document.getElementById('orderBtn');
   btn.disabled = true; btn.textContent = t('sending');
 
+  // Save to Supabase first
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    await supabase.from('orders').insert({
+      user_id: user?.id || null,
+      items: cart,
+      total: finalTotal,
+      customer_name: name,
+      phone,
+      email: document.getElementById('cEmail').value || null,
+      address: fullAddress,
+      notes: document.getElementById('cNotes').value || null,
+      payment: selectedPay,
+      status: 'pending'
+    });
+  } catch (e) { console.error('Supabase order error:', e); }
+
   // FormSubmit email
   try {
-    const itemsText = cart.map(i => `${i.title} ×${i.qty}${i.selectedSize ? ` | Taille: ${i.selectedSize}` : ''}${i.selectedColor ? ` | Couleur: ${i.selectedColor}` : ''} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
+    const itemsText = cart.map(i => `${i.title} x${i.qty}${i.selectedSize ? ' | Taille: ' + i.selectedSize : ''}${i.selectedColor ? ' | Couleur: ' + i.selectedColor : ''} = ${(i.price * i.qty).toFixed(2)} DT`).join('\n');
     const fd = new FormData();
-    fd.append('_subject', `🛍️ Nouvelle commande Odette — ${name}`);
+    fd.append('_subject', 'Nouvelle commande Odette — ' + name);
     fd.append('_template', 'table');
     fd.append('_captcha', 'false');
     fd.append('_replyto', document.getElementById('cEmail').value || FORMSUBMIT);
     fd.append('Nom', name);
-    fd.append('Téléphone', phone);
+    fd.append('Telephone', phone);
     fd.append('Email', document.getElementById('cEmail').value || '—');
-    fd.append('Adresse', addr);
-    fd.append('Gouvernorat', gov);
-    fd.append('Commande', itemsText);
-    fd.append('Total', finalTotal.toFixed(2) + ' DT');
+    fd.append('Adresse', addr + ' - ' + gov);
+    fd.append('Produits', itemsText);
     fd.append('Livraison', shipping.toFixed(2) + ' DT');
+    fd.append('Total', finalTotal.toFixed(2) + ' DT');
     fd.append('Paiement', selectedPay);
     fd.append('Notes', document.getElementById('cNotes').value || '—');
-    const res = await fetch(`https://formsubmit.co/${FORMSUBMIT}`, { method: 'POST', body: fd });
-    if (!res.ok) console.error('FormSubmit error:', res.status);
-
-    // Save to Supabase (optional, if logged in)
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      await supabase.from('orders').insert({
-        user_id: user?.id || null,
-        items: cart,
-        total: finalTotal,
-        customer_name: name,
-        phone, email: document.getElementById('cEmail').value || null,
-        address: fullAddress,
-        notes: document.getElementById('cNotes').value || null,
-        payment: selectedPay,
-        status: 'pending'
-      });
-    } catch (_) {}
-  } catch (_) {}
+    const res = await fetch('https://formsubmit.co/' + FORMSUBMIT, { method: 'POST', body: fd });
+    if (!res.ok) console.error('FormSubmit error:', res.status, await res.text());
+  } catch (e) { console.error('FormSubmit error:', e); }
 
   showSuccess();
 };
