@@ -539,16 +539,38 @@ async function submitQuick(e) {
  const btn = document.getElementById('qSubBtn');
  btn.disabled = true;
  document.getElementById('qSubBtnT').textContent = 'Envoi…';
+ const qName  = document.getElementById('qiName').value;
+ const qPhone = document.getElementById('qiPhone').value;
+ const qEmail = document.getElementById('qiEmail').value || null;
+ const qAddr  = document.getElementById('qiAddr').value;
+ const qNotes = document.getElementById('qiNotes').value || null;
+ const qTotal = Number(p.price) + 8;
+ const qItem  = [{ ...p, qty: 1, selectedColor, selectedSize, variantNote: selectedColor ? 'Couleur: ' + (selectedColorName || selectedColor) : null }];
+
+ // Save to Supabase
+ supabase.from('orders').insert({
+   customer_name: qName,
+   phone: qPhone,
+   email: qEmail,
+   address: qAddr,
+   notes: qNotes,
+   payment: 'cod',
+   status: 'pending',
+   total: qTotal,
+   items: qItem,
+ }).then(({ error }) => { if (error) console.error('Order insert error:', error.message); });
+
+ // EmailJS notification
  emailjs.send('service_j1bb6fq', 'template_3i8j97c', {
-   customer_name: document.getElementById('qiName').value,
-   phone: document.getElementById('qiPhone').value,
-   email: document.getElementById('qiEmail').value || '—',
-   address: document.getElementById('qiAddr').value,
+   customer_name: qName,
+   phone: qPhone,
+   email: qEmail || '—',
+   address: qAddr,
    products: p.title + ' — ' + Number(p.price).toFixed(2) + ' DT' + (selectedColor ? ' | Couleur: ' + (selectedColorName || selectedColor) : '') + (selectedSize ? ' | Taille: ' + selectedSize : ''),
    shipping: '8.00 DT',
-   total: (Number(p.price) + 8).toFixed(2) + ' DT',
+   total: qTotal.toFixed(2) + ' DT',
    payment: 'cod',
-   notes: document.getElementById('qiNotes').value || '—',
+   notes: qNotes || '—',
  }).catch(e => console.error('EmailJS error:', e));
  document.getElementById('qoFormW').style.display = 'none';
  document.getElementById('qoSucc').classList.add('on');
