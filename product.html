@@ -6,6 +6,8 @@
 <title>Produit — Odette</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('UT3j4aW3xjm3Gqcuj');</script>
 <meta property="og:title" content="Odette">
 <meta  property="og:image" content="https://ik.imagekit.io/598oq8jpn/20CDC8EB-1D0C-4DB3-9283-5A57D9AF5C4C.jpeg">
 <meta property="og:description" content="Découvrez Odette, une boutique en ligne de sacs pour femmes élégants, modernes et accessibles. Sublimez votre style avec nos collections uniques.">
@@ -288,7 +290,7 @@ footer strong{color:var(--rose)}
 import { supabase } from '/js/supabase.js';
 import { getUser, logout, updateNav } from '/js/auth.js';
 import { addToCart, removeFromCart, updateQty, getCart, getTotal, getCount } from '/js/cart.js';
-import { WA_NUMBER, FORMSUBMIT } from '/js/supabase.js';
+import { WA_NUMBER } from '/js/supabase.js';
 import { t, currentLang, setLang, getLangSwitcherHTML, initLangSwitcher } from '/js/i18n.js';
 
 
@@ -537,23 +539,17 @@ async function submitQuick(e) {
  const btn = document.getElementById('qSubBtn');
  btn.disabled = true;
  document.getElementById('qSubBtnT').textContent = 'Envoi…';
- try {
- const fd = new FormData();
- fd.append('_subject', 'Commande Rapide Odette — ' + document.getElementById('qiName').value);
- fd.append('_template', 'table');
- fd.append('_captcha', 'false');
- fd.append('_replyto', document.getElementById('qiEmail').value || FORMSUBMIT);
- fd.append('Nom', document.getElementById('qiName').value);
- fd.append('Telephone', document.getElementById('qiPhone').value);
- fd.append('Email', document.getElementById('qiEmail').value || '—');
- fd.append('Adresse', document.getElementById('qiAddr').value);
- fd.append('Produit', p.title + ' — ' + Number(p.price).toFixed(2) + ' DT');
- if (selectedColor) fd.append('Couleur', selectedColorName || selectedColor);
- if (selectedSize) fd.append('Taille', selectedSize);
- fd.append('Notes', document.getElementById('qiNotes').value || '—');
- const res = await fetch('https://formsubmit.co/' + FORMSUBMIT, { method: 'POST', body: fd });
- if (!res.ok) console.error('FormSubmit error:', res.status, await res.text());
- } catch (e) { console.error('FormSubmit error:', e); }
+ emailjs.send('service_j1bb6fq', 'template_3i8j97c', {
+   customer_name: document.getElementById('qiName').value,
+   phone: document.getElementById('qiPhone').value,
+   email: document.getElementById('qiEmail').value || '—',
+   address: document.getElementById('qiAddr').value,
+   products: p.title + ' — ' + Number(p.price).toFixed(2) + ' DT' + (selectedColor ? ' | Couleur: ' + (selectedColorName || selectedColor) : '') + (selectedSize ? ' | Taille: ' + selectedSize : ''),
+   shipping: '8.00 DT',
+   total: (Number(p.price) + 8).toFixed(2) + ' DT',
+   payment: 'cod',
+   notes: document.getElementById('qiNotes').value || '—',
+ }).catch(e => console.error('EmailJS error:', e));
  document.getElementById('qoFormW').style.display = 'none';
  document.getElementById('qoSucc').classList.add('on');
  document.getElementById('qoForm').reset();
