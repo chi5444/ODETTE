@@ -190,7 +190,7 @@ async function init() {
 
 function renderSummary(cart) {
   const total = getTotal();
-  const shipping = 8;
+  const shipping = 9;
   const finalTotal = total + shipping;
 
   document.getElementById('summaryBox').innerHTML = `
@@ -238,7 +238,7 @@ window.placeOrder = async function() {
 
   const cart = getCart();
   const total = getTotal();
-  const shipping = 8;
+  const shipping = 9;
   const finalTotal = total + shipping;
 
   const btn = document.getElementById('orderBtn');
